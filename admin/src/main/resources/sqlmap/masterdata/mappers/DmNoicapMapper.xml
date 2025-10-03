@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.masterdata.mapper.DmNoicapMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.masterdata.entity.DmNoicap">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_system" jdbcType="BOOLEAN" property="isSystem" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, description, is_system, position
+  </sql>
+
+  <!--  /////////////////////////////////////////////////////////////////////////////////////////////-->
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.id != null"> and id = #{search.id,jdbcType=INTEGER}</if>
+      <if test="search.description != null">
+        <choose>
+          <when test='exact == true'>
+            and description = #{search.description}
+          </when>
+          <otherwise>
+            and description ILIKE '%${search.description}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.isSystem != null"> and is_system = #{search.isSystem}</if>
+    </if>
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'id'">id ${order.direction}</if>
+          <if test="order.property == 'description'">description ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from dm_noicap
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from dm_noicap
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+  <!--/////////////////////////////////////////////////////////////////////////////////////////////-->
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dm_noicap
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dm_noicap
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.masterdata.entity.DmNoicap">
+    insert into dm_noicap (id, description, is_system, position)
+    values (#{id,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{isSystem,jdbcType=BOOLEAN}, #{position,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.masterdata.entity.DmNoicap">
+    insert into dm_noicap
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.masterdata.entity.DmNoicap">
+    update dm_noicap
+    <set>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.masterdata.entity.DmNoicap">
+    update dm_noicap
+    set description = #{description,jdbcType=VARCHAR},
+      is_system = #{isSystem,jdbcType=BOOLEAN},
+    	  position = #{position,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

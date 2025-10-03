@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.UsersAuthoritiesMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.UsersAuthorities">
+		<id column="userid" jdbcType="VARCHAR" property="userid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<id column="authorityid" jdbcType="VARCHAR" property="authorityid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+	</resultMap>
+	<delete id="deleteById" parameterType="map">
+		delete from users_authorities
+		where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		and authorityid =
+		#{authorityid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</delete>
+	<delete id="deleteListByUserIds" parameterType="java.util.List">
+		delete from users_authorities
+		where userid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</delete>
+
+	<insert id="insert" parameterType="com.base.admin.entity.UsersAuthorities">
+		insert into users_authorities (userid, authorityid)
+		values (#{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{authorityid,jdbcType=OTHER,typeHandler=UUIDTypeHandler})
+	</insert>
+
+	<insert id="saveAll" parameterType="java.util.List">
+		insert into users_authorities (userid, authorityid)
+		values
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.authorityid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</insert>
+</mapper>

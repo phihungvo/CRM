@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.AdjustmentDetailRepository">
+    <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.AdjustmentDetail">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="adjustmentid" jdbcType="VARCHAR" property="adjustmentid"/>
+        <result column="warehouseid" jdbcType="VARCHAR" property="warehouseid"/>
+        <result column="warehousename" jdbcType="VARCHAR" property="warehousename"/>
+        <result column="productid" jdbcType="VARCHAR" property="productid"/>
+        <result column="productname" jdbcType="VARCHAR" property="productname"/>
+        <result column="productcode" jdbcType="VARCHAR" property="productcode"/>
+        <result column="minimumstocklevel" jdbcType="DOUBLE" property="minimumstocklevel"/>
+        <result column="quantityavailable" jdbcType="DOUBLE" property="quantityavailable"/>
+        <result column="maximumstocklevel" jdbcType="DOUBLE" property="maximumstocklevel"/>
+        <result column="adjustquantity" jdbcType="DOUBLE" property="adjustquantity"/>
+        <result column="adjustmentType" jdbcType="DOUBLE" property="adjustmentType"/>
+    </resultMap>
+
+    <select id="findByAdjustmentid" resultType="com.base.admin.inventory.entity.AdjustmentDetail">
+        SELECT *
+        FROM adjustmentdetail
+        WHERE id = #{id}
+    </select>
+
+</mapper>

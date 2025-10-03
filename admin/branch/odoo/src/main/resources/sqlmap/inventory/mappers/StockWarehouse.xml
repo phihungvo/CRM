@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.StockWarehouseMapper">
+    <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.StockWarehouse">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="company_id" jdbcType="OTHER" property="companyId" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, "name", company_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from "stock_warehouse"
+        where id = #{id,jdbcType=OTHER}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+            from "stock_warehouse"
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+        delete from "stock_warehouse"
+        where id = #{id,jdbcType=OTHER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.StockWarehouse" useGeneratedKeys="false">
+        insert into "stock_warehouse" (id, "name", company_id)
+        values (#{id,jdbcType=OTHER} ,#{name,jdbcType=VARCHAR}, #{companyId,jdbcType=OTHER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.StockWarehouse" useGeneratedKeys="true">
+        insert into "stock_warehouse"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                "name",
+            </if>
+            <if test="companyId != null">
+                company_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                #{companyId,jdbcType=OTHER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.StockWarehouse">
+        update "stock_warehouse"
+        <set>
+            <if test="name != null">
+                "name" = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="companyId != null">
+                company_id = #{companyId,jdbcType=OTHER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=OTHER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.StockWarehouse">
+        update "stock_warehouse"
+        set "name" = #{name,jdbcType=VARCHAR},
+            company_id = #{companyId,jdbcType=OTHER}
+        where id = #{id,jdbcType=OTHER}
+    </update>
+</mapper>

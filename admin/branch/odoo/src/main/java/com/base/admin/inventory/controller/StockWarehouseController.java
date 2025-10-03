@@ -1,0 +1,68 @@
+package com.base.admin.inventory.controller;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.base.admin.constant.APIConstant;
+import com.base.admin.handler.ResponseHandler;
+import com.base.admin.inventory.dto.request.StockWarehouseDTO;
+import com.base.admin.inventory.dto.request.StockWarehouseUpdateDTO;
+import com.base.admin.inventory.entity.StockWarehouse;
+import com.base.admin.inventory.service.StockWarehouseService;
+
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+
+@RestController
+@RequestMapping(APIConstant.INVENTORY + "/stock-warehouse")
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class StockWarehouseController {
+
+    StockWarehouseService stockWarehouseService;
+
+    public StockWarehouseController(StockWarehouseService stockWarehouseService) {
+        this.stockWarehouseService = stockWarehouseService;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Object> create(@RequestBody StockWarehouseDTO stockWarehouseDTO) {
+        int count = stockWarehouseService.create(stockWarehouseDTO);
+        if (count == 0)
+            return ResponseHandler.generateResponseError("Create stock warehouse failed", HttpStatus.BAD_REQUEST);
+        return ResponseHandler.generateResponseSuccess("Create stock warehouse successfully!", null);
+    }
+
+    @PostMapping("/findAll")
+    public ResponseEntity<Object> findAll() {
+        List<StockWarehouse> stockWarehouseList = stockWarehouseService.getAll();
+        if (stockWarehouseList == null)
+            return ResponseHandler.generateResponseError("Don't have any stock warehouse", HttpStatus.NOT_FOUND);
+        return ResponseHandler.generateResponseSuccess("Get stock warehouse successfully", null);
+    }
+
+    @PostMapping("/findById")
+    public ResponseEntity<Object> findById(@RequestParam(name = "stockId") UUID id) {
+        StockWarehouse stockWarehouse = stockWarehouseService.findById(id);
+        if (stockWarehouse == null)
+            return ResponseHandler.generateResponseError("Don't have stock warehouse", HttpStatus.NOT_FOUND);
+        return ResponseHandler.generateResponseSuccess("Get success", null);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Object> update(@RequestBody StockWarehouseUpdateDTO updateDTO) {
+        int count = stockWarehouseService.update(updateDTO);
+        if (count == 0) return ResponseHandler.generateResponseError("Update failed", HttpStatus.BAD_REQUEST);
+        return ResponseHandler.generateResponseSuccess("Update success", null);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Object> delete(@RequestParam(name = "stockId") UUID id) {
+        int count = stockWarehouseService.deleteById(id);
+        if (count == 0) return ResponseHandler.generateResponseError("Delete failed", HttpStatus.BAD_REQUEST);
+        return ResponseHandler.generateResponseSuccess("Delete success", null);
+    }
+}

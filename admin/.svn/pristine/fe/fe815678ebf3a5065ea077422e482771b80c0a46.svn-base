@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.ResPartner;
+
+public interface ResPartnerMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(ResPartner record);
+
+    int insertSelective(ResPartner record);
+
+    ResPartner selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(ResPartner record);
+
+    int updateByPrimaryKey(ResPartner record);
+}

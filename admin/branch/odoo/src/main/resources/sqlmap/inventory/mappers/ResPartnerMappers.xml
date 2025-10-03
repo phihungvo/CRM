@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.ResPartnerMapper">
+    <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.ResPartner">
+        <id column="id" jdbcType="OTHER" property="id"/>
+        <result column="company_id" jdbcType="OTHER" property="companyId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        ,company_id, "name"
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from "res_partner"
+        where id = #{id,jdbcType=OTHER}
+    </select>
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from "res_partner"
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+        delete
+        from "res_partner"
+        where id = #{id,jdbcType=OTHER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.base.admin.inventory.entity.ResPartner" useGeneratedKeys="false">
+        insert into "res_partner" (id, company_id, "name")
+        values (#{id, jdbcType=OTHER}, #{companyId,jdbcType=OTHER}, #{name,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.base.admin.inventory.entity.ResPartner" useGeneratedKeys="false">
+        insert into "res_partner"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">
+                company_id,
+            </if>
+            <if test="name != null">
+                "name",
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">
+                #{companyId,jdbcType=OTHER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.ResPartner">
+        update "res_partner"
+        <set>
+            <if test="companyId != null">
+                company_id = #{companyId,jdbcType=OTHER},
+            </if>
+            <if test="name != null">
+                "name" = #{name,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=OTHER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.ResPartner">
+        update "res_partner"
+        set company_id = #{companyId,jdbcType=OTHER},
+            "name"       = #{name,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=OTHER}
+    </update>
+</mapper>

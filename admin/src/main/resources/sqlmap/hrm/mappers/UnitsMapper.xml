@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.UnitsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.Units">
+    <id column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="organizationid" jdbcType="OTHER" property="organizationid" typeHandler="UUIDTypeHandler" />
+    <result column="parentunitid" jdbcType="OTHER" property="parentunitid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitcode" jdbcType="VARCHAR" property="unitcode" />
+    <result column="unitlevelid" jdbcType="INTEGER" property="unitlevelid" />
+    <result column="registrationnumber" jdbcType="VARCHAR" property="registrationnumber" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="unitname" jdbcType="VARCHAR" property="unitname" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+    <result column="leaderids" jdbcType="VARCHAR" property="leaderids" />
+    <result column="responsibility" jdbcType="VARCHAR" property="responsibility" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+  <resultMap id="UnitItemDTOResultMap" type="com.base.admin.hrm.dto.UnitItemDTO">
+    <id column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="parentunitid" jdbcType="OTHER" property="parentunitid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitcode" jdbcType="VARCHAR" property="unitcode" />
+    <result column="unitlevelid" jdbcType="INTEGER" property="unitlevelid" />
+    <result column="unitname" jdbcType="VARCHAR" property="unitname" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    unitid, organizationid, parentunitid, unitcode, unitlevelid, registrationnumber, address,
+    unitname, symbol, leaderids, responsibility, "status"
+  </sql>
+
+  <sql id="UnitItems_Column_List">
+    unitid, parentunitid, unitcode, unitlevelid,unitname
+  </sql>
+
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.unitid != null"> and unitid = #{search.unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.organizationid != null"> and organizationid = #{search.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.parentunitid != null"> and parentunitid = #{search.parentunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.unitcode != null">
+        <choose>
+          <when test='exact == true'>
+            and unitcode = #{search.unitcode}
+          </when>
+          <otherwise>
+            and unitcode ILIKE '%${search.unitcode}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.unitlevelid != null"> and unitlevelid = #{search.unitlevelid,jdbcType=INTEGER}</if>
+      <if test="search.registrationnumber != null">
+        <choose>
+          <when test='exact == true'>
+            and registrationnumber = #{search.registrationnumber}
+          </when>
+          <otherwise>
+            and registrationnumber ILIKE '%${search.registrationnumber}%'
+          </otherwise>
+        </choose></if>
+      <if test="search.address != null">
+        <choose>
+          <when test='exact == true'>
+            and address = #{search.address}
+          </when>
+          <otherwise>
+            and address ILIKE '%${search.address}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.unitname != null">
+        <choose>
+          <when test='exact == true'>
+            and unitname = #{search.unitname}
+          </when>
+          <otherwise>
+            and unitname ILIKE '%${search.unitname}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.symbol != null">
+        <choose>
+          <when test='exact == true'>
+            and symbol = #{search.symbol}
+          </when>
+          <otherwise>
+            and symbol ILIKE '%${search.symbol}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.responsibility != null">
+        <choose>
+          <when test='exact == true'>
+            and responsibility = #{search.responsibility}
+          </when>
+          <otherwise>
+            and responsibility ILIKE '%${search.responsibility}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.status != null"> and u.status = #{search.status}</if>
+    </if>
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'unitcode'">unitcode ${order.direction}</if>
+          <if test="order.property == 'unitlevelid'">unitlevelid ${order.direction}</if>
+          <if test="order.property == 'registrationnumber'">registrationnumber ${order.direction}</if>
+          <if test="order.property == 'address'">address ${order.direction}</if>
+          <if test="order.property == 'unitname'">unitname ${order.direction}</if>
+          <if test="order.property == 'symbol'">symbol ${order.direction}</if>
+          <if test="order.property == 'status'">status ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from units
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.entity.Units">
+    select
+    <include refid="Base_Column_List"/>
+    from units
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from units
+    where unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+
+  <select id="getUnitItems" parameterType="java.util.UUID" resultMap="UnitItemDTOResultMap">
+    select
+    <include refid="UnitItems_Column_List" />
+    from units
+    where organizationid = #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from units
+    where unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.Units">
+    insert into units (unitid, organizationid, parentunitid, 
+      unitcode, unitlevelid, registrationnumber,
+      address, unitname, symbol, 
+      leaderids, responsibility, "status"
+      )
+    values (#{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{parentunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, 
+      #{unitcode,jdbcType=VARCHAR}, #{unitlevelid,jdbcType=INTEGER}, #{registrationnumber,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, #{unitname,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR}, 
+      #{leaderids,jdbcType=VARCHAR}, #{responsibility,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.Units">
+    insert into units
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="unitid != null">
+        unitid,
+      </if>
+      <if test="organizationid != null">
+        organizationid,
+      </if>
+      <if test="parentunitid != null">
+        parentunitid,
+      </if>
+      <if test="unitcode != null">
+        unitcode,
+      </if>
+      <if test="unitlevelid != null">
+        unitlevelid,
+      </if>
+      <if test="registrationnumber != null">
+        registrationnumber,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="unitname != null">
+        unitname,
+      </if>
+      <if test="symbol != null">
+        symbol,
+      </if>
+      <if test="leaderids != null">
+        leaderids,
+      </if>
+      <if test="responsibility != null">
+        responsibility,
+      </if>
+      <if test="status != null">
+        "status",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="unitid != null">
+        #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="organizationid != null">
+        #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="parentunitid != null">
+        #{parentunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitcode != null">
+        #{unitcode,jdbcType=VARCHAR},
+      </if>
+      <if test="unitlevel != null">
+        #{unitlevelid,jdbcType=INTEGER},
+      </if>
+      <if test="registrationnumber != null">
+        #{registrationnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="unitname != null">
+        #{unitname,jdbcType=VARCHAR},
+      </if>
+      <if test="symbol != null">
+        #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderids != null">
+        #{leaderids,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibility != null">
+        #{responsibility,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.Units">
+    update units
+    <set>
+      <if test="organizationid != null">
+        organizationid = #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="parentunitid != null">
+        parentunitid = #{parentunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitcode != null">
+        unitcode = #{unitcode,jdbcType=VARCHAR},
+      </if>
+      <if test="unitlevel != null">
+        unitlevelid = #{unitlevelid,jdbcType=INTEGER},
+      </if>
+      <if test="registrationnumber != null">
+        registrationnumber = #{registrationnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="unitname != null">
+        unitname = #{unitname,jdbcType=VARCHAR},
+      </if>
+      <if test="symbol != null">
+        symbol = #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderids != null">
+        leaderids = #{leaderids,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibility != null">
+        responsibility = #{responsibility,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        "status" = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.Units">
+    update units
+    set organizationid = #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      parentunitid = #{parentunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      unitcode = #{unitcode,jdbcType=VARCHAR},
+      unitlevelid = #{unitlevelid,jdbcType=INTEGER},
+      registrationnumber = #{registrationnumber,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      unitname = #{unitname,jdbcType=VARCHAR},
+      symbol = #{symbol,jdbcType=VARCHAR},
+      leaderids = #{leaderids,jdbcType=VARCHAR},
+      responsibility = #{responsibility,jdbcType=VARCHAR},
+      "status" = #{status,jdbcType=INTEGER}
+    where unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

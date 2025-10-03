@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.masterdata.mapper.DmTinhthanhMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.masterdata.entity.DmTinhthanh">
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="district_id" jdbcType="VARCHAR" property="districtId" />
+    <result column="district_name" jdbcType="VARCHAR" property="districtName" />
+    <result column="ward_id" jdbcType="VARCHAR" property="wardId" />
+    <result column="ward_name" jdbcType="VARCHAR" property="wardName" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BOOLEAN" property="isFavorite" />
+    <result column="is_system" jdbcType="BOOLEAN" property="isSystem" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    city_id, city_name, district_id,
+      district_name, ward_id, ward_name,
+      "level", "position", is_favorite,
+      is_system
+  </sql>
+
+
+  <!--  /////////////////////////////////////////////////////////////////////////////////////////////-->
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.cityId != null"> and city_id = #{search.cityId}</if>
+      <if test="search.cityName != null">
+        <choose>
+          <when test='exact == true'>
+            and city_name = #{search.cityName}
+          </when>
+          <otherwise>
+            and city_name ILIKE '%${search.cityName}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.districtId != null"> and district_id = #{search.districtId}</if>
+      <if test="search.district_name != null">
+        <choose>
+          <when test='exact == true'>
+            and district_name = #{search.districtName}
+          </when>
+          <otherwise>
+            and district_name ILIKE '%${search.districtName}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.wardId != null"> and ward_id = #{search.wardId}</if>
+      <if test="search.wardName != null">
+        <choose>
+          <when test='exact == true'>
+            and ward_name = #{search.wardName}
+          </when>
+          <otherwise>
+            and ward_name ILIKE '%${search.wardName}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.level != null">
+        <choose>
+          <when test='exact == true'>
+            and level = #{search.level}
+          </when>
+          <otherwise>
+            and level ILIKE '%${search.level}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.isFavorite != null"> and is_favorite = #{search.isFavorite}</if>
+      <if test="search.isSystem != null"> and is_system = #{search.isSystem}</if>
+    </if>
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'cityId'">city_id ${order.direction}</if>
+          <if test="order.property == 'cityName'">city_name ${order.direction}</if>
+          <if test="order.property == 'districtId'">district_id ${order.direction}</if>
+          <if test="order.property == 'districtName'">district_name ${order.direction}</if>
+          <if test="order.property == 'wardId'">ward_id ${order.direction}</if>
+          <if test="order.property == 'wardName'">ward_name ${order.direction}</if>
+          <if test="order.property == 'level'">level ${order.direction}</if>
+          <if test="order.property == 'position'">position ${order.direction}</if>
+          <if test="order.property == 'isFavorite'">is_favorite ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from dm_tinhthanh
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from dm_tinhthanh
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+  <!--/////////////////////////////////////////////////////////////////////////////////////////////-->
+
+  <select id="countlistCities" resultType="java.lang.Long">
+    select count(1) from
+              (select DISTINCT city_id, city_name, position, is_favorite, is_system
+                from dm_tinhthanh)
+  </select>
+  <select id="listCities" resultType="com.base.admin.masterdata.dto.CityDTO">
+    select DISTINCT city_id, city_name, position, is_favorite, is_system
+    from dm_tinhthanh
+    <include refid="pageable"/>
+  </select>
+
+  <select id="countDistrictByCityId" resultType="java.lang.Long">
+      select count(1) from
+        (select DISTINCT district_id, district_name
+         from dm_tinhthanh
+         WHERE city_id = #{cityid,jdbcType=VARCHAR})
+  </select>
+  <select id="listDistrictByCityId" resultType="com.base.admin.masterdata.dto.DistrictDTO">
+      select DISTINCT district_id, district_name
+      from dm_tinhthanh
+      WHERE city_id = #{cityid,jdbcType=VARCHAR}
+      <include refid="pageable"/>
+  </select>
+
+  <select id="countWardsByCityIdAndDistrictId" resultType="java.lang.Long">
+    select count(1) from
+    (select DISTINCT ward_id, ward_name, level
+    from dm_tinhthanh
+    WHERE city_id = #{cityid,jdbcType=VARCHAR} AND district_id = #{districtid,jdbcType=VARCHAR})
+  </select>
+  <select id="listWardsByCityIdAndDistrictId" resultType="com.base.admin.masterdata.dto.WardDTO">
+    select DISTINCT ward_id, ward_name, level
+    from dm_tinhthanh
+    WHERE city_id = #{cityid,jdbcType=VARCHAR} AND district_id = #{districtid,jdbcType=VARCHAR}
+    <include refid="pageable"/>
+  </select>
+
+  <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dm_tinhthanh
+    where city_id = #{cityId,jdbcType=VARCHAR}
+  </select>
+
+
+  <insert id="insert" parameterType="com.base.admin.masterdata.entity.DmTinhthanh">
+    insert into dm_tinhthanh (city_id, city_name, district_id, 
+      district_name, ward_id, ward_name, 
+      "level", "position", is_favorite, 
+      is_system)
+    values (#{cityId,jdbcType=VARCHAR}, #{cityName,jdbcType=VARCHAR}, #{districtId,jdbcType=VARCHAR}, 
+      #{districtName,jdbcType=VARCHAR}, #{wardId,jdbcType=VARCHAR}, #{wardName,jdbcType=VARCHAR}, 
+      #{level,jdbcType=VARCHAR}, #{position,jdbcType=INTEGER}, #{isFavorite,jdbcType=BOOLEAN}, 
+      #{isSystem,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.masterdata.entity.DmTinhthanh">
+    insert into dm_tinhthanh
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        city_id,
+      </if>
+      <if test="cityName != null">
+        city_name,
+      </if>
+      <if test="districtId != null">
+        district_id,
+      </if>
+      <if test="districtName != null">
+        district_name,
+      </if>
+      <if test="wardId != null">
+        ward_id,
+      </if>
+      <if test="wardName != null">
+        ward_name,
+      </if>
+      <if test="level != null">
+        "level",
+      </if>
+      <if test="position != null">
+        "position",
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityName != null">
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="districtId != null">
+        #{districtId,jdbcType=VARCHAR},
+      </if>
+      <if test="districtName != null">
+        #{districtName,jdbcType=VARCHAR},
+      </if>
+      <if test="wardId != null">
+        #{wardId,jdbcType=VARCHAR},
+      </if>
+      <if test="wardName != null">
+        #{wardName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

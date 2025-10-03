@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockScrap;
+
+public interface StockScrapMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockScrap record);
+
+    int insertSelective(StockScrap record);
+
+    StockScrap selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockScrap record);
+
+    int updateByPrimaryKey(StockScrap record);
+}

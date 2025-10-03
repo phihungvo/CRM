@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.ProductAttribute;
+
+public interface ProductAttributeMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(ProductAttribute record);
+
+    int insertSelective(ProductAttribute record);
+
+    ProductAttribute selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(ProductAttribute record);
+
+    int updateByPrimaryKey(ProductAttribute record);
+}

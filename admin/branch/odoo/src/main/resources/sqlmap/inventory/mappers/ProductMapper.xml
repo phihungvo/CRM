@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.Product">
+    <id column="id" jdbcType="OTHER" property="id" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="product_category_id" jdbcType="OTHER" property="productCategoryId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_name, description, product_category_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "product"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from "product"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.Product" useGeneratedKeys="false">
+    insert into "product" (id, product_name, description, product_category_id
+      )
+    values (#{id,jdbcType=OTHER} ,#{productName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{productCategoryId,jdbcType=OTHER}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.Product" useGeneratedKeys="true">
+    insert into "product"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="productCategoryId != null">
+        product_category_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="productCategoryId != null">
+        #{productCategoryId,jdbcType=OTHER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.Product">
+    update "product"
+    <set>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="productCategoryId != null">
+        product_category_id = #{productCategoryId,jdbcType=OTHER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.Product">
+    update "product"
+    set product_name = #{productName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      product_category_id = #{productCategoryId,jdbcType=OTHER}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

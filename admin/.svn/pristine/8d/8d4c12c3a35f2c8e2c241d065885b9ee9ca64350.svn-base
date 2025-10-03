@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockWarehouseOrderpoint;
+
+public interface StockWarehouseOrderpointMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockWarehouseOrderpoint record);
+
+    int insertSelective(StockWarehouseOrderpoint record);
+
+    StockWarehouseOrderpoint selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockWarehouseOrderpoint record);
+
+    int updateByPrimaryKey(StockWarehouseOrderpoint record);
+}

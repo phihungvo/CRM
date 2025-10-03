@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.TerminationReasonMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.TerminationReason">
+    <id column="terminationreasonid" jdbcType="INTEGER" property="terminationreasonid" />
+    <result column="terminationreasonname" jdbcType="VARCHAR" property="terminationreasonname" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BIT" property="isFavorite" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    terminationreasonid, terminationreasonname, position, is_favorite, is_system
+  </sql>
+
+  <resultMap id="DTOResultMap" type="com.base.admin.hrm.dto.TerminationReasonDTO">
+    <id column="terminationreasonid" jdbcType="INTEGER" property="terminationreasonid" />
+    <result column="terminationreasonname" jdbcType="VARCHAR" property="terminationreasonname" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BIT" property="isFavorite" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+  </resultMap>
+
+  <sql id="DTO_Column_List">
+    terminationreasonid, terminationreasonname, position, is_favorite, is_system
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'terminationreasonid'">terminationreasonid ${order.direction}</if>
+          <if test="order.property == 'terminationreasonname'">terminationreasonname ${order.direction}</if>
+          <if test="order.property == 'position'">position ${order.direction}</if>
+          <if test="order.property == 'isFavorite'">is_favorite ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <select id="findById" resultType="com.base.admin.hrm.dto.TerminationReasonDTO">
+    select
+    <include refid="DTO_Column_List" />
+    from termination_reason
+    where terminationreasonid = #{terminationreasonid,jdbcType=INTEGER}
+  </select>
+
+  <select id="countPaged" resultType="java.lang.Long">
+    select count(1)
+    from termination_reason
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.dto.TerminationReasonDTO">
+    select
+    <include refid="DTO_Column_List"/>
+    from termination_reason
+    <include refid="pageable"/>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from termination_reason
+    where terminationreasonid = #{terminationreasonid,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from termination_reason
+    where terminationreasonid = #{terminationreasonid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.TerminationReason">
+    insert into termination_reason (terminationreasonid, terminationreasonname,
+      position, is_favorite, is_system
+      )
+    values (#{terminationreasonid,jdbcType=INTEGER}, #{terminationreasonname,jdbcType=VARCHAR}, 
+      #{position,jdbcType=INTEGER}, #{isFavorite,jdbcType=BIT}, #{isSystem,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.TerminationReason">
+    insert into termination_reason
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="terminationreasonid != null">
+        terminationreasonid,
+      </if>
+      <if test="terminationreasonname != null">
+        terminationreasonname,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="terminationreasonid != null">
+        #{terminationreasonid,jdbcType=INTEGER},
+      </if>
+      <if test="terminationreasonname != null">
+        #{terminationreasonname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BIT},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.TerminationReason">
+    update termination_reason
+    <set>
+      <if test="terminationreasonname != null">
+        terminationreasonname = #{terminationreasonname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BIT},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BIT},
+      </if>
+    </set>
+    where terminationreasonid = #{terminationreasonid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.TerminationReason">
+    update termination_reason
+    set terminationreasonname = #{terminationreasonname,jdbcType=VARCHAR},
+      position = #{position,jdbcType=INTEGER},
+      is_favorite = #{isFavorite,jdbcType=BIT},
+      is_system = #{isSystem,jdbcType=BIT}
+    where terminationreasonid = #{terminationreasonid,jdbcType=INTEGER}
+  </update>
+</mapper>

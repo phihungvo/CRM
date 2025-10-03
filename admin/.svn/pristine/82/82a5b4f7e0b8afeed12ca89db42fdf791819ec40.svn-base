@@ -1,0 +1,21 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.entity.AdjustmentDetail;
+import com.base.admin.inventory.mapper.AdjustmentDetailMapper;
+import com.base.admin.inventory.service.AdjustmentDetailService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class AdjustmentDetailServiceImpl implements AdjustmentDetailService {
+    private final AdjustmentDetailMapper adjustmentDetailMapper;
+
+    @Override
+    public List<AdjustmentDetail> findByAdjustmentId(UUID id) {
+        return adjustmentDetailMapper.findByAdjustmentid(id);
+    }
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.ContractWorktypeMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.ContractWorktype">
+    <id column="contractworktypeid" jdbcType="INTEGER" property="contractworktypeid" />
+    <result column="contractworktypename" jdbcType="VARCHAR" property="contractworktypename" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BOOLEAN" property="isFavorite" />
+    <result column="is_system" jdbcType="BOOLEAN" property="isSystem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    contractworktypeid, contractworktypename, "position", is_favorite, is_system
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'contractworktypeid'">contractworktypeid ${order.direction}</if>
+          <if test="order.property == 'contractworktypename'">contractworktypename ${order.direction}</if>
+          <if test="order.property == 'position'">position ${order.direction}</if>
+          <if test="order.property == 'isFavorite'">is_favorite ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from contract_worktype
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.entity.ContractWorktype">
+    select
+    <include refid="Base_Column_List"/>
+    from contract_worktype
+    <include refid="pageable"/>
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from contract_worktype
+    where contractworktypeid = #{contractworktypeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from contract_worktype
+    where contractworktypeid = #{contractworktypeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.ContractWorktype">
+    insert into contract_worktype (contractworktypeid, contractworktypename, 
+      "position", is_favorite, is_system
+      )
+    values (#{contractworktypeid,jdbcType=INTEGER}, #{contractworktypename,jdbcType=VARCHAR}, 
+      #{position,jdbcType=INTEGER}, #{isFavorite,jdbcType=BOOLEAN}, #{isSystem,jdbcType=BOOLEAN}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.ContractWorktype">
+    insert into contract_worktype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="contractworktypeid != null">
+        contractworktypeid,
+      </if>
+      <if test="contractworktypename != null">
+        contractworktypename,
+      </if>
+      <if test="position != null">
+        "position",
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="contractworktypeid != null">
+        #{contractworktypeid,jdbcType=INTEGER},
+      </if>
+      <if test="contractworktypename != null">
+        #{contractworktypename,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.ContractWorktype">
+    update contract_worktype
+    <set>
+      <if test="contractworktypename != null">
+        contractworktypename = #{contractworktypename,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        "position" = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where contractworktypeid = #{contractworktypeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.ContractWorktype">
+    update contract_worktype
+    set contractworktypename = #{contractworktypename,jdbcType=VARCHAR},
+      "position" = #{position,jdbcType=INTEGER},
+      is_favorite = #{isFavorite,jdbcType=BOOLEAN},
+      is_system = #{isSystem,jdbcType=BOOLEAN}
+    where contractworktypeid = #{contractworktypeid,jdbcType=INTEGER}
+  </update>
+</mapper>

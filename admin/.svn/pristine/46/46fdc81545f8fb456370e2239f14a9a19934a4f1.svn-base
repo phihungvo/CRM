@@ -1,0 +1,66 @@
+package com.base.admin.inventory.controller;
+
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.base.admin.handler.ResponseHandler;
+import com.base.admin.inventory.dto.request.ProductTemplateDTO;
+import com.base.admin.inventory.entity.ProductTemplate;
+import com.base.admin.inventory.service.ProductTemplateService;
+
+@RestController
+@RequestMapping("/api/v1/inventory/product-template")
+public class ProductTemplateController {
+    private final ProductTemplateService productTemplateService;
+
+    public ProductTemplateController(ProductTemplateService productTemplateService) {
+        this.productTemplateService = productTemplateService;
+    }
+
+    @PostMapping("/findById")
+    public ResponseEntity<Object> findById(@RequestParam(name = "productTemplateId") UUID id) {
+        ProductTemplate productTemplate = productTemplateService.findById(id);
+        if (productTemplate == null) {
+            ResponseHandler.generateResponseError("Product template not found", HttpStatus.NOT_FOUND);
+        }
+        return ResponseHandler.generateResponseSuccess("", productTemplate);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<Object> create(@RequestBody ProductTemplateDTO request) {
+        int count = productTemplateService.create(request);
+        if (count == 0) {
+            return ResponseHandler.generateResponseError(
+                    "Failed to add Product template", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseHandler.generateResponseSuccess("Create Product template successfully", null);
+    }
+
+    //    @PostMapping("/search")
+
+    @PostMapping("/deleteById")
+    public ResponseEntity<Object> deleteById(@RequestParam(name = "productTemplateId") UUID id) {
+        int count = productTemplateService.deleteById(id);
+        if (count == 0) {
+            return ResponseHandler.generateResponseError("Product template not found", HttpStatus.NOT_FOUND);
+        }
+        return ResponseHandler.generateResponseSuccess("Product template deleted successfully", null);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Object> update(@RequestBody ProductTemplate request) {
+        if (request.getId() == null) {
+            return ResponseHandler.generateResponseError(
+                    "Invalid parameters. Product template ID not null", HttpStatus.BAD_REQUEST);
+        }
+        int count = productTemplateService.update(request);
+        if (count == 0) {
+            return ResponseHandler.generateResponseError(
+                    "Failed to update Product template", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseHandler.generateResponseSuccess("Product template updated successfully", null);
+    }
+}

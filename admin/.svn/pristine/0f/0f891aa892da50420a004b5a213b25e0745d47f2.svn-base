@@ -1,0 +1,16 @@
+package com.base.admin.inventory.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+
+/**
+ * product_attribute
+ * @author
+ */
+@Getter
+@Setter
+@FieldDefaults(level = lombok.AccessLevel.PRIVATE)
+public class ProductAttribute extends ModelEntity {
+    String name;
+}

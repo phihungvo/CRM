@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.PermissionsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.entity.Permissions">
+    <id column="roleid" jdbcType="OTHER" property="roleid" typeHandler="UUIDTypeHandler" />
+    <id column="moduleid" jdbcType="OTHER" property="moduleid" typeHandler="UUIDTypeHandler"/>
+    <id column="pageid" jdbcType="OTHER" property="pageid" typeHandler="UUIDTypeHandler"/>
+    <id column="actionid" jdbcType="OTHER" property="actionid" typeHandler="UUIDTypeHandler"/>
+  </resultMap>
+
+  <insert id="saveAll" parameterType="java.util.List">
+    insert into permissions (roleid, moduleid, pageid, actionid, isselected)
+    values
+    <foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+      #{element.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.isselected,jdbcType=BOOLEAN}
+    </foreach>
+  </insert>
+    <update id="updateListPermission" parameterType="java.util.List">
+--       <foreach collection="list" item="element" index="index" separator=";">
+<!--      <foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">-->
+          UPDATE permissions SET isselected = #{element.isselected,jdbcType=BOOLEAN}
+          WHERE  roleid = #{element.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+              and moduleid = #{element.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+              and pageid = #{element.pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+              and actionid = #{element.actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+        </foreach>
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from permissions
+    where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and actionid = #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.entity.Permissions">
+    insert into permissions (roleid, moduleid, pageid, 
+      actionid, isselected)
+    values (#{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{isselected,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.entity.Permissions">
+    insert into permissions
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleid != null">
+        roleid,
+      </if>
+      <if test="moduleid != null">
+        moduleid,
+      </if>
+      <if test="pageid != null">
+        pageid,
+      </if>
+      <if test="actionid != null">
+        actionid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleid != null">
+        #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="moduleid != null">
+        #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="pageid != null">
+        #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="actionid != null">
+        #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+    </trim>
+  </insert>
+
+
+</mapper>

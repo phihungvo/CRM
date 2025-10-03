@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.TokensMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Tokens">
+		<id column="tokenid" jdbcType="VARCHAR" property="tokenid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="userid" jdbcType="VARCHAR" property="userid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="token" jdbcType="VARCHAR" property="token"/>
+		<result column="revoked" jdbcType="BOOLEAN" property="revoked"/>
+		<result column="expired" jdbcType="BOOLEAN" property="expired"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		tokenid
+		, userid, token, revoked, expired
+	</sql>
+	<select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from tokens
+		where tokenid = #{tokenid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+	<delete id="deleteById" parameterType="java.util.UUID">
+		delete from tokens
+		where tokenid = #{tokenid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</delete>
+	<insert id="insert" parameterType="com.base.admin.entity.Tokens">
+		insert into tokens (tokenid, userid, token,
+		revoked, expired)
+		values (#{tokenid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{userid,jdbcType=VARCHAR, typeHandler=UUIDTypeHandler},
+		#{token,jdbcType=VARCHAR,},
+		#{revoked,jdbcType=BOOLEAN}, #{expired,jdbcType=BOOLEAN})
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Tokens">
+		update tokens
+		set userid = #{userid,jdbcType=VARCHAR, typeHandler=UUIDTypeHandler},
+		token = #{token,jdbcType=VARCHAR},
+		revoked = #{revoked,jdbcType=BOOLEAN},
+		expired = #{expired,jdbcType=BOOLEAN}
+		where tokenid = #{tokenid,jdbcType=VARCHAR, typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

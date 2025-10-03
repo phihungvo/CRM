@@ -1,0 +1,58 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.entity.Provider;
+import com.base.admin.inventory.mapper.ProviderMapper;
+import com.base.admin.inventory.service.ProviderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class ProviderServiceImpl implements ProviderService {
+
+    private final ProviderMapper providerMapper;
+
+    @Override
+    public Optional<Provider> findById(UUID id) {
+        return providerMapper.findById(id);
+    }
+
+    @Override
+    public List<Provider> findAll() {
+        return providerMapper.findAll();
+    }
+//
+//    @Override
+//    public Page<Brand> findPage(PagedRequest pagedRequest) {
+//        PageUtil pageUtil = new PageUtil(pagedRequest);
+//        List<Brand> brands = brandMapper.findPage(pageUtil.getLimit(), pageUtil.getOffset());
+//        long count = brandMapper.count();
+//        return new PageImpl<>(brands, pageUtil.getPageable(), count);
+//    }
+//
+//    @Override
+//    public boolean existsByBrandname(String brandname) {
+//        return brandMapper.existsByBrandname(brandname);
+//    }
+//
+//    @Override
+//    public UUID save(Brand brand) {
+//        brand.setId(UUID.randomUUID());
+//        brandMapper.save(brand);
+//        return brand.getId();
+//    }
+//
+//    @Override
+//    public boolean existById(UUID brandid) {
+//        return brandMapper.existById(brandid);
+//    }
+//
+//    @Override
+//    public boolean delete(UUID brandid) {
+//        return brandMapper.deleteById(brandid);
+//    }
+}

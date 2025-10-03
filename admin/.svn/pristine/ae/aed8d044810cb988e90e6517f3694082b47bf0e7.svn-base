@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockQuantPackage;
+
+public interface StockQuantPackageMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockQuantPackage record);
+
+    int insertSelective(StockQuantPackage record);
+
+    StockQuantPackage selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockQuantPackage record);
+
+    int updateByPrimaryKey(StockQuantPackage record);
+}

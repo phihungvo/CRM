@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.purchase.mapper.BarcodeNomenclatureMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.purchase.entity.BarcodeNomenclature">
+    <id column="id" jdbcType="OTHER" property="id" />
+    <result column="parent_id" jdbcType="OTHER" property="parentId" />
+    <result column="color" jdbcType="INTEGER" property="color" />
+    <result column="create_uid" jdbcType="OTHER" property="createUid" />
+    <result column="write_uid" jdbcType="OTHER" property="writeUid" />
+    <result column="parent_path" jdbcType="VARCHAR" property="parentPath" />
+    <result column="complete_name" jdbcType="VARCHAR" property="completeName" />
+    <result column="name" jdbcType="OTHER" property="name" />
+    <result column="default_applicability" jdbcType="OTHER" property="defaultApplicability" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="write_date" jdbcType="TIMESTAMP" property="writeDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, parent_id, color, create_uid, write_uid, parent_path, complete_name, "name", 
+    default_applicability, description, create_date, write_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Object" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "account_analytic_plan"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Object">
+    delete from "account_analytic_plan"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.purchase.entity.BarcodeNomenclature" useGeneratedKeys="true">
+    insert into "account_analytic_plan" (parent_id, color, create_uid, 
+      write_uid, parent_path, complete_name, 
+      "name", default_applicability, description, 
+      create_date, write_date)
+    values (#{parentId,jdbcType=OTHER}, #{color,jdbcType=INTEGER}, #{createUid,jdbcType=OTHER}, 
+      #{writeUid,jdbcType=OTHER}, #{parentPath,jdbcType=VARCHAR}, #{completeName,jdbcType=VARCHAR}, 
+      #{name,jdbcType=OTHER}, #{defaultApplicability,jdbcType=OTHER}, #{description,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{writeDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.purchase.entity.BarcodeNomenclature" useGeneratedKeys="true">
+    insert into "account_analytic_plan"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="color != null">
+        color,
+      </if>
+      <if test="createUid != null">
+        create_uid,
+      </if>
+      <if test="writeUid != null">
+        write_uid,
+      </if>
+      <if test="parentPath != null">
+        parent_path,
+      </if>
+      <if test="completeName != null">
+        complete_name,
+      </if>
+      <if test="name != null">
+        "name",
+      </if>
+      <if test="defaultApplicability != null">
+        default_applicability,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="writeDate != null">
+        write_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="parentId != null">
+        #{parentId,jdbcType=OTHER},
+      </if>
+      <if test="color != null">
+        #{color,jdbcType=INTEGER},
+      </if>
+      <if test="createUid != null">
+        #{createUid,jdbcType=OTHER},
+      </if>
+      <if test="writeUid != null">
+        #{writeUid,jdbcType=OTHER},
+      </if>
+      <if test="parentPath != null">
+        #{parentPath,jdbcType=VARCHAR},
+      </if>
+      <if test="completeName != null">
+        #{completeName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=OTHER},
+      </if>
+      <if test="defaultApplicability != null">
+        #{defaultApplicability,jdbcType=OTHER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writeDate != null">
+        #{writeDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.purchase.entity.BarcodeNomenclature">
+    update "account_analytic_plan"
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=OTHER},
+      </if>
+      <if test="color != null">
+        color = #{color,jdbcType=INTEGER},
+      </if>
+      <if test="createUid != null">
+        create_uid = #{createUid,jdbcType=OTHER},
+      </if>
+      <if test="writeUid != null">
+        write_uid = #{writeUid,jdbcType=OTHER},
+      </if>
+      <if test="parentPath != null">
+        parent_path = #{parentPath,jdbcType=VARCHAR},
+      </if>
+      <if test="completeName != null">
+        complete_name = #{completeName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        "name" = #{name,jdbcType=OTHER},
+      </if>
+      <if test="defaultApplicability != null">
+        default_applicability = #{defaultApplicability,jdbcType=OTHER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writeDate != null">
+        write_date = #{writeDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.purchase.entity.BarcodeNomenclature">
+    update "account_analytic_plan"
+    set parent_id = #{parentId,jdbcType=OTHER},
+      color = #{color,jdbcType=INTEGER},
+      create_uid = #{createUid,jdbcType=OTHER},
+      write_uid = #{writeUid,jdbcType=OTHER},
+      parent_path = #{parentPath,jdbcType=VARCHAR},
+      complete_name = #{completeName,jdbcType=VARCHAR},
+      "name" = #{name,jdbcType=OTHER},
+      default_applicability = #{defaultApplicability,jdbcType=OTHER},
+      description = #{description,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      write_date = #{writeDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

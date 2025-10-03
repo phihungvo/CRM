@@ -1,0 +1,174 @@
+mô tả các câu sql query postgres để tạo các bảng dùng cho inventory app trong odoo 18 bao gồm cả kiểu dữ liệu, các bảng có quan hệ liên quan và các bảng danh mục
+## 🗒️ Mô tả SQL Query để tạo các bảng trong **Inventory App** của Odoo 18
+
+Dưới đây là tập hợp các lệnh SQL để tạo các bảng cơ bản, các bảng liên quan và các bảng danh mục liên quan đến **Inventory App** trong **PostgreSQL**. Các bảng chính bao gồm **stock_picking**, **stock_move**, **stock_quant**, và các bảng danh mục liên quan.
+
+---
+
+## **1. Bảng `stock_picking` (Phiếu xuất/nhập kho)**
+```sql
+CREATE TABLE stock_picking (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL, -- Mã tham chiếu của phiếu (ví dụ: WH/IN/0001)
+    origin VARCHAR(64), -- Nguồn gốc của phiếu (ví dụ: PO001, SO001)
+    partner_id INTEGER, -- Tham chiếu đến nhà cung cấp hoặc khách hàng (res_partner)
+    location_id INTEGER NOT NULL, -- Tham chiếu đến vị trí nguồn (stock_location)
+    location_dest_id INTEGER NOT NULL, -- Tham chiếu đến vị trí đích (stock_location)
+    date_done TIMESTAMP, -- Ngày hoàn thành
+    state VARCHAR(20) DEFAULT 'draft', -- Trạng thái của phiếu (draft, done, cancel)
+    picking_type_id INTEGER, -- Tham chiếu đến loại phiếu (stock_picking_type)
+    create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Ngày tạo phiếu
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_partner FOREIGN KEY (partner_id) REFERENCES res_partner (id) ON DELETE CASCADE,
+    CONSTRAINT fk_location FOREIGN KEY (location_id) REFERENCES stock_location (id) ON DELETE CASCADE,
+    CONSTRAINT fk_location_dest FOREIGN KEY (location_dest_id) REFERENCES stock_location (id) ON DELETE CASCADE,
+    CONSTRAINT fk_picking_type FOREIGN KEY (picking_type_id) REFERENCES stock_picking_type (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **2. Bảng `stock_move` (Chi tiết di chuyển hàng hóa)**
+```sql
+CREATE TABLE stock_move (
+    id SERIAL PRIMARY KEY,
+    picking_id INTEGER, -- Tham chiếu đến bảng stock_picking
+    product_id INTEGER NOT NULL, -- Tham chiếu đến sản phẩm (product_product)
+    product_qty NUMERIC(10, 2) DEFAULT 0.00, -- Số lượng sản phẩm cần di chuyển
+    product_uom INTEGER NOT NULL, -- Tham chiếu đến đơn vị đo lường (uom_uom)
+    location_id INTEGER NOT NULL, -- Vị trí nguồn (stock_location)
+    location_dest_id INTEGER NOT NULL, -- Vị trí đích (stock_location)
+    state VARCHAR(20) DEFAULT 'draft', -- Trạng thái của di chuyển (draft, done, cancel)
+    date TIMESTAMP, -- Ngày thực hiện di chuyển
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_picking FOREIGN KEY (picking_id) REFERENCES stock_picking (id) ON DELETE CASCADE,
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product_product (id) ON DELETE CASCADE,
+    CONSTRAINT fk_uom FOREIGN KEY (product_uom) REFERENCES uom_uom (id) ON DELETE CASCADE,
+    CONSTRAINT fk_location FOREIGN KEY (location_id) REFERENCES stock_location (id) ON DELETE CASCADE,
+    CONSTRAINT fk_location_dest FOREIGN KEY (location_dest_id) REFERENCES stock_location (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **3. Bảng `stock_quant` (Số lượng tồn kho)**
+```sql
+CREATE TABLE stock_quant (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL, -- Tham chiếu đến sản phẩm (product_product)
+    location_id INTEGER NOT NULL, -- Tham chiếu đến vị trí kho (stock_location)
+    quantity NUMERIC(10, 2) DEFAULT 0.00, -- Số lượng tồn kho
+    reserved_quantity NUMERIC(10, 2) DEFAULT 0.00, -- Số lượng đã đặt trước
+
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product_product (id) ON DELETE CASCADE,
+    CONSTRAINT fk_location FOREIGN KEY (location_id) REFERENCES stock_location (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **4. Bảng `stock_location` (Vị trí kho)**
+```sql
+CREATE TABLE stock_location (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL, -- Tên vị trí kho
+    parent_id INTEGER, -- Vị trí cha, tự tham chiếu
+    usage VARCHAR(20) DEFAULT 'internal', -- Kiểu kho (internal, supplier, customer, inventory, production)
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_parent_location FOREIGN KEY (parent_id) REFERENCES stock_location (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **5. Bảng `stock_picking_type` (Loại phiếu nhập/xuất kho)**
+```sql
+CREATE TABLE stock_picking_type (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL, -- Tên loại phiếu (nhập kho, xuất kho, điều chuyển kho)
+    code VARCHAR(20) CHECK (code IN ('incoming', 'outgoing', 'internal')) -- Loại phiếu (incoming, outgoing, internal)
+);
+```
+
+---
+
+## **6. Bảng `product_product` (Sản phẩm)**
+```sql
+CREATE TABLE product_product (
+    id SERIAL PRIMARY KEY,
+    product_tmpl_id INTEGER NOT NULL, -- Tham chiếu đến product_template
+    default_code VARCHAR(64), -- Mã SKU của sản phẩm
+    barcode VARCHAR(64), -- Mã vạch của sản phẩm
+    active BOOLEAN DEFAULT TRUE, -- Trạng thái kích hoạt của sản phẩm
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_template FOREIGN KEY (product_tmpl_id) REFERENCES product_template (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **7. Bảng `product_template` (Mẫu sản phẩm)**
+```sql
+CREATE TABLE product_template (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL, -- Tên sản phẩm
+    categ_id INTEGER NOT NULL, -- Tham chiếu đến bảng product_category
+    uom_id INTEGER NOT NULL, -- Tham chiếu đến đơn vị đo lường (uom_uom)
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_category FOREIGN KEY (categ_id) REFERENCES product_category (id) ON DELETE CASCADE,
+    CONSTRAINT fk_uom FOREIGN KEY (uom_id) REFERENCES uom_uom (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **8. Bảng `res_partner` (Đối tác - khách hàng/nhà cung cấp)**
+```sql
+CREATE TABLE res_partner (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL, -- Tên đối tác
+    email VARCHAR(64), -- Email của đối tác
+    phone VARCHAR(20) -- Số điện thoại
+);
+```
+
+---
+
+## **9. Bảng `uom_uom` (Đơn vị đo lường)**
+```sql
+CREATE TABLE uom_uom (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) NOT NULL, -- Tên đơn vị đo lường (kg, unit, box, ...)
+    rounding NUMERIC(10, 4) DEFAULT 0.01 -- Độ chính xác làm tròn
+);
+```
+
+---
+
+## **Tóm tắt mối quan hệ**
+- **stock_picking** liên kết với **stock_move** thông qua `picking_id`.
+- **stock_move** liên kết với **product_product**, **uom_uom**, **stock_location**.
+- **stock_quant** giữ số lượng tồn kho của sản phẩm tại các vị trí kho.
+- **stock_picking_type** mô tả các loại phiếu (nhập, xuất, nội bộ).
+- **stock_location** mô tả các vị trí kho (ví dụ: Kho tổng, kho con, khu vực giao nhận, kho nhà cung cấp...).
+- **product_product** và **product_template** mô tả thông tin chi tiết sản phẩm.
+- **res_partner** chứa thông tin về khách hàng hoặc nhà cung cấp.
+
+---
+
+## **Chú ý**
+1. **Khóa chính**: Sử dụng `SERIAL PRIMARY KEY` để tự động tăng id.
+2. **Khóa ngoại**: Sử dụng `FOREIGN KEY` để liên kết các bảng với nhau.
+3. **Ràng buộc dữ liệu**: `CHECK` giúp ràng buộc giá trị hợp lệ (ví dụ: `code` trong `stock_picking_type`).
+4. **ON DELETE CASCADE**: Dữ liệu con bị xóa khi xóa dữ liệu cha.
+5. **Chỉ số (Index)**: Nên tạo các chỉ mục (`INDEX`) trên các cột được tìm kiếm thường xuyên (ví dụ: `product_id` trong `stock_quant`).
+
+---
+
+Nếu cần thêm chi tiết về trigger, stored procedure hoặc các tính năng khác, hãy cho tôi biết nhé! 😊

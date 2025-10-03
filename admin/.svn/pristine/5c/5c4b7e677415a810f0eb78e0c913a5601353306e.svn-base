@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockPackageLevel;
+
+public interface StockPackageLevelMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockPackageLevel record);
+
+    int insertSelective(StockPackageLevel record);
+
+    StockPackageLevel selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockPackageLevel record);
+
+    int updateByPrimaryKey(StockPackageLevel record);
+}

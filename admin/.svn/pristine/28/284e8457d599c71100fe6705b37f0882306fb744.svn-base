@@ -1,0 +1,16 @@
+package com.base.admin.inventory.service;
+
+import java.util.UUID;
+
+import com.base.admin.inventory.dto.request.StockInventoryDTO;
+import com.base.admin.inventory.dto.request.StockInventoryUpdateDTO;
+
+public interface StockInventoryService {
+    int create(StockInventoryDTO stockInventoryDTO);
+
+    int findById(UUID id);
+
+    int update(StockInventoryUpdateDTO request);
+
+    int deleteById(UUID id);
+}

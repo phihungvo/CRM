@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.ModulesMapper">
+
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Modules">
+		<id column="moduleid" jdbcType="VARCHAR" property="moduleid" typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="modulename" jdbcType="VARCHAR" property="modulename"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="position" jdbcType="INTEGER" property="position"/>
+		<result column="moduletype" jdbcType="INTEGER" property="moduletype"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		moduleid, modulename, description, position, moduletype, active
+	</sql>
+
+	<sql id="ModuleDTO_Column_List">
+		moduleid, modulename, description, position, moduletype, active
+	</sql>
+
+	<sql id="pageable">
+		<if test="pageable.sort.sorted">
+			<trim prefix="order by">
+				<foreach item="order" index="i" collection="pageable.sort" separator=", ">
+					<if test="order.property == 'moduleid'">moduleid ${order.direction}</if>
+					<if test="order.property == 'modulename'">modulename ${order.direction}</if>
+					<if test="order.property == 'description'">description ${order.direction}</if>
+					<if test="order.property == 'position'">position ${order.direction}</if>
+					<if test="order.property == 'moduletype'">moduletype ${order.direction}</if>
+					<if test="order.property == 'active'">active ${order.direction}</if>
+				</foreach>
+			</trim>
+		</if>
+		<if test="pageable.paged">
+			limit #{pageable.pageSize} offset #{pageable.offset}
+		</if>
+	</sql>
+
+	<sql id="searchCondition">
+		<if test="search != null">
+			<if test="search.moduleid != null"> and moduleid = #{search.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+
+			<if test="search.modulename != null">
+				<choose>
+					<when test='exact == true'>
+						and modulename = #{search.modulename}
+					</when>
+					<otherwise>
+						and modulename ILIKE '%${search.modulename}%'
+					</otherwise>
+				</choose>
+			</if>
+			<if test="search.description != null">
+				<choose>
+					<when test='exact == true'>
+						and description = #{search.description}
+					</when>
+					<otherwise>
+						and description ILIKE '%${search.description}%'
+					</otherwise>
+				</choose>
+			</if>
+
+			<if test="search.moduletype != null"> and moduletype = #{search.moduletype}</if>
+			<if test="search.active != null"> and active = #{search.active}</if>
+		</if>
+	</sql>
+
+	<sql id="queryAndCountWhereStatement">
+		<where>
+			moduletype != 3
+			<include refid="searchCondition"></include>
+		</where>
+	</sql>
+
+	<insert id="saveAll" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="moduleid" keyProperty="moduleid">
+		INSERT INTO modules (moduleid, modulename, description, position, moduletype, active)
+		VALUES
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.moduleid, jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+			#{element.modulename, jdbcType=VARCHAR},
+			#{element.description, jdbcType=VARCHAR},
+			#{element.position, jdbcType=INTEGER},
+			#{element.moduletype, jdbcType=INTEGER},
+			#{element.active, jdbcType=BOOLEAN}
+		</foreach>
+	</insert>
+
+	<select id="findAll" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM modules
+		ORDER BY position, modulename
+	</select>
+
+	<select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+		SELECT
+		<include refid="ModuleDTO_Column_List"/>
+		FROM modules
+		WHERE moduleid = #{moduleid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="findDTOById" resultType="com.base.admin.dto.ModulesDTO">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM modules
+		WHERE moduleid = #{moduleid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+		ORDER BY position, modulename
+	</select>
+
+	<select id="findByRoleId" resultType="com.base.admin.dto.ModulesDTO">
+		SELECT
+			modules.moduleid,
+			modules.modulename,
+			modules.description,
+			modules."position",
+			modules.moduletype,
+			modules.active
+		FROM
+			modules
+				INNER JOIN
+			roles_modules
+			ON
+				modules.moduleid = roles_modules.moduleid
+		WHERE
+			roles_modules.roleid = #{roleId, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="countByListModuleId" parameterType="java.util.List" resultType="java.lang.Long">
+		SELECT
+		count(1)
+		FROM modules
+		WHERE moduleid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</select>
+	<select id="countPaged" resultType="long">
+		select count(1)
+		from modules
+		<include refid="queryAndCountWhereStatement"/>
+	</select>
+
+	<select id="searchPaged" resultType="com.base.admin.dto.ModulesDTO">
+		select
+		<include refid="ModuleDTO_Column_List"/>
+		from modules
+		<include refid="queryAndCountWhereStatement"/>
+		<include refid="pageable"/>
+	</select>
+
+
+	<delete id="deleteById" parameterType="java.util.UUID">
+		DELETE FROM modules
+		WHERE moduleid = #{moduleid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</delete>
+
+	<insert id="insert" parameterType="com.base.admin.entity.Modules">
+		INSERT INTO modules (moduleid, modulename, description, position, moduletype, active)
+		VALUES (#{moduleid, jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+		#{modulename, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR},
+		#{position, jdbcType=INTEGER}, #{moduletype, jdbcType=INTEGER}, #{active, jdbcType=BOOLEAN})
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Modules">
+		UPDATE modules
+		SET modulename = #{modulename, jdbcType=VARCHAR},
+		description = #{description, jdbcType=VARCHAR},
+		position = #{position, jdbcType=INTEGER},
+		moduletype = #{moduletype, jdbcType=INTEGER},
+		active = #{active, jdbcType=BOOLEAN}
+		WHERE moduleid = #{moduleid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

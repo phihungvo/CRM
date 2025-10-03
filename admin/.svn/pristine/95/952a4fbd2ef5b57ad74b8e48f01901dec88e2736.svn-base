@@ -1,0 +1,19 @@
+package com.base.admin.inventory.mapper;
+
+import java.util.UUID;
+
+import com.base.admin.inventory.entity.ProductAttribute;
+
+public interface ProductAttributeMapper {
+    int deleteByPrimaryKey(UUID id);
+
+    int insert(ProductAttribute record);
+
+    int insertSelective(ProductAttribute record);
+
+    ProductAttribute selectByPrimaryKey(UUID id);
+
+    int updateByPrimaryKeySelective(ProductAttribute record);
+
+    int updateByPrimaryKey(ProductAttribute record);
+}

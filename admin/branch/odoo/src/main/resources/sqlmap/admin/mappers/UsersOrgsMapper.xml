@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.UsersOrgsMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.UsersOrgs">
+		<id column="organizationid" jdbcType="VARCHAR" property="organizationid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<id column="userid" jdbcType="VARCHAR" property="userid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+	</resultMap>
+
+	<delete id="deleteById" parameterType="map">
+		delete from users_orgs
+		where organizationid =
+		#{organizationid, jdbcType=OTHER, typeHandler=UUIDTypeHandler ,typeHandler=UUIDTypeHandler}
+		and userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</delete>
+
+	<delete id="deleteListByUserIds" parameterType="java.util.List">
+		delete from users_orgs
+		where userid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</delete>
+
+	<delete id="deleteListByIds" parameterType="java.util.List">
+		delete from users_orgs
+		where
+		<foreach item="item" index="index" collection="list" open="(" separator="OR" close=")">
+			(organizationid = #{item.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+			and userid = #{item.userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler})
+		</foreach>
+	</delete>
+
+	<insert id="insert" parameterType="com.base.admin.entity.UsersOrgs">
+		insert into users_orgs (organizationid, userid)
+		values (#{organizationid,jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+		#{userid,jdbcType=OTHER, typeHandler=UUIDTypeHandler})
+	</insert>
+
+	<insert id="saveAll" parameterType="java.util.List">
+		insert into users_orgs (organizationid, userid)
+		values
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</insert>
+
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.StockPickingMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.StockPicking">
+    <id column="id" jdbcType="OTHER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="picking_type_id" jdbcType="OTHER" property="pickingTypeId" />
+    <result column="partner_id" jdbcType="OTHER" property="partnerId" />
+    <result column="location_id" jdbcType="OTHER" property="locationId" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, "name", picking_type_id, partner_id, location_id, "state"
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "stock_picking"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from "stock_picking"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.StockPicking" useGeneratedKeys="false">
+    insert into "stock_picking" (id, "name", picking_type_id, partner_id,
+      location_id, "state")
+    values (#{id,jdbcType=OTHER}, #{name,jdbcType=VARCHAR}, #{pickingTypeId,jdbcType=OTHER}, #{partnerId,jdbcType=OTHER},
+      #{locationId,jdbcType=OTHER}, #{state,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.StockPicking" useGeneratedKeys="false">
+    insert into "stock_picking"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        "name",
+      </if>
+      <if test="pickingTypeId != null">
+        picking_type_id,
+      </if>
+      <if test="partnerId != null">
+        partner_id,
+      </if>
+      <if test="locationId != null">
+        location_id,
+      </if>
+      <if test="state != null">
+        "state",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pickingTypeId != null">
+        #{pickingTypeId,jdbcType=OTHER},
+      </if>
+      <if test="partnerId != null">
+        #{partnerId,jdbcType=OTHER},
+      </if>
+      <if test="locationId != null">
+        #{locationId,jdbcType=OTHER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.StockPicking">
+    update "stock_picking"
+    <set>
+      <if test="name != null">
+        "name" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pickingTypeId != null">
+        picking_type_id = #{pickingTypeId,jdbcType=OTHER},
+      </if>
+      <if test="partnerId != null">
+        partner_id = #{partnerId,jdbcType=OTHER},
+      </if>
+      <if test="locationId != null">
+        location_id = #{locationId,jdbcType=OTHER},
+      </if>
+      <if test="state != null">
+        "state" = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.StockPicking">
+    update "stock_picking"
+    set "name" = #{name,jdbcType=VARCHAR},
+      picking_type_id = #{pickingTypeId,jdbcType=OTHER},
+      partner_id = #{partnerId,jdbcType=OTHER},
+      location_id = #{locationId,jdbcType=OTHER},
+      "state" = #{state,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.AuthoritiesMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Authorities">
+		<id column="authorityid" jdbcType="VARCHAR" property="authorityid" typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="authorityname" jdbcType="VARCHAR" property="authorityname"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		authorityid,
+        authorityname
+	</sql>
+
+	<select id="getIdsByName" parameterType="java.util.List" resultType="java.util.UUID">
+		SELECT
+		authorityid
+		FROM authorities
+		WHERE authorityname IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<insert id="saveAll" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="authorityid" keyProperty="authorityid">
+		INSERT INTO authorities (authorityid, authorityname)
+		VALUES
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.authorityid, jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+			#{element.authorityname, jdbcType=VARCHAR}
+		</foreach>
+	</insert>
+
+	<select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM authorities
+		WHERE authorityid = #{authorityid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</select>
+
+	<delete id="deleteById" parameterType="java.util.UUID">
+		DELETE FROM authorities
+		WHERE authorityid = #{authorityid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</delete>
+
+	<insert id="insert" parameterType="com.base.admin.entity.Authorities">
+		INSERT INTO authorities (authorityid, authorityname)
+		VALUES (#{authorityid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}, #{authorityname, jdbcType=VARCHAR})
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Authorities">
+		UPDATE authorities
+		SET authorityname = #{authorityname, jdbcType=VARCHAR}
+		WHERE authorityid = #{authorityid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockPickingType;
+
+public interface StockPickingTypeMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockPickingType record);
+
+    int insertSelective(StockPickingType record);
+
+    StockPickingType selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockPickingType record);
+
+    int updateByPrimaryKey(StockPickingType record);
+}

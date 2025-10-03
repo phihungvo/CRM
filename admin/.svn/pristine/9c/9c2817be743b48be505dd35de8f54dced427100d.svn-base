@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.RolesModulesMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.RolesModules">
+		<id column="roleid" jdbcType="VARCHAR" property="roleid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<id column="moduleid" jdbcType="VARCHAR" property="moduleid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+	</resultMap>
+
+	<insert id="saveAll" parameterType="java.util.List" >
+		INSERT INTO roles_modules (
+		roleid, moduleid)
+		VALUES
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</insert>
+
+	<delete id="deleteById" parameterType="map">
+		delete from roles_modules
+		where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		and moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</delete>
+	<delete id="deleteListByIds" parameterType="java.util.List">
+		delete from roles_modules
+		where
+		<foreach item="item" index="index" collection="list" open="(" separator="OR" close=")">
+			(roleid = #{item.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+			and moduleid = #{item.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler})
+		</foreach>
+	</delete>
+	<select id="findAll" resultMap="BaseResultMap">
+		select * from roles_modules
+	</select>
+
+	<insert id="insert" parameterType="com.base.admin.entity.RolesModules">
+		insert into roles_modules (roleid, moduleid)
+		values (#{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler})
+	</insert>
+</mapper>

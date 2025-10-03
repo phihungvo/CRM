@@ -1,0 +1,48 @@
+package com.base.admin.hrm.controller;
+
+import com.base.admin.dto.PagedResponse;
+import com.base.admin.dto.Pagination;
+import com.base.admin.handler.ResponseHandler;
+import com.base.admin.hrm.entity.ContractWorktype;
+import com.base.admin.hrm.service.ContractWorktypeService;
+import com.base.admin.utils.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RequestMapping("/api/v1/hrm/contractworktype")
+@RestController
+public class ContractWorktypeController {
+    private final ContractWorktypeService contractWorktypeService;
+
+    public ContractWorktypeController(ContractWorktypeService contractWorktypeService) {
+        this.contractWorktypeService = contractWorktypeService;
+    }
+
+    @PostMapping("/findById")
+    public ResponseEntity<Object> findById(@RequestParam(name = "contractworktypeid", required = true) Integer contractworktypeid) {
+        ContractWorktype cntractWorktype = contractWorktypeService.findById(contractworktypeid);
+        if (cntractWorktype == null) {
+            return ResponseHandler.generateResponseError("Contract Working Type not found", HttpStatus.NOT_FOUND);
+        }
+        return ResponseHandler.generateResponseSuccess("", cntractWorktype);
+    }
+
+    @PostMapping(value = "/search")
+    public ResponseEntity<Object> search(@RequestBody Pagination pagination) {
+        List<String> listFields = ClassUtils.getAllPropertyNames(ContractWorktype.class);
+
+        if (!pagination.isValidSortField(listFields)) {
+            return ResponseHandler.generateResponseError("sortFiels invalid. In list: " + StringUtils.join(listFields, ','), HttpStatus.BAD_REQUEST);
+        }
+        Pageable pageable = pagination.convertToPageable();
+        Page<ContractWorktype> paged = contractWorktypeService.searchPaged(pageable);
+        PagedResponse<ContractWorktype> response = new PagedResponse<>(paged.getContent(), paged.getNumber(), paged.getSize(), paged.getTotalElements(), paged.getTotalPages(), paged.isLast());
+        return ResponseHandler.generateResponseSuccess("", response);
+    }
+}

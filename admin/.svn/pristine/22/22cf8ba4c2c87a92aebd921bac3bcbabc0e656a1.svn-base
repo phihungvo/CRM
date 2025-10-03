@@ -1,0 +1,32 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.AdjustmentDetail;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
+import java.util.UUID;
+
+@Mapper
+public interface AdjustmentDetailMapper {
+    @Select("SELECT * FROM adjustmentdetail WHERE CAST(adjustmentdetailid AS VARCHAR) = #{id,jdbcType=VARCHAR}")
+    List<AdjustmentDetail> findByAdjustmentid(@Param("id") UUID id);
+
+    @Insert("""
+                <script>
+                        INSERT INTO adjustmentdetail (adjustmentid, warehouseid, warehousename, productid,
+                        productname, productcode, minimumstocklevel, quantityavailable, maximumstocklevel,
+                        adjustquantity, adjustmentType)
+                        VALUES
+                        <foreach collection="adjustmentDetailList" item="item" separator=",">
+                                              (#{item.adjustmentid}, #{item.warehouseid}, #{item.warehousename},
+                                              #{item.productid}, #{item.productname}, #{item.productcode},
+                                              #{item.minimumstocklevel}, #{item.quantityavailable},
+                                              #{item.maximumstocklevel}, #{item.adjustquantity}, #{item.adjustmentType})
+                                          </foreach>
+                        </script>
+            """)
+    void saveAll(@Param("adjustmentDetailList") List<AdjustmentDetail> adjustmentDetailList);
+}

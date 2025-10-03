@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockStorageCategory;
+
+public interface StockStorageCategoryMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockStorageCategory record);
+
+    int insertSelective(StockStorageCategory record);
+
+    StockStorageCategory selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockStorageCategory record);
+
+    int updateByPrimaryKey(StockStorageCategory record);
+}

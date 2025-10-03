@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockRule;
+
+public interface StockRuleMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockRule record);
+
+    int insertSelective(StockRule record);
+
+    StockRule selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockRule record);
+
+    int updateByPrimaryKey(StockRule record);
+}

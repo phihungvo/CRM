@@ -1,0 +1,85 @@
+package com.base.admin.inventory.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
+
+/**
+ * barcode_rule
+ * @author 
+ */
+@Getter
+@Setter
+public class StockLocation implements Serializable {
+    private UUID id;
+
+    /**
+     * Barcode Nomenclature
+     */
+    private UUID barcodeNomenclatureId;
+
+    /**
+     * Created by
+     */
+    private UUID createUid;
+
+    /**
+     * Last Updated by
+     */
+    private UUID writeUid;
+
+    /**
+     * Rule Name
+     */
+    private String name;
+
+    /**
+     * Encoding
+     */
+    private String encoding;
+
+    /**
+     * Type
+     */
+    private String type;
+
+    /**
+     * Barcode Pattern
+     */
+    private String pattern;
+
+    /**
+     * Alias
+     */
+    private String alias;
+
+    /**
+     * Created on
+     */
+    private Date createDate;
+
+    /**
+     * Last Updated on
+     */
+    private Date writeDate;
+
+    /**
+     * Associated Uom
+     */
+    private UUID associatedUomId;
+
+    /**
+     * GS1 Content Type
+     */
+    private String gs1ContentType;
+
+    /**
+     * Decimal
+     */
+    private Boolean gs1DecimalUsage;
+
+    private static final long serialVersionUID = 1L;
+}

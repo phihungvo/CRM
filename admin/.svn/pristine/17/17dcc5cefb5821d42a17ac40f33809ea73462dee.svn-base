@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockMoveLine;
+
+public interface StockMoveLineMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockMoveLine record);
+
+    int insertSelective(StockMoveLine record);
+
+    StockMoveLine selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockMoveLine record);
+
+    int updateByPrimaryKey(StockMoveLine record);
+}

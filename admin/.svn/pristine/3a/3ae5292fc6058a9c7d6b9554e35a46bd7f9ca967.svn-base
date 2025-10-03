@@ -1,0 +1,42 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.dto.reponse.AdjustmentResponse;
+import com.base.admin.inventory.dto.resquest.AdjustmentRequest;
+import com.base.admin.inventory.dto.resquest.PagedRequest;
+import com.base.admin.inventory.entity.Adjustment;
+import com.base.admin.inventory.mapper.AdjustmentRepository;
+import com.base.admin.inventory.service.AdjustmentService;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class AdjustmentServiceImpl implements AdjustmentService {
+    private final AdjustmentRepository adjustmentRepository;
+
+    public AdjustmentServiceImpl(AdjustmentRepository adjustmentRepository) {
+        this.adjustmentRepository = adjustmentRepository;
+    }
+
+    @Override
+    public Optional<Adjustment> findById(UUID id) {
+        return adjustmentRepository.findById(id);
+    }
+
+    @Override
+    public Page<Adjustment> findPage(PagedRequest pagedRequest) {
+        return null;
+    }
+
+    @Override
+    public AdjustmentResponse saveAdjustment(AdjustmentRequest adjustmentRequest) {
+        return null;
+    }
+
+    @Override
+    public boolean existsByAdjustmentnumber(String adjustmentnumber) {
+        return false;
+    }
+}

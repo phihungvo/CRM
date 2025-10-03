@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.ActionsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.entity.Actions">
+    <id column="actionid" jdbcType="OTHER" property="actionid" typeHandler="UUIDTypeHandler"/>
+    <id column="resourceid" jdbcType="OTHER" property="resourceid" typeHandler="UUIDTypeHandler"/>
+    <result column="actionname" jdbcType="VARCHAR" property="actionname" />
+    <result column="resourcename" jdbcType="VARCHAR" property="resourcename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    actionid, resourceid, actionname, resourcename
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from actions
+    where actionid = #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and resourceid = #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+
+  <select id="findActionIdByResourceid" resultType="java.util.UUID">
+      select actionid
+      from actions
+      where resourceid = #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from actions
+    where actionid = #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and resourceid = #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+
+  <insert id="saveAll" parameterType="java.util.List">
+    insert into actions (actionid, resourceid, actionname,  resourcename)
+    values
+    <foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+      #{element.actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.actionname,jdbcType=VARCHAR},
+      #{element.resourcename,jdbcType=VARCHAR}
+    </foreach>
+  </insert>
+
+  <insert id="insert" parameterType="com.base.admin.entity.Actions">
+    insert into actions (actionid, resourceid, actionname, 
+      resourcename)
+    values (#{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{actionname,jdbcType=VARCHAR},
+      #{resourcename,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.entity.Actions">
+    insert into actions
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="actionid != null">
+        actionid,
+      </if>
+      <if test="resourceid != null">
+        resourceid,
+      </if>
+      <if test="actionname != null">
+        actionname,
+      </if>
+      <if test="resourcename != null">
+        resourcename,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="actionid != null">
+        #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="resourceid != null">
+        #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="actionname != null">
+        #{actionname,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcename != null">
+        #{resourcename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.entity.Actions">
+    update actions
+    <set>
+      <if test="actionname != null">
+        actionname = #{actionname,jdbcType=VARCHAR},
+      </if>
+      <if test="resourcename != null">
+        resourcename = #{resourcename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where actionid = #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and resourceid = #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.entity.Actions">
+    update actions
+    set actionname = #{actionname,jdbcType=VARCHAR},
+      resourcename = #{resourcename,jdbcType=VARCHAR}
+    where actionid = #{actionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and resourceid = #{resourceid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

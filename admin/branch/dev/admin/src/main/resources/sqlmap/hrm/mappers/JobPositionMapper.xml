@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.JobPositionMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.JobPosition">
+    <result column="jobcode" jdbcType="VARCHAR" property="jobcode" />
+    <result column="jobname" jdbcType="VARCHAR" property="jobname" />
+    <result column="jobgroup" jdbcType="VARCHAR" property="jobgroup" />
+    <result column="joblevel" jdbcType="VARCHAR" property="joblevel" />
+    <result column="jobtitle" jdbcType="VARCHAR" property="jobtitle" />
+    <result column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitname" jdbcType="VARCHAR" property="unitname" />
+    <result column="socialinsurancesalary" jdbcType="NUMERIC" property="socialinsurancesalary" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    jobcode, jobname, jobgroup,
+      joblevel, jobtitle, unitid,
+      unitname, socialinsurancesalary, "status"
+  </sql>
+
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.jobcode != null">
+        <choose>
+          <when test='exact == true'>
+            and jobcode = #{search.jobcode}
+          </when>
+          <otherwise>
+            and jobcode ILIKE '%${search.jobcode}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.jobname != null">
+        <choose>
+          <when test='exact == true'>
+            and jobname = #{search.jobname}
+          </when>
+          <otherwise>
+            and jobname ILIKE '%${search.jobname}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.jobgroup != null">
+        <choose>
+          <when test='exact == true'>
+            and jobgroup = #{search.jobgroup}
+          </when>
+          <otherwise>
+            and jobgroup ILIKE '%${search.jobgroup}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.joblevel != null">
+        <choose>
+          <when test='exact == true'>
+            and joblevel = #{search.joblevel}
+          </when>
+          <otherwise>
+            and joblevel ILIKE '%${search.joblevel}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.jobtitle != null">
+        <choose>
+          <when test='exact == true'>
+            and jobtitle = #{search.jobtitle}
+          </when>
+          <otherwise>
+            and jobtitle ILIKE '%${search.jobtitle}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.unitid != null"> and unitid = #{search.unitid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}</if>
+      <if test="search.unitname != null">
+        <choose>
+          <when test='exact == true'>
+            and unitname = #{search.unitname}
+          </when>
+          <otherwise>
+            and unitname ILIKE '%${search.unitname}%'
+          </otherwise>
+        </choose>
+      </if>
+
+      <if test="search.status != null"> and status = #{search.status}</if>
+    </if>
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'jobcode'">jobcode ${order.direction}</if>
+          <if test="order.property == 'jobname'">jobname ${order.direction}</if>
+          <if test="order.property == 'jobgroup'">jobgroup ${order.direction}</if>
+          <if test="order.property == 'joblevel'">joblevel ${order.direction}</if>
+          <if test="order.property == 'jobtitle'">jobtitle ${order.direction}</if>
+          <if test="order.property == 'unitid'">unitid ${order.direction}</if>
+          <if test="order.property == 'unitname'">unitname ${order.direction}</if>
+          <if test="order.property == 'socialinsurancesalary'">socialinsurancesalary ${order.direction}</if>
+          <if test="order.property == 'status'">status ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+
+  <update id="updateByPrimaryKey">
+    update job_position
+    <set>
+          jobcode = #{jobcode,jdbcType=VARCHAR},
+          jobname = #{jobname,jdbcType=VARCHAR},
+    	  jobgroup = #{jobgroup,jdbcType=VARCHAR},
+    	  joblevel = #{joblevel,jdbcType=VARCHAR},
+    	  jobtitle = #{jobtitle,jdbcType=VARCHAR},
+    	  unitid = #{unitid,jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+    	  unitname = #{unitname,jdbcType=VARCHAR},
+    	  socialinsurancesalary = #{socialinsurancesalary,jdbcType=DECIMAL},
+    	  status = #{status,jdbcType=INTEGER}
+    </set>
+    where jobcode = #{jobcode,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from job_position
+    where jobcode = #{jobcode,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="selectByPrimaryKey" resultType="com.base.admin.hrm.entity.JobPosition">
+      select
+      <include refid="Base_Column_List" />
+      from job_position
+      where jobcode = #{jobcode,jdbcType=VARCHAR}
+  </select>
+
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from job_position
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.entity.JobPosition">
+    select
+    <include refid="Base_Column_List"/>
+    from job_position
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.JobPosition">
+    insert into job_position (jobcode, jobname, jobgroup, 
+      joblevel, jobtitle, unitid, 
+      unitname, socialinsurancesalary, "status"
+      )
+    values (#{jobcode,jdbcType=VARCHAR}, #{jobname,jdbcType=VARCHAR}, #{jobgroup,jdbcType=VARCHAR}, 
+      #{joblevel,jdbcType=VARCHAR}, #{jobtitle,jdbcType=VARCHAR}, #{unitid,jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+      #{unitname,jdbcType=VARCHAR}, #{socialinsurancesalary,jdbcType=NUMERIC}, #{status,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.JobPosition">
+    insert into job_position
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobcode != null">
+        jobcode,
+      </if>
+      <if test="jobname != null">
+        jobname,
+      </if>
+      <if test="jobgroup != null">
+        jobgroup,
+      </if>
+      <if test="joblevel != null">
+        joblevel,
+      </if>
+      <if test="jobtitle != null">
+        jobtitle,
+      </if>
+      <if test="unitid != null">
+        unitid,
+      </if>
+      <if test="unitname != null">
+        unitname,
+      </if>
+      <if test="socialinsurancesalary != null">
+        socialinsurancesalary,
+      </if>
+      <if test="status != null">
+        "status",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jobcode != null">
+        #{jobcode,jdbcType=VARCHAR},
+      </if>
+      <if test="jobname != null">
+        #{jobname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobgroup != null">
+        #{jobgroup,jdbcType=VARCHAR},
+      </if>
+      <if test="joblevel != null">
+        #{joblevel,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitle != null">
+        #{jobtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="unitid != null">
+        #{unitid,jdbcType=OTHER, typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitname != null">
+        #{unitname,jdbcType=VARCHAR},
+      </if>
+      <if test="socialinsurancesalary != null">
+        #{socialinsurancesalary,jdbcType=NUMERIC},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>

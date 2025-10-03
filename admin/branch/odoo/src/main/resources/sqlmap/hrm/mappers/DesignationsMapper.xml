@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.DesignationsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.Designations">
+    <id column="designateid" jdbcType="OTHER" property="designateid" typeHandler="UUIDTypeHandler"/>
+    <result column="employeeid" jdbcType="OTHER" property="employeeid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="designateunitid" jdbcType="OTHER" property="designateunitid" typeHandler="UUIDTypeHandler"/>
+    <result column="effectivedate" jdbcType="DATE" property="effectivedate" />
+    <result column="designatenumber" jdbcType="VARCHAR" property="designatenumber" />
+    <result column="jobtitleid" jdbcType="INTEGER" property="jobtitleid" />
+    <result column="designatestatusid" jdbcType="INTEGER" property="designatestatusid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    designateid, employeeid, unitid, designateunitid, effectivedate, designatenumber,
+    jobtitleid, designatestatusid
+  </sql>
+
+  <resultMap id="DTOResultMap" type="com.base.admin.hrm.dto.DesignationsDTO">
+    <id column="designateid" jdbcType="OTHER" property="designateid" typeHandler="UUIDTypeHandler"/>
+    <result column="employeeid" jdbcType="OTHER" property="employeeid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="designateunitid" jdbcType="OTHER" property="designateunitid" typeHandler="UUIDTypeHandler"/>
+    <result column="effectivedate" jdbcType="DATE" property="effectivedate" />
+    <result column="designatenumber" jdbcType="VARCHAR" property="designatenumber" />
+    <result column="jobtitleid" jdbcType="INTEGER" property="jobtitleid" />
+    <result column="designatestatusid" jdbcType="INTEGER" property="designatestatusid" />
+    <result column="employeecode" jdbcType="VARCHAR" property="employeecode" />
+    <result column="fullname" jdbcType="VARCHAR" property="fullname" />
+    <result column="unitname" jdbcType="VARCHAR" property="unitname" />
+    <result column="designateunitname" jdbcType="VARCHAR" property="designateunitname" />
+      <result column="jobtitlename" jdbcType="VARCHAR" property="jobtitlename"/>
+  </resultMap>
+  <sql id="DTO_Column_List">
+    designateid, employeeid, unitid, designateunitid, effectivedate, designatenumber,
+    jobtitleid, designatestatusid,employeecode,fullname,unitname,designateunitname,jobtitlename
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'designateid'">designateid ${order.direction}</if>
+          <if test="order.property == 'employeeid'">employeeid ${order.direction}</if>
+          <if test="order.property == 'unitid'">unitid ${order.direction}</if>
+          <if test="order.property == 'designateunitid'">designateunitid ${order.direction}</if>
+          <if test="order.property == 'effectivedate'">effectivedate ${order.direction}</if>
+          <if test="order.property == 'designatenumber'">designatenumber ${order.direction}</if>
+          <if test="order.property == 'jobtitleid'">jobtitleid ${order.direction}</if>
+          <if test="order.property == 'designatestatusid'">designatestatusid ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.designateid != null"> and designateid = #{search.designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.employeeid != null"> and employeeid = #{search.employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.unitid != null"> and unitid = #{search.unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.designateunitid != null"> and designateunitid = #{search.designateunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.effectivedate != null"> and effectivedate = #{search.effectivedate,jdbcType=DATE}</if>
+
+      <if test="search.designatenumber != null">
+        <choose>
+          <when test='exact == true'>
+            and designatenumber = #{search.designatenumber}
+          </when>
+          <otherwise>
+            and designatenumber ILIKE '%${search.designatenumber}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.jobtitleid != null"> and jobtitleid = #{search.jobtitleid}</if>
+      <if test="search.designatestatusid != null"> and designatestatusid = #{search.designatestatusid}</if>
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+
+  <select id="findById" resultType="com.base.admin.hrm.dto.DesignationsDTO">
+<!--    select-->
+<!--    <include refid="DTO_Column_List" />-->
+<!--    from designations-->
+    WITH designations_CTE AS (
+        SELECT
+          ds.designateid,
+          ds.employeeid,
+          ds.unitid,
+          ds.designateunitid,
+          ds.effectivedate,
+          ds.designatenumber,
+          ds.jobtitleid,
+          ds.designatestatusid
+        FROM
+            designations ds
+        where ds.designateid = #{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    )
+    SELECT
+      ds.designateid,
+      ds.employeeid,
+      ds.unitid,
+      ds.designateunitid,
+      ds.effectivedate,
+      ds.designatenumber,
+      ds.jobtitleid,
+      ds.designatestatusid,
+      e.employeecode,
+      e.fullname,
+      u.unitname,
+      ud.unitname as designateunitname,
+      jt.jobtitlename
+    FROM
+      designations_CTE ds
+      LEFT JOIN employees e on e.employeeid = ds.employeeid
+      LEFT JOIN units u on u.unitid =  ds.unitid
+      LEFT JOIN units ud on ud.unitid = ds.designateunitid
+      LEFT JOIN job_title jt on jt.jobtitleid = ds.jobtitleid
+  </select>
+
+  <select id="countPaged" resultType="java.lang.Long">
+    select count(1)
+    from designations
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.dto.DesignationsDTO">
+<!--    WITH designations_CTE AS (-->
+<!--      SELECT-->
+<!--        ds.designateid,-->
+<!--        ds.employeeid,-->
+<!--        ds.unitid,-->
+<!--        ds.designateunitid,-->
+<!--        ds.effectivedate,-->
+<!--        ds.designatenumber,-->
+<!--        ds.jobtitleid,-->
+<!--        ds.designatestatusid-->
+<!--      FROM-->
+<!--        designations ds-->
+<!--        <include refid="queryAndCountWhereStatement"/>-->
+<!--        <include refid="pageable"/>-->
+<!--    )-->
+    SELECT
+      ds.designateid,
+      ds.employeeid,
+      ds.unitid,
+      ds.designateunitid,
+      ds.effectivedate,
+      ds.designatenumber,
+      ds.jobtitleid,
+      ds.designatestatusid,
+      e.employeecode,
+      e.fullname,
+      u.unitname,
+      ud.unitname as designateunitname,
+      jt.jobtitlename
+    FROM
+        designations ds
+        LEFT JOIN employees e on e.employeeid = ds.employeeid
+        LEFT JOIN units u on u.unitid =  ds.unitid
+        LEFT JOIN units ud on ud.unitid = ds.designateunitid
+        LEFT JOIN job_title jt on jt.jobtitleid = ds.jobtitleid
+      <include refid="queryAndCountWhereStatement"/>
+      <include refid="pageable"/>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from designations
+    where designateid = #{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from designations
+    where designateid = #{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    delete from designations
+    where designateid in
+    <foreach item="item" collection="list" open="(" separator="," close=")">
+      #{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.Designations">
+    insert into designations (designateid, employeeid, unitid,
+      designateunitid, effectivedate, designatenumber,
+      jobtitleid, designatestatusid)
+    values (#{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{designateunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{effectivedate,jdbcType=DATE}, #{designatenumber,jdbcType=VARCHAR},
+      #{jobtitleid,jdbcType=INTEGER}, #{designatestatusid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.Designations">
+    insert into designations
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="designateid != null">
+        designateid,
+      </if>
+      <if test="employeeid != null">
+        employeeid,
+      </if>
+      <if test="unitid != null">
+        unitid,
+      </if>
+      <if test="designateunitid != null">
+        designateunitid,
+      </if>
+      <if test="effectivedate != null">
+        effectivedate,
+      </if>
+      <if test="designatenumber != null">
+        designatenumber,
+      </if>
+      <if test="jobtitleid != null">
+        jobtitleid,
+      </if>
+      <if test="designatestatusid != null">
+        designatestatusid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="designateid != null">
+        #{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="employeeid != null">
+        #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitid != null">
+        #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="designateunitid != null">
+        #{designateunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="effectivedate != null">
+        #{effectivedate,jdbcType=DATE},
+      </if>
+      <if test="designatenumber != null">
+        #{designatenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleid != null">
+        #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="designatestatusid != null">
+        #{designatestatusid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.Designations">
+    update designations
+    <set>
+      <if test="employeeid != null">
+        employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitid != null">
+        unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="designateunitid != null">
+        designateunitid = #{designateunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="effectivedate != null">
+        effectivedate = #{effectivedate,jdbcType=DATE},
+      </if>
+      <if test="designatenumber != null">
+        designatenumber = #{designatenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleid != null">
+        jobtitleid = #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="designatestatusid != null">
+        designatestatusid = #{designatestatusid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where designateid = #{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.Designations">
+    update designations
+    set employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      designateunitid = #{designateunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      effectivedate = #{effectivedate,jdbcType=DATE},
+      designatenumber = #{designatenumber,jdbcType=VARCHAR},
+      jobtitleid = #{jobtitleid,jdbcType=INTEGER},
+      designatestatusid = #{designatestatusid,jdbcType=INTEGER}
+    where designateid = #{designateid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

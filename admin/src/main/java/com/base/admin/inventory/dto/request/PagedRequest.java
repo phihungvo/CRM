@@ -1,0 +1,13 @@
+package com.base.admin.inventory.dto.request;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class PagedRequest {
+    private int page;
+    private int size;
+    private String sortField;
+    private String sortDirection;
+}

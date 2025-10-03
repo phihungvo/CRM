@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.PagesMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Pages">
+		<id column="pageid" jdbcType="OTHER" property="pageid"
+		    typeHandler="UUIDTypeHandler"/>
+		<id column="moduleid" jdbcType="OTHER" property="moduleid"
+		    typeHandler="UUIDTypeHandler"/>
+		<result column="parentpageid" jdbcType="OTHER" property="parentpageid"
+		        typeHandler="UUIDTypeHandler"/>
+		<result column="pagename" jdbcType="VARCHAR" property="pagename"/>
+		<result column="href" jdbcType="VARCHAR" property="href"/>
+		<result column="icon" jdbcType="VARCHAR" property="icon"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="istitle" jdbcType="BOOLEAN" property="istitle"/>
+		<result column="position" jdbcType="INTEGER" property="position"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+	</resultMap>
+
+	<resultMap id="MenuDTOResultMap" type="com.base.admin.dto.authentication.MenuDTO">
+		<id column="pageid" jdbcType="OTHER" property="pageid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="parentpageid" jdbcType="OTHER" property="parentpageid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="pagename" jdbcType="VARCHAR" property="pagename"/>
+		<result column="href" jdbcType="VARCHAR" property="href"/>
+		<result column="icon" jdbcType="VARCHAR" property="icon"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="istitle" jdbcType="BOOLEAN" property="istitle"/>
+		<result column="position" jdbcType="INTEGER" property="position"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+		<result column="roleid" jdbcType="OTHER" property="roleid" typeHandler="UUIDTypeHandler"/>
+		<result column="moduleid" jdbcType="OTHER" property="moduleid" typeHandler="UUIDTypeHandler"/>
+
+		<!--    collections of permission     -->
+<!--		<collection property="permissions" ofType="com.base.admin.dto.PermissionsDTO"-->
+<!--		            column="{pageid=pageid,roleid=roleid,moduleid=moduleid}" select="selectPermissions"/>-->
+	</resultMap>
+
+	<resultMap id="PermissionResultMap" type="com.base.admin.dto.PermissionsDTO">
+		<result column="roleid" jdbcType="OTHER" property="roleid" typeHandler="UUIDTypeHandler"/>
+		<result column="moduleid" jdbcType="OTHER" property="moduleid" typeHandler="UUIDTypeHandler"/>
+		<result column="pageid" jdbcType="OTHER" property="pageid" typeHandler="UUIDTypeHandler"/>
+		<result column="isselected" jdbcType="BOOLEAN" property="isselected"/>
+		<result column="actionid" jdbcType="OTHER" property="actionid" typeHandler="UUIDTypeHandler"/>
+		<result column="actionname" jdbcType="VARCHAR" property="actionname"/>
+	</resultMap>
+
+	<resultMap id="PagesDTOResultMap" type="com.base.admin.dto.PagesDTO">
+		<result column="pageid" jdbcType="OTHER" property="pageid" typeHandler="UUIDTypeHandler"/>
+		<result column="moduleid" jdbcType="OTHER" property="moduleid" typeHandler="UUIDTypeHandler"/>
+		<result column="roleid" jdbcType="OTHER" property="roleid" typeHandler="UUIDTypeHandler"/>
+		<result column="parentpageid" jdbcType="OTHER" property="parentpageid" typeHandler="UUIDTypeHandler"/>
+		<result column="pagename" jdbcType="VARCHAR" property="pagename"/>
+		<result column="href" jdbcType="VARCHAR" property="href"/>
+		<result column="icon" jdbcType="VARCHAR" property="icon"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="istitle" jdbcType="BOOLEAN" property="istitle"/>
+		<result column="position" jdbcType="INTEGER" property="position"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+		<result column="isselected" jdbcType="BOOLEAN" property="isselected"/>
+
+		<!--    collections of permission     -->
+		<collection property="permissions" ofType="com.base.admin.dto.PermissionsDTO"
+		            column="{pageid=pageid,roleid=roleid,moduleid=moduleid}" select="selectPermissions"/>
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		pageid
+		, moduleid, parentpageid, pagename, href, icon, description, istitle, position,
+    active
+	</sql>
+
+	<select id="selectPermissions" resultMap="PermissionResultMap">
+		SELECT
+		permissions.roleid,
+		permissions.moduleid,
+		permissions.pageid,
+		permissions.isselected,
+		actions.actionid,
+		actions.actionname
+		FROM
+		actions
+		INNER JOIN
+		permissions
+		ON
+		actions.actionid = permissions.actionid AND
+		actions.resourceid = permissions.pageid
+		WHERE
+		permissions.roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler} AND
+		permissions.moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler} AND
+		permissions.pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+	<insert id="saveAll" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="pageid"
+	        keyProperty="pageid">
+		INSERT INTO pages (
+		pageid, moduleid, parentpageid, pagename, href, icon, description, istitle , position, active )
+		VALUES
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.parentpageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.pagename,jdbcType=VARCHAR},
+			#{element.href,jdbcType=VARCHAR},
+			#{element.icon,jdbcType=VARCHAR},
+			#{element.description,jdbcType=VARCHAR},
+			#{element.istitle,jdbcType=BOOLEAN},
+			#{element.position,jdbcType=INTEGER},
+			#{element.active,jdbcType=BOOLEAN}
+		</foreach>
+	</insert>
+
+	<select id="getUserMenuForOrganization" parameterType="map" resultMap="MenuDTOResultMap">
+		with cte as(
+			SELECT
+				DISTINCT ON (pageid) rolemodulepage.pageid, rolemodulepage.roleid, rolemodulepage.moduleid
+			FROM
+				rolemodulepage
+			INNER JOIN
+				roles_modules
+				ON
+				rolemodulepage.roleid = roles_modules.roleid AND
+				rolemodulepage.moduleid = roles_modules.moduleid
+			INNER JOIN
+				users_roles
+				ON
+				roles_modules.roleid = users_roles.roleid
+			INNER JOIN
+				users_orgs
+				ON
+				users_roles.userid = users_orgs.userid
+			WHERE
+				users_orgs.organizationid =  #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+				AND users_orgs.userid =  #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+				AND rolemodulepage.isselected = true
+		)
+		SELECT
+			pages.pageid,
+			pages.parentpageid,
+			pages.pagename,
+			pages.href,
+			pages.icon,
+			pages.description,
+			pages.istitle,
+			pages.position,
+			pages.active,
+			t.roleid,
+			t.moduleid
+		FROM cte t
+		LEFT JOIN pages
+			ON t.pageid = pages.pageid
+<!--		SELECT-->
+<!--            pages.pageid,-->
+<!--            pages.parentpageid,-->
+<!--            pages.pagename,-->
+<!--            pages.href,-->
+<!--            pages.icon,-->
+<!--            pages.description,-->
+<!--            pages.istitle,-->
+<!--            pages.position,-->
+<!--            pages.active,-->
+<!--            t.roleid,-->
+<!--            t.moduleid-->
+<!--		FROM-->
+<!--		    pages-->
+<!--		RIGHT JOIN-->
+<!--            (-->
+<!--                SELECT-->
+<!--                    DISTINCT ON (pageid) rolemodulepage.pageid, rolemodulepage.roleid, rolemodulepage.moduleid-->
+<!--                FROM-->
+<!--                    rolemodulepage-->
+<!--                INNER JOIN-->
+<!--                    roles_modules-->
+<!--                ON-->
+<!--                    rolemodulepage.roleid = roles_modules.roleid AND-->
+<!--                    rolemodulepage.moduleid = roles_modules.moduleid-->
+<!--                INNER JOIN-->
+<!--                    users_roles-->
+<!--                ON-->
+<!--                    roles_modules.roleid = users_roles.roleid-->
+<!--                INNER JOIN-->
+<!--                    users_orgs-->
+<!--                ON-->
+<!--                    users_roles.userid = users_orgs.userid-->
+<!--                WHERE-->
+<!--                    users_orgs.organizationid =  #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}-->
+<!--                    AND users_orgs.userid =  #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}-->
+<!--					AND rolemodulepage.isselected = true-->
+
+<!--            ) as t-->
+<!--		ON t.pageid = pages.pageid-->
+	</select>
+	<select id="getMenuPermission" parameterType="map" resultMap="PermissionResultMap">
+		with cte as (
+			SELECT
+				rolemodulepage.pageid, rolemodulepage.roleid, rolemodulepage.moduleid
+			FROM
+				rolemodulepage
+			INNER JOIN
+				roles_modules
+				ON
+				rolemodulepage.roleid = roles_modules.roleid AND
+				rolemodulepage.moduleid = roles_modules.moduleid
+			INNER JOIN
+				users_roles
+				ON
+				roles_modules.roleid = users_roles.roleid
+			INNER JOIN
+				users_orgs
+				ON
+				users_roles.userid = users_orgs.userid
+		WHERE
+			users_orgs.organizationid =  #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+			AND users_orgs.userid =  #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		)
+		SELECT
+			permissions.roleid,
+			permissions.moduleid,
+			permissions.pageid,
+			permissions.isselected,
+			actions.actionid,
+			actions.actionname
+		FROM cte t
+			INNER join permissions
+			ON t.pageid = permissions.pageid and t.roleid = permissions.roleid and t.moduleid = permissions.moduleid
+			left JOIN actions
+			ON
+			actions.actionid = permissions.actionid AND
+			actions.resourceid = permissions.pageid
+		WHERE
+		permissions.isselected = true
+<!--		SELECT-->
+<!--			permissions.roleid,-->
+<!--			permissions.moduleid,-->
+<!--			permissions.pageid,-->
+<!--			permissions.isselected,-->
+<!--			actions.actionid,-->
+<!--			actions.actionname-->
+<!--		FROM-->
+<!--			actions-->
+<!--				INNER JOIN-->
+<!--			permissions-->
+<!--			ON-->
+<!--				actions.actionid = permissions.actionid AND-->
+<!--				actions.resourceid = permissions.pageid-->
+<!--				INNER JOIN-->
+<!--			(-->
+<!--				SELECT-->
+<!--					rolemodulepage.pageid, rolemodulepage.roleid, rolemodulepage.moduleid-->
+<!--				FROM-->
+<!--					rolemodulepage-->
+<!--						INNER JOIN-->
+<!--					roles_modules-->
+<!--					ON-->
+<!--						rolemodulepage.roleid = roles_modules.roleid AND-->
+<!--						rolemodulepage.moduleid = roles_modules.moduleid-->
+<!--						INNER JOIN-->
+<!--					users_roles-->
+<!--					ON-->
+<!--						roles_modules.roleid = users_roles.roleid-->
+<!--						INNER JOIN-->
+<!--					users_orgs-->
+<!--					ON-->
+<!--						users_roles.userid = users_orgs.userid-->
+<!--				WHERE-->
+<!--					users_orgs.organizationid =  #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}-->
+<!--					AND users_orgs.userid =  #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}-->
+<!--			) as t-->
+<!--			ON t.pageid = permissions.pageid and t.roleid = permissions.roleid and t.moduleid = permissions.moduleid-->
+<!--		WHERE-->
+<!--			permissions.isselected = true-->
+	</select>
+
+	<select id="getUserMenuForOrganizationNormal" parameterType="map" resultMap="MenuDTOResultMap">
+		SELECT
+			pages.pageid,
+			pages.parentpageid,
+			pages.pagename,
+			pages.href,
+			pages.icon,
+			pages.description,
+			pages.istitle,
+			pages.position,
+			pages.active,
+			null as roleid,
+			null as moduleid
+		FROM
+			pages
+		WHERE
+			pages.pageid IN (
+			        SELECT
+			            pages.pageid
+			        FROM
+			            pages
+			        INNER JOIN
+			            modules
+			        ON pages.moduleid = modules.moduleid
+			        WHERE
+				        modules.modulename = 'Default'
+				        AND modules.active = TRUE
+			)
+	</select>
+
+	<select id="findById" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from pages
+		where pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		and moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="findByModuleId" parameterType="map" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from pages
+		where moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+	<select id="findMenuItemByRoleIdAndModuleId" resultMap="PagesDTOResultMap">
+		SELECT
+			pages.pageid,
+			pages.moduleid,
+			rolemodulepage.roleid,
+			pages.parentpageid,
+			pages.pagename,
+			pages.href,
+			pages.icon,
+			pages.description,
+			pages.istitle,
+			pages."position",
+			pages.active,
+			rolemodulepage.isselected
+		FROM
+			pages
+				INNER JOIN
+			rolemodulepage
+			ON
+				pages.pageid = rolemodulepage.pageid AND
+				pages.moduleid = rolemodulepage.moduleid
+		WHERE
+			rolemodulepage.roleid =  #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler} AND
+			rolemodulepage.moduleid =  #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+
+	<delete id="deleteById" parameterType="map">
+		DELETE FROM pages
+		WHERE pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		AND moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</delete>
+	<insert id="insert" parameterType="com.base.admin.entity.Pages">
+		INSERT INTO pages (pageid, moduleid, parentpageid,
+		pagename, href, icon,
+		description, istitle, position,
+		active)
+		VALUES (#{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{parentpageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{pagename,jdbcType=VARCHAR}, #{href,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{istitle,jdbcType=BOOLEAN}, #{position,jdbcType=INTEGER},
+		#{active,jdbcType=BOOLEAN})
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Pages">
+		UPDATE pages
+		SET parentpageid =
+		#{parentpageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		pagename = #{pagename,jdbcType=VARCHAR},
+		href = #{href,jdbcType=VARCHAR},
+		icon = #{icon,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		istitle = #{istitle,jdbcType=BOOLEAN},
+		position = #{position,jdbcType=INTEGER},
+		active = #{active,jdbcType=BOOLEAN}
+		WHERE pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		AND moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

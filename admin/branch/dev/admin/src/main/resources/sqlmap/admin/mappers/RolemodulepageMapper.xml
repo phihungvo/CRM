@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.RolemodulepageMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.entity.Rolemodulepage">
+    <!--@mbg.generated -->
+    <!--@Table rolemodulepage -->
+    <!-- generated on Mon Apr 01 14:57:31 ICT 2024 -->
+    <id column="roleid" jdbcType="OTHER" property="roleid" />
+    <id column="moduleid" jdbcType="OTHER" property="moduleid" />
+    <id column="pageid" jdbcType="OTHER" property="pageid" />
+  </resultMap>
+
+  <insert id="saveAll" parameterType="java.util.List" >
+    INSERT INTO rolemodulepage (
+    roleid, moduleid, pageid, isselected )
+    VALUES
+    <foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+      #{element.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{element.isselected,jdbcType=BOOLEAN}
+    </foreach>
+  </insert>
+
+  <update id="updateFieldSelectted" parameterType="com.base.admin.entity.Rolemodulepage">
+    UPDATE rolemodulepage
+    set isselected = #{isselected,jdbcType=BOOLEAN}
+    where rolemodulepage.roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler} AND
+          rolemodulepage.moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler} AND
+          rolemodulepage.pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    <!--@mbg.generated -->
+    delete from rolemodulepage
+    where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and moduleid = #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      and pageid = #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.entity.Rolemodulepage">
+    <!--@mbg.generated -->
+    insert into rolemodulepage (roleid, moduleid, pageid, isselected
+      )
+    values (#{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{moduleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{pageid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.entity.Rolemodulepage">
+    <!--@mbg.generated -->
+    insert into rolemodulepage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleid != null">
+        roleid,
+      </if>
+      <if test="moduleid != null">
+        moduleid,
+      </if>
+      <if test="pageid != null">
+        pageid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleid != null">
+        #{roleid,jdbcType=OTHER},
+      </if>
+      <if test="moduleid != null">
+        #{moduleid,jdbcType=OTHER},
+      </if>
+      <if test="pageid != null">
+        #{pageid,jdbcType=OTHER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

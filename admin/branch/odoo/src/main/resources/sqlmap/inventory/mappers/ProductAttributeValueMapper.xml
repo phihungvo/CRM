@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.ProductAttributeValueMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.ProductAttributeValue">
+    <id column="id" jdbcType="OTHER" property="id" />
+    <result column="attribute_id" jdbcType="OTHER" property="attributeId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, attribute_id, "name"
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Object" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "product_attribute_value"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Object">
+    delete from "product_attribute_value"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.ProductAttributeValue" useGeneratedKeys="false">
+    insert into "product_attribute_value" ("id",attribute_id, "name")
+    values (#{id,jdbcType=OTHER},#{attributeId,jdbcType=OTHER}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.ProductAttributeValue" useGeneratedKeys="true">
+    insert into "product_attribute_value"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="attributeId != null">
+        attribute_id,
+      </if>
+      <if test="name != null">
+        "name",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="attributeId != null">
+        #{attributeId,jdbcType=OTHER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.ProductAttributeValue">
+    update "product_attribute_value"
+    <set>
+      <if test="attributeId != null">
+        attribute_id = #{attributeId,jdbcType=OTHER},
+      </if>
+      <if test="name != null">
+        "name" = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.ProductAttributeValue">
+    update "product_attribute_value"
+    set attribute_id = #{attributeId,jdbcType=OTHER},
+      "name" = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

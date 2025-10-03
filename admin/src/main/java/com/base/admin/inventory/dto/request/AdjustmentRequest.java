@@ -1,0 +1,22 @@
+package com.base.admin.inventory.dto.request;
+
+import com.base.admin.inventory.dto.AdjustmentDTO;
+import com.base.admin.inventory.dto.AdjustmentDetailDTO;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+public class AdjustmentRequest {
+     AdjustmentDTO adjustment;
+     List<AdjustmentDetailDTO> adjustmentDetails;
+
+     public AdjustmentRequest(AdjustmentDTO adjustmentDTO, List<AdjustmentDetailDTO> adjustmentDetailDTOS) {
+          this.adjustment = adjustmentDTO;
+          this.adjustmentDetails = adjustmentDetailDTOS;
+     }
+     public AdjustmentRequest()
+     {}
+}

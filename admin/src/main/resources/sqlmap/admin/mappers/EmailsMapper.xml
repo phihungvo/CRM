@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.EmailsMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Emails">
+		<id column="userid" jdbcType="OTHER" property="userid" typeHandler="UUIDTypeHandler"/>
+		<result column="username" jdbcType="VARCHAR" property="username"/>
+		<result column="toemail" jdbcType="VARCHAR" property="toemail"/>
+		<result column="subject" jdbcType="VARCHAR" property="subject"/>
+		<result column="message" jdbcType="VARCHAR" property="message"/>
+		<result column="scheduledtime" jdbcType="DATE" property="scheduledtime"/>
+		<result column="zoneid" jdbcType="VARCHAR" property="zoneid"/>
+		<result column="sentdate" jdbcType="DATE" property="sentdate"/>
+		<result column="errordescription" jdbcType="VARCHAR" property="errordescription"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		userid,
+        username,
+        toemail,
+        subject,
+        message,
+        scheduledtime,
+        zoneid,
+        sentdate,
+        errordescription,
+        "status"
+	</sql>
+
+	<select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM emails
+		WHERE userid = #{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</select>
+	<select id="findAllByStatus" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM emails
+		WHERE status=#{status, jdbcType=INTEGER}
+		limit #{pageable.pageSize} offset #{pageable.offset}
+	</select>
+
+	<delete id="deleteById" parameterType="java.util.UUID">
+		DELETE FROM emails
+		WHERE userid = #{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</delete>
+
+	<insert id="insert" parameterType="com.base.admin.entity.Emails">
+		INSERT INTO emails (userid, username, toemail, subject, message, scheduledtime, zoneid, sentdate, errordescription, "status")
+		VALUES (#{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}, #{username, jdbcType=VARCHAR}, #{toemail, jdbcType=VARCHAR}, #{subject, jdbcType=VARCHAR}, #{message, jdbcType=VARCHAR}, #{scheduledtime, jdbcType=DATE}, #{zoneid, jdbcType=VARCHAR}, #{sentdate, jdbcType=DATE}, #{errordescription, jdbcType=VARCHAR}, #{status, jdbcType=INTEGER})
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Emails">
+		UPDATE emails
+		SET username = #{username, jdbcType=VARCHAR},
+		toemail = #{toemail, jdbcType=VARCHAR},
+		subject = #{subject, jdbcType=VARCHAR},
+		message = #{message, jdbcType=VARCHAR},
+		scheduledtime = #{scheduledtime, jdbcType=DATE},
+		zoneid = #{zoneid, jdbcType=VARCHAR},
+		sentdate = #{sentdate, jdbcType=DATE},
+		errordescription = #{errordescription, jdbcType=VARCHAR},
+		"status" = #{status, jdbcType=INTEGER}
+		WHERE userid = #{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

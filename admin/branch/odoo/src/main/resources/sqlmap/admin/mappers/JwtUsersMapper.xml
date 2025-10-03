@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.JwtUsersMapper">
+	<resultMap id="JwtUserResultMap" type="com.base.admin.jwt.JwtUsers">
+		<id column="userid" jdbcType="VARCHAR" property="userid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<id column="organizationid" jdbcType="VARCHAR" property="organizationid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="username" jdbcType="VARCHAR" property="username"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="fullname" jdbcType="VARCHAR" property="fullname"/>
+		<result column="jobtitle" jdbcType="VARCHAR" property="jobtitle"/>
+		<result column="lockout" jdbcType="BOOLEAN" property="lockout"/>
+		<result column="usertype" jdbcType="INTEGER" property="usertype"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<!--    collections of Authorities     -->
+		<collection property="authorities" ofType="com.base.admin.entity.Authorities"
+		            column="userid" select="selectAuthoritiesFromUser"/>
+	</resultMap>
+
+	<resultMap id="AuthorityResultMap"
+	           type="com.base.admin.entity.Authorities">
+		<id column="authorityid" jdbcType="VARCHAR" property="authorityid"
+		    typeHandler="UUIDTypeHandler"/>
+		<result column="authorityname" jdbcType="VARCHAR" property="authorityname"/>
+	</resultMap>
+
+	<!--    one to many select  -->
+	<select id="loadJwtUserByUsername"
+	        resultMap="JwtUserResultMap"
+	        parameterType="java.lang.String">
+		SELECT
+		users.userid,
+		users.organizationid,
+		users.username,
+		users.password,
+		users.fullname,
+		users.jobtitle,
+		users.lockout,
+		users.usertype,
+		users.status
+		FROM
+		users
+		WHERE users.username = #{username}
+	</select>
+
+	<select id="selectAuthoritiesFromUser"
+	        parameterType="java.util.UUID"
+	        resultType="com.base.admin.entity.Authorities"
+	        resultMap="AuthorityResultMap">
+		SELECT
+		authorities.authorityid,
+		authorities.authorityname
+		FROM
+		authorities
+		INNER JOIN
+		users_authorities
+		ON
+		authorities.authorityid = users_authorities.authorityid
+		WHERE
+		users_authorities.userid = #{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</select>
+</mapper>

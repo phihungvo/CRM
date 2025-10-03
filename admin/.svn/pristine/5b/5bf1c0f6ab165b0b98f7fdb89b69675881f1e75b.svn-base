@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.ProcurementGroup;
+
+public interface ProcurementGroupMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(ProcurementGroup record);
+
+    int insertSelective(ProcurementGroup record);
+
+    ProcurementGroup selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(ProcurementGroup record);
+
+    int updateByPrimaryKey(ProcurementGroup record);
+}

@@ -1,0 +1,134 @@
+mô tả chi tiết các bảng dùng cho inventory app trong odoo 18 bao gồm cả kiểu dữ liệu và các bảng danh mục
+**Mô tả chi tiết các bảng và kiểu dữ liệu dùng cho Inventory App trong Odoo 18 (bao gồm các bảng vận hành và bảng danh mục)**
+
+Dưới đây là danh sách và mô tả chi tiết về các bảng chính được sử dụng trong ứng dụng quản lý kho (Inventory) của Odoo 18. Nội dung bao gồm tên bảng, kiểu dữ liệu của từng trường, mô tả chức năng và mối quan hệ giữa các bảng.
+
+---
+
+## **1. Bảng `stock_picking` (Phiếu chuyển kho)**
+> **Mục đích**: Quản lý các phiếu chuyển kho (nhập kho, xuất kho, chuyển kho nội bộ).
+
+| **Tên cột**       | **Kiểu dữ liệu**  | **Mô tả**                             |
+|------------------|------------------|--------------------------------------|
+| `id`             | Integer (PK)      | Khóa chính của bảng.                  |
+| `name`           | Char(64)          | Tên/Tham chiếu của phiếu chuyển.      |
+| `partner_id`     | Many2one (res_partner) | Đối tác liên quan (khách hàng/nhà cung cấp). |
+| `location_id`    | Many2one (stock_location) | Vị trí nguồn của sản phẩm.         |
+| `location_dest_id`| Many2one (stock_location) | Vị trí đích của sản phẩm.         |
+| `state`          | Selection         | Trạng thái phiếu (draft, done, etc.). |
+| `picking_type_id`| Many2one (stock_picking_type) | Loại phiếu (nhập, xuất, nội bộ).   |
+| `date_done`      | Datetime          | Ngày hoàn thành phiếu.                |
+
+> **Liên kết**: 
+- Bảng `stock_move` (liên kết thông qua `picking_id`)
+- Bảng `res_partner` (liên kết thông qua `partner_id`)
+
+---
+
+## **2. Bảng `stock_move` (Dòng di chuyển kho)**
+> **Mục đích**: Quản lý từng dòng sản phẩm trong phiếu chuyển kho.
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `name`          | Char(64)           | Mô tả chi tiết của dòng di chuyển.     |
+| `product_id`    | Many2one (product_product) | Sản phẩm liên quan.                |
+| `product_uom_qty`| Float             | Số lượng sản phẩm cần di chuyển.     |
+| `quantity_done` | Float              | Số lượng thực tế đã di chuyển.        |
+| `state`         | Selection          | Trạng thái của dòng (done, waiting, etc.). |
+| `picking_id`    | Many2one (stock_picking) | Tham chiếu đến phiếu chuyển kho.  |
+| `location_id`   | Many2one (stock_location) | Vị trí nguồn của sản phẩm.         |
+| `location_dest_id`| Many2one (stock_location) | Vị trí đích của sản phẩm.         |
+
+> **Liên kết**: 
+- Bảng `stock_picking`
+- Bảng `product_product`
+- Bảng `stock_location`
+
+---
+
+## **3. Bảng `stock_quant` (Tồn kho)**
+> **Mục đích**: Quản lý số lượng tồn kho hiện tại của sản phẩm tại từng vị trí.
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `product_id`    | Many2one (product_product) | Sản phẩm liên quan.                |
+| `location_id`   | Many2one (stock_location) | Vị trí kho chứa sản phẩm.          |
+| `quantity`      | Float              | Số lượng tồn hiện tại.                 |
+| `reserved_quantity`| Float           | Số lượng đã đặt trước.                |
+
+> **Liên kết**: 
+- Bảng `product_product`
+- Bảng `stock_location`
+
+---
+
+## **4. Bảng `stock_location` (Vị trí kho)**
+> **Mục đích**: Quản lý các vị trí trong kho.
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `name`          | Char(64)           | Tên của vị trí kho.                    |
+| `location_id`   | Many2one (self)    | Vị trí cha của vị trí hiện tại.       |
+| `usage`         | Selection          | Loại vị trí (internal, customer, v.v.) |
+| `active`        | Boolean            | Trạng thái kích hoạt (True/False).     |
+
+---
+
+## **5. Bảng `product_product` (Biến thể sản phẩm)**
+> **Mục đích**: Lưu trữ thông tin các biến thể của sản phẩm.
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `product_tmpl_id`| Many2one (product_template) | Tham chiếu đến mẫu sản phẩm.  |
+| `default_code`  | Char(64)           | Mã SKU của sản phẩm.                   |
+| `barcode`       | Char(64)           | Mã vạch của sản phẩm.                  |
+| `active`        | Boolean            | Trạng thái kích hoạt (True/False).     |
+
+---
+
+## **6. Bảng `product_template` (Mẫu sản phẩm)**
+> **Mục đích**: Lưu trữ thông tin chung về sản phẩm (mô tả, đơn vị, loại sản phẩm, v.v.).
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `name`          | Char(64)           | Tên của sản phẩm.                      |
+| `categ_id`      | Many2one (product_category) | Danh mục sản phẩm.                  |
+| `uom_id`        | Many2one (uom_uom)  | Đơn vị đo lường cơ bản.                |
+| `type`          | Selection          | Loại sản phẩm (stockable, consumable, etc.). |
+| `list_price`    | Float              | Giá bán mặc định của sản phẩm.         |
+| `standard_price`| Float              | Giá vốn của sản phẩm.                  |
+
+---
+
+## **7. Bảng `product_category` (Danh mục sản phẩm)**
+> **Mục đích**: Phân loại sản phẩm theo danh mục.
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `name`          | Char(64)           | Tên của danh mục sản phẩm.             |
+| `parent_id`     | Many2one (self)    | Danh mục cha.                         |
+| `property_cost_method`| Selection    | Phương pháp tính giá (standard, fifo, etc.). |
+
+---
+
+## **8. Bảng `res_partner` (Đối tác)**
+> **Mục đích**: Lưu thông tin đối tác (khách hàng, nhà cung cấp).
+
+| **Tên cột**      | **Kiểu dữ liệu**   | **Mô tả**                             |
+|-----------------|-------------------|---------------------------------------|
+| `id`            | Integer (PK)       | Khóa chính của bảng.                  |
+| `name`          | Char(64)           | Tên đối tác (khách hàng, nhà cung cấp).|
+| `email`         | Char(64)           | Email của đối tác.                    |
+| `phone`         | Char(64)           | Số điện thoại của đối tác.            |
+| `vat`           | Char(64)           | Mã số thuế.                            |
+
+---
+
+**Kết luận**  
+Hệ thống bảng dữ liệu của Inventory App trong Odoo 18 rất chặt chẽ và có tính liên kết cao. Các bảng quản lý vận hành (`stock_picking`, `stock_move`, `stock_quant`) liên kết với các bảng danh mục (`product_product`, `product_template`, `product_category`, `res_partner`). Nếu bạn cần thêm thông tin chi tiết hoặc truy vấn SQL, tôi có thể cung cấp!

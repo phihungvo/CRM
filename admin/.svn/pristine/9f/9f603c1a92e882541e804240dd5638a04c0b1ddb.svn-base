@@ -1,0 +1,103 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.dto.AdjustmentDTO;
+import com.base.admin.inventory.dto.AdjustmentDetailDTO;
+import com.base.admin.inventory.dto.response.AdjustmentResponse;
+import com.base.admin.inventory.dto.request.AdjustmentRequest;
+import com.base.admin.inventory.dto.request.PagedRequest;
+import com.base.admin.inventory.entity.Adjustment;
+import com.base.admin.inventory.entity.AdjustmentDetail;
+import com.base.admin.inventory.mapper.AdjustmentDetailMapper;
+import com.base.admin.inventory.mapper.AdjustmentMapper;
+import com.base.admin.inventory.service.AdjustmentService;
+import com.base.admin.inventory.service.InventoryService;
+import com.base.admin.inventory.util.PageUtil;
+import com.google.gson.reflect.TypeToken;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class AdjustmentServiceImpl implements AdjustmentService {
+    private final AdjustmentMapper adjustmentMapper;
+    private final AdjustmentDetailMapper adjustmentDetailMapper;
+    private final ModelMapper modelMapper;
+    private final InventoryService inventoryService;
+
+    @Override
+    public Optional<Adjustment> findById(UUID id) {
+        return adjustmentMapper.findById(id);
+    }
+
+    @Override
+    public Page<Adjustment> findPage(PagedRequest pagedRequest) {
+        PageUtil pageable = new PageUtil(pagedRequest);
+        List<Adjustment> adjustmentList = adjustmentMapper.adjustmentList(pageable.getLimit(),pageable.getOffset());
+        long countAdjustmentList = adjustmentMapper.countAdjustmentList();
+        return new PageImpl(adjustmentList, pageable.getPageable(), countAdjustmentList);
+    }
+
+    @Override
+    public boolean existsByAdjustmentnumber(String adjustmentnumber) {
+        return adjustmentMapper.existsByAdjustmentnumber(adjustmentnumber);
+    }
+
+    @Override
+    public AdjustmentResponse saveAdjustment(AdjustmentRequest adjustmentRequest) {
+        Adjustment adjustment = new Adjustment();
+        adjustment.setAdjustmentdate(adjustmentRequest.getAdjustment().getAdjustmentdate());
+        adjustment.setAdjustmentnumber(adjustmentRequest.getAdjustment().getAdjustmentnumber());
+        adjustment.setWarehouseid(adjustmentRequest.getAdjustment().getWarehouseid());
+        adjustment.setStatus(adjustmentRequest.getAdjustment().getStatus());
+        adjustment.setNote(adjustmentRequest.getAdjustment().getNote());
+
+        Adjustment saved = adjustmentMapper.save(adjustment);
+        if (saved != null) {
+            UUID adjustmentId = saved.getId();
+            List<AdjustmentDetail> adjustmentDetailList = new ArrayList<>();
+            for(AdjustmentDetailDTO adjustmentDetailDTO: adjustmentRequest.getAdjustmentDetails()) {
+
+                AdjustmentDetail adjustmentdetail = new AdjustmentDetail();
+                adjustmentdetail.setAdjustmentid(adjustmentId);
+                adjustmentdetail.setWarehouseid(adjustmentDetailDTO.getWarehouseid());
+                adjustmentdetail.setWarehousename(adjustmentDetailDTO.getWarehousename());
+                adjustmentdetail.setProductid(adjustmentDetailDTO.getProductid());
+                adjustmentdetail.setProductname(adjustmentDetailDTO.getProductname());
+                adjustmentdetail.setProductcode(adjustmentDetailDTO.getProductcode());
+                adjustmentdetail.setMinimumstocklevel(adjustmentDetailDTO.getMinimumstocklevel());
+                adjustmentdetail.setQuantityavailable(adjustmentDetailDTO.getQuantityavailable());
+                adjustmentdetail.setMaximumstocklevel(adjustmentDetailDTO.getMaximumstocklevel());
+                adjustmentdetail.setAdjustquantity(adjustmentDetailDTO.getAdjustquantity());
+                adjustmentdetail.setAdjustmentType(adjustmentDetailDTO.getAdjustmentType());
+
+
+                if(adjustmentDetailDTO.getAdjustmentType() == 0){ //0: Increase , 1: Decrease
+                    inventoryService.IncreaseInventory(adjustmentDetailDTO.getWarehouseid(), adjustmentDetailDTO.getProductid(), adjustmentDetailDTO.getAdjustquantity());
+                }
+                else {
+                    inventoryService.decreaseInventory(adjustmentDetailDTO.getWarehouseid(), adjustmentDetailDTO.getProductid(), adjustmentDetailDTO.getAdjustquantity());
+                }
+
+                adjustmentDetailList.add(adjustmentdetail);
+            }
+            adjustmentDetailMapper.saveAll(adjustmentDetailList);
+
+            AdjustmentResponse adjustmentResponse = new AdjustmentResponse();
+            AdjustmentDTO AdjustmentReturn = modelMapper.map(saved, AdjustmentDTO.class);
+            adjustmentResponse.setAdjustment(AdjustmentReturn);
+            List<AdjustmentDetailDTO> AdjustmentDetailReturn = modelMapper.map(adjustmentDetailList, new TypeToken<List<AdjustmentDetailDTO>>() {
+            }.getType());
+            adjustmentResponse.setAdjustmentDetails(AdjustmentDetailReturn);
+            return adjustmentResponse;
+        }
+        return null;
+    }
+}

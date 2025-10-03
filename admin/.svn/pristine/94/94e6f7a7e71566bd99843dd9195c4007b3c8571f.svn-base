@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.BarcodeRule;
+
+public interface BarcodeRuleMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(BarcodeRule record);
+
+    int insertSelective(BarcodeRule record);
+
+    BarcodeRule selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(BarcodeRule record);
+
+    int updateByPrimaryKey(BarcodeRule record);
+}

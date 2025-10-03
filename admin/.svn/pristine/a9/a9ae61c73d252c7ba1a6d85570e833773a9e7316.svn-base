@@ -1,0 +1,59 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.dto.request.PagedRequest;
+import com.base.admin.inventory.entity.DeliveryDetail;
+import com.base.admin.inventory.entity.DeliveryDetailFull;
+import com.base.admin.inventory.mapper.DeliveryDetailMapper;
+import com.base.admin.inventory.service.DeliveryDetailService;
+import com.base.admin.inventory.util.PageUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class DeliveryDetailServiceImpl implements DeliveryDetailService {
+
+    private final DeliveryDetailMapper deliveryDetailMapper;
+
+    @Override
+    public List<DeliveryDetail> findByDeliveryId(UUID id) {
+        return deliveryDetailMapper.findByDeliveryId(id);
+    }
+
+    @Override
+    public Optional<DeliveryDetail> findById(UUID id) {
+        return deliveryDetailMapper.findById(id);
+    }
+
+    @Override
+    public UUID save(DeliveryDetail deliveryDetail) {
+        deliveryDetail.setId(UUID.randomUUID());
+        deliveryDetailMapper.save(deliveryDetail);
+        return deliveryDetail.getId();
+    }
+
+    @Override
+    public boolean existById(UUID deliverydetailid) {
+        return deliveryDetailMapper.existById(deliverydetailid);
+    }
+
+    @Override
+    public boolean delete(UUID deliverydetailid) {
+        return deliveryDetailMapper.deleteById(deliverydetailid);
+    }
+
+    @Override
+    public Page<DeliveryDetailFull> findPageByDeliveryId(PagedRequest pagedRequest, UUID deliveryid) {
+        PageUtil pageUtil = new PageUtil(pagedRequest);
+        List<DeliveryDetailFull> list = deliveryDetailMapper.findPageByDeliveryId(pageUtil.getLimit(),
+                pageUtil.getOffset(),deliveryid);
+        long count = deliveryDetailMapper.count(deliveryid);
+        return new PageImpl<>(list, pageUtil.getPageable(), count);
+    }
+}

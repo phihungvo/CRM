@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.ResCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.ResCompany">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, "name"
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from "res_company"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <select id="getAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from "res_company"
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from "res_company"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.ResCompany" useGeneratedKeys="false">
+    insert into "res_company" (id, "name")
+    values (#{id,jdbcType=OTHER},#{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.ResCompany" useGeneratedKeys="true">
+    insert into "res_company"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        "name",
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.ResCompany">
+    update "res_company"
+    <set>
+      <if test="name != null">
+        "name" = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.ResCompany">
+    update "res_company"
+    set "name" = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

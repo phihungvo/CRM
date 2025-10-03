@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.AvatarsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.Avatars">
+    <id column="userid" jdbcType="OTHER" property="userid" typeHandler="UUIDTypeHandler"/>
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="base64avatar" jdbcType="VARCHAR" property="base64avatar" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userid, filename, base64avatar
+  </sql>
+  <sql id="Blob_Column_List">
+    base64avatar
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from avatars
+    where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+
+  <select id="selectByPrimaryKeys" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from avatars
+    where userid in
+    <foreach item="item" collection="list" open="(" separator="," close=")">
+      #{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    </foreach>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from avatars
+    where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.Avatars">
+    insert into avatars (userid, filename, base64avatar
+      )
+    values (#{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{filename,jdbcType=VARCHAR}, #{base64avatar,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.Avatars">
+    insert into avatars
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="filename != null">
+        filename,
+      </if>
+      <if test="base64avatar != null">
+        base64avatar,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=OTHER},
+      </if>
+      <if test="filename != null">
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="base64avatar != null">
+        #{base64avatar,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.Avatars">
+    update avatars
+    <set>
+      <if test="filename != null">
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="base64avatar != null">
+        base64avatar = #{base64avatar,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.base.admin.hrm.entity.Avatars">
+    update avatars
+    set filename = #{filename,jdbcType=VARCHAR},
+      base64avatar = #{base64avatar,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.Avatars">
+    update avatars
+    set filename = #{filename,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

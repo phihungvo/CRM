@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.ProductRemoval;
+
+public interface ProductRemovalMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(ProductRemoval record);
+
+    int insertSelective(ProductRemoval record);
+
+    ProductRemoval selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(ProductRemoval record);
+
+    int updateByPrimaryKey(ProductRemoval record);
+}

@@ -1,0 +1,44 @@
+package com.base.admin.inventory.service.impl;
+
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.base.admin.inventory.dto.request.ProductTemplateDTO;
+import com.base.admin.inventory.entity.ProductTemplate;
+import com.base.admin.inventory.mapper.ProductTemplateMapper;
+import com.base.admin.inventory.mapstruct.ProductTemplateMapstruct;
+import com.base.admin.inventory.service.ProductTemplateService;
+
+@Service
+public class ProductTemplateServiceImpl implements ProductTemplateService {
+    private final ProductTemplateMapper productTemplateMapper;
+    private final ProductTemplateMapstruct productTemplateMapstruct;
+
+    public ProductTemplateServiceImpl(
+            ProductTemplateMapper productTemplateMapper, ProductTemplateMapstruct productTemplateMapstruct) {
+        this.productTemplateMapper = productTemplateMapper;
+        this.productTemplateMapstruct = productTemplateMapstruct;
+    }
+
+    @Override
+    public int create(ProductTemplateDTO request) {
+        ProductTemplate productTemplate = productTemplateMapstruct.toEntity(request);
+        return productTemplateMapper.insert(productTemplate);
+    }
+
+    @Override
+    public ProductTemplate findById(UUID id) {
+        return productTemplateMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int deleteById(UUID id) {
+        return productTemplateMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int update(ProductTemplate request) {
+        return productTemplateMapper.updateByPrimaryKey(request);
+    }
+}

@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockRoute;
+
+public interface StockRouteMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockRoute record);
+
+    int insertSelective(StockRoute record);
+
+    StockRoute selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockRoute record);
+
+    int updateByPrimaryKey(StockRoute record);
+}

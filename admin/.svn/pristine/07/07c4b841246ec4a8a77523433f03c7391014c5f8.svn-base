@@ -1,0 +1,41 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.entity.Inventory;
+import com.base.admin.inventory.mapper.InventoryMapper;
+import com.base.admin.inventory.service.InventoryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class InventoryServiceImpl implements InventoryService {
+    private final InventoryMapper inventoryMapper;
+
+    @Override
+    public void IncreaseInventory(UUID warehouseid, UUID productid, Double orderquantity) {
+        Inventory inventory = inventoryMapper.findByWarehouseidAndProductid(warehouseid, productid);
+        if(inventory == null) {
+            inventory = new Inventory();
+            inventory.setQuantityavailable(0.0);
+            inventory.setId(UUID.randomUUID());
+            inventory.setQuantityavailable(inventory.getQuantityavailable() + orderquantity);
+            inventory.setWarehouseid(warehouseid);
+            inventory.setProductid(productid);
+            inventoryMapper.save(inventory);
+        } else {
+            inventory.setQuantityavailable(inventory.getQuantityavailable() + orderquantity);
+            inventoryMapper.update(inventory);
+        }
+    }
+
+    @Override
+    public void decreaseInventory(UUID warehouseid, UUID productid, Double deliveryquantity) {
+        Inventory inventory = inventoryMapper.findByWarehouseidAndProductid(warehouseid, productid);
+        if(inventory != null) {
+            inventory.setQuantityavailable(inventory.getQuantityavailable() - deliveryquantity);
+            inventoryMapper.save(inventory);
+        }
+    }
+}

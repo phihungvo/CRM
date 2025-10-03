@@ -1,0 +1,68 @@
+package com.base.admin.inventory.controller;
+
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.base.admin.handler.ResponseHandler;
+import com.base.admin.inventory.dto.request.ProductAttributeDTO;
+import com.base.admin.inventory.entity.ProductAttribute;
+import com.base.admin.inventory.service.ProductAttributeService;
+
+@RestController
+@RequestMapping("/api/v1/inventory/product-attribute")
+public class ProductAttributeController {
+    private final ProductAttributeService productAttributeService;
+
+    public ProductAttributeController(ProductAttributeService productAttributeService) {
+        this.productAttributeService = productAttributeService;
+    }
+
+    @PostMapping("/findById")
+    public ResponseEntity<Object> findById(@RequestParam(name = "productAttributeId") UUID productAttributeId) {
+        ProductAttribute productAttribute = productAttributeService.findById(productAttributeId);
+        if (productAttribute == null) {
+            return ResponseHandler.generateResponseError("Product attribute not found", HttpStatus.NOT_FOUND);
+        }
+        return ResponseHandler.generateResponseSuccess("", productAttribute);
+    }
+
+    // @PostMapping("/search")
+
+    @PostMapping("/create")
+    public ResponseEntity<Object> create(@RequestBody ProductAttributeDTO request) {
+        int count = productAttributeService.create(request);
+        if (count == 0) {
+            return ResponseHandler.generateResponseError(
+                    "Failed to add Product attribute", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseHandler.generateResponseSuccess("Product attribute added successfully", null);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Object> update(@RequestBody ProductAttribute request) {
+        //        JSONObject jsonObject = ClassUtils.newJSONObject(request);
+        // validate parameter
+        if (request.getId() == null) {
+            return ResponseHandler.generateResponseError(
+                    "Invalid parameters. Product Attribute ID not null", HttpStatus.BAD_REQUEST);
+        }
+        int count = productAttributeService.update(request);
+        if (count == 0) {
+            return ResponseHandler.generateResponseError(
+                    "Failed to update product attribute", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return ResponseHandler.generateResponseSuccess("Product attribute updated successfully", null);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Object> delete(@RequestParam(name = "productAttributeId") UUID id) {
+        int count = productAttributeService.deleteById(id);
+        if (count == 0) {
+            return ResponseHandler.generateResponseError("Product attribute not found", HttpStatus.NOT_FOUND);
+        }
+        return ResponseHandler.generateResponseSuccess("Product attribute deleted successfully", null);
+    }
+}

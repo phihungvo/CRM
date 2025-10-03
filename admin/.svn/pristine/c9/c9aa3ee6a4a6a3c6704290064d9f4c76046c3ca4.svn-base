@@ -1,0 +1,168 @@
+mô tả các câu sql query postgres để tạo các bảng dùng cho purchase app trong odoo 18 bao gồm cả kiểu dữ liệu, các bảng có quan hệ liên quan và các bảng danh mục
+## 🗒️ Mô tả SQL Query để tạo các bảng trong **Purchase App** của Odoo 18
+
+Dưới đây là tập hợp các lệnh SQL để tạo các bảng cơ bản, các bảng có mối quan hệ và các bảng danh mục liên quan đến **Purchase App** trong **PostgreSQL**. Các bảng chính bao gồm **purchase_order**, **purchase_order_line**, và các bảng danh mục liên quan như **res_partner**, **product_product**, **product_template**, **uom_uom**, và **purchase_order_type**.
+
+---
+
+## **1. Bảng `purchase_order` (Đơn mua hàng)**
+```sql
+CREATE TABLE purchase_order (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Mã tham chiếu của đơn mua (ví dụ: PO/2024/0001)
+    partner_id INTEGER NOT NULL, -- Tham chiếu đến nhà cung cấp (res_partner)
+    date_order TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Ngày tạo đơn mua
+    date_approve TIMESTAMP, -- Ngày phê duyệt
+    state VARCHAR(20) DEFAULT 'draft', -- Trạng thái đơn mua (draft, sent, purchase, done, cancel)
+    currency_id INTEGER, -- Tham chiếu đến tiền tệ (res_currency)
+    amount_total NUMERIC(12, 2) DEFAULT 0.00, -- Tổng tiền của đơn mua
+    payment_term_id INTEGER, -- Tham chiếu đến điều khoản thanh toán (account_payment_term)
+    company_id INTEGER, -- Tham chiếu đến công ty (res_company)
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_partner FOREIGN KEY (partner_id) REFERENCES res_partner (id) ON DELETE CASCADE,
+    CONSTRAINT fk_currency FOREIGN KEY (currency_id) REFERENCES res_currency (id) ON DELETE CASCADE,
+    CONSTRAINT fk_payment_term FOREIGN KEY (payment_term_id) REFERENCES account_payment_term (id) ON DELETE CASCADE,
+    CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES res_company (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **2. Bảng `purchase_order_line` (Chi tiết đơn mua hàng)**
+```sql
+CREATE TABLE purchase_order_line (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    order_id INTEGER NOT NULL, -- Tham chiếu đến đơn mua hàng (purchase_order)
+    product_id INTEGER NOT NULL, -- Tham chiếu đến sản phẩm (product_product)
+    product_uom INTEGER NOT NULL, -- Tham chiếu đến đơn vị đo lường (uom_uom)
+    product_qty NUMERIC(12, 2) DEFAULT 0.00, -- Số lượng sản phẩm đặt mua
+    price_unit NUMERIC(12, 2) DEFAULT 0.00, -- Đơn giá sản phẩm
+    price_subtotal NUMERIC(12, 2) DEFAULT 0.00, -- Thành tiền của dòng này (product_qty * price_unit)
+    date_planned TIMESTAMP, -- Ngày dự kiến nhận hàng
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES purchase_order (id) ON DELETE CASCADE,
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES product_product (id) ON DELETE CASCADE,
+    CONSTRAINT fk_uom FOREIGN KEY (product_uom) REFERENCES uom_uom (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **3. Bảng `product_product` (Sản phẩm)**
+```sql
+CREATE TABLE product_product (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    product_tmpl_id INTEGER NOT NULL, -- Tham chiếu đến product_template
+    default_code VARCHAR(64), -- Mã SKU của sản phẩm
+    barcode VARCHAR(64), -- Mã vạch của sản phẩm
+    active BOOLEAN DEFAULT TRUE, -- Trạng thái kích hoạt của sản phẩm
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_template FOREIGN KEY (product_tmpl_id) REFERENCES product_template (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **4. Bảng `product_template` (Mẫu sản phẩm)**
+```sql
+CREATE TABLE product_template (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Tên sản phẩm
+    categ_id INTEGER NOT NULL, -- Tham chiếu đến danh mục sản phẩm (product_category)
+    uom_id INTEGER NOT NULL, -- Tham chiếu đến đơn vị đo lường (uom_uom)
+    
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_category FOREIGN KEY (categ_id) REFERENCES product_category (id) ON DELETE CASCADE,
+    CONSTRAINT fk_uom FOREIGN KEY (uom_id) REFERENCES uom_uom (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **5. Bảng `res_partner` (Nhà cung cấp/Khách hàng)**
+```sql
+CREATE TABLE res_partner (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Tên nhà cung cấp/khách hàng
+    email VARCHAR(64), -- Email của nhà cung cấp/khách hàng
+    phone VARCHAR(20), -- Số điện thoại của nhà cung cấp/khách hàng
+    is_company BOOLEAN DEFAULT FALSE -- Đánh dấu là công ty hay không
+);
+```
+
+---
+
+## **6. Bảng `uom_uom` (Đơn vị đo lường)**
+```sql
+CREATE TABLE uom_uom (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Tên đơn vị đo lường (kg, unit, box, ...)
+    rounding NUMERIC(10, 4) DEFAULT 0.01 -- Độ chính xác làm tròn
+);
+```
+
+---
+
+## **7. Bảng `res_currency` (Tiền tệ)**
+```sql
+CREATE TABLE res_currency (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(3) NOT NULL, -- Ký hiệu tiền tệ (USD, EUR, VND, ...)
+    symbol VARCHAR(5), -- Biểu tượng tiền tệ ($, €, ₫, ...)
+    rounding NUMERIC(10, 2) DEFAULT 0.01 -- Độ chính xác làm tròn
+);
+```
+
+---
+
+## **8. Bảng `account_payment_term` (Điều khoản thanh toán)**
+```sql
+CREATE TABLE account_payment_term (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Tên điều khoản thanh toán (ví dụ: Thanh toán ngay, thanh toán sau 30 ngày)
+    note TEXT -- Ghi chú về điều khoản thanh toán
+);
+```
+
+---
+
+## **9. Bảng `product_category` (Danh mục sản phẩm)**
+```sql
+CREATE TABLE product_category (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Tên danh mục sản phẩm (ví dụ: Nguyên vật liệu, Thành phẩm)
+    parent_id INTEGER, -- Danh mục cha
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_parent_category FOREIGN KEY (parent_id) REFERENCES product_category (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **10. Bảng `res_company` (Công ty)**
+```sql
+CREATE TABLE res_company (
+    id SERIAL PRIMARY KEY, -- Khóa chính tự tăng
+    name VARCHAR(64) NOT NULL, -- Tên công ty
+    currency_id INTEGER, -- Tiền tệ mặc định của công ty
+    -- Ràng buộc khóa ngoại
+    CONSTRAINT fk_currency FOREIGN KEY (currency_id) REFERENCES res_currency (id) ON DELETE CASCADE
+);
+```
+
+---
+
+## **Mối quan hệ giữa các bảng**
+1. **purchase_order** liên kết với **purchase_order_line** thông qua `order_id`.
+2. **purchase_order** liên kết với **res_partner** (nhà cung cấp), **res_currency** (tiền tệ) và **res_company**.
+3. **purchase_order_line** liên kết với **product_product** và **uom_uom**.
+4. **product_product** liên kết với **product_template**, và **product_template** liên kết với **product_category** và **uom_uom**.
+5. **res_partner** được sử dụng làm nhà cung cấp.
+6. **res_currency** và **account_payment_term** được sử dụng để xác định tiền tệ và điều khoản thanh toán.
+
+---
+
+Nếu bạn cần thêm chi tiết về trigger, stored procedure, hoặc chi tiết về các mối quan hệ phức tạp hơn, hãy cho tôi biết! 😊

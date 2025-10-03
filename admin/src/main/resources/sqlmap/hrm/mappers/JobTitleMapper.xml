@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.JobTitleMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.JobTitle">
+    <id column="jobtitleid" jdbcType="INTEGER" property="jobtitleid" />
+    <result column="jobtitlename" jdbcType="VARCHAR" property="jobtitlename" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BOOLEAN" property="isFavorite" />
+    <result column="is_system" jdbcType="BOOLEAN" property="isSystem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    jobtitleid, jobtitlename, "position", is_favorite, is_system
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'jobtitleid'">jobtitleid ${order.direction}</if>
+          <if test="order.property == 'jobtitlename'">jobtitlename ${order.direction}</if>
+          <if test="order.property == 'position'">position ${order.direction}</if>
+          <if test="order.property == 'isFavorite'">is_favorite ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from job_title
+    where jobtitleid = #{jobtitleid,jdbcType=INTEGER}
+  </select>
+
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from job_title
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.entity.JobTitle">
+    select
+    <include refid="Base_Column_List"/>
+    from job_title
+    <include refid="pageable"/>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from job_title
+    where jobtitleid = #{jobtitleid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.JobTitle">
+    insert into job_title (jobtitleid, jobtitlename, "position", 
+      is_favorite, is_system)
+    values (#{jobtitleid,jdbcType=INTEGER}, #{jobtitlename,jdbcType=VARCHAR}, #{position,jdbcType=INTEGER}, 
+      #{isFavorite,jdbcType=BOOLEAN}, #{isSystem,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.JobTitle">
+    insert into job_title
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jobtitleid != null">
+        jobtitleid,
+      </if>
+      <if test="jobtitlename != null">
+        jobtitlename,
+      </if>
+      <if test="position != null">
+        "position",
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jobtitleid != null">
+        #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="jobtitlename != null">
+        #{jobtitlename,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.JobTitle">
+    update job_title
+    <set>
+      <if test="jobtitlename != null">
+        jobtitlename = #{jobtitlename,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        "position" = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where jobtitleid = #{jobtitleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.JobTitle">
+    update job_title
+    set jobtitlename = #{jobtitlename,jdbcType=VARCHAR},
+      "position" = #{position,jdbcType=INTEGER},
+      is_favorite = #{isFavorite,jdbcType=BOOLEAN},
+      is_system = #{isSystem,jdbcType=BOOLEAN}
+    where jobtitleid = #{jobtitleid,jdbcType=INTEGER}
+  </update>
+</mapper>

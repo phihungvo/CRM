@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.UsersMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Users">
+		<id column="userid" jdbcType="VARCHAR" property="userid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="organizationid" jdbcType="VARCHAR" property="organizationid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="username" jdbcType="VARCHAR" property="username"/>
+		<result column="fullname" jdbcType="VARCHAR" property="fullname"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="emailaddress" jdbcType="VARCHAR" property="emailaddress"/>
+		<result column="jobtitle" jdbcType="VARCHAR" property="jobtitle"/>
+		<result column="gender" jdbcType="INTEGER" property="gender"/>
+		<result column="phonenumber" jdbcType="VARCHAR" property="phonenumber"/>
+		<result column="passwordencrypted" jdbcType="BOOLEAN" property="passwordencrypted"/>
+		<result column="passwordreset" jdbcType="BOOLEAN" property="passwordreset"/>
+		<result column="passwordmodifieddate" jdbcType="TIMESTAMP" property="passwordmodifieddate"/>
+		<result column="gracelogincount" jdbcType="INTEGER" property="gracelogincount"/>
+		<result column="languageid" jdbcType="VARCHAR" property="languageid"/>
+		<result column="timezoneid" jdbcType="VARCHAR" property="timezoneid"/>
+		<result column="logindate" jdbcType="TIMESTAMP" property="logindate"/>
+		<result column="loginip" jdbcType="VARCHAR" property="loginip"/>
+		<result column="lastlogindate" jdbcType="TIMESTAMP" property="lastlogindate"/>
+		<result column="lastloginip" jdbcType="VARCHAR" property="lastloginip"/>
+		<result column="lastfailedlogindate" jdbcType="TIMESTAMP" property="lastfailedlogindate"/>
+		<result column="failedloginattempts" jdbcType="INTEGER" property="failedloginattempts"/>
+		<result column="lockout" jdbcType="BOOLEAN" property="lockout"/>
+		<result column="lockoutdate" jdbcType="TIMESTAMP" property="lockoutdate"/>
+		<result column="usertype" jdbcType="INTEGER" property="usertype"/>
+		<result column="createdate" jdbcType="TIMESTAMP" property="createdate"/>
+		<result column="modifieddate" jdbcType="TIMESTAMP" property="modifieddate"/>
+		<result column="userupdate" jdbcType="VARCHAR" property="userupdate"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+	</resultMap>
+	<resultMap id="UserDTOResultMap" type="com.base.admin.dto.UsersDTO">
+		<id column="userid" jdbcType="VARCHAR" property="userid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="organizationid" jdbcType="VARCHAR" property="organizationid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="username" jdbcType="VARCHAR" property="username"/>
+		<result column="fullname" jdbcType="VARCHAR" property="fullname"/>
+		<result column="emailaddress" jdbcType="VARCHAR" property="emailaddress"/>
+		<result column="jobtitle" jdbcType="VARCHAR" property="jobtitle"/>
+		<result column="gender" jdbcType="INTEGER" property="gender"/>
+		<result column="phonenumber" jdbcType="VARCHAR" property="phonenumber"/>
+		<result column="lockout" jdbcType="BOOLEAN" property="lockout"/>
+		<result column="usertype" jdbcType="INTEGER" property="usertype"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		userid, organizationid, username, fullname, "password", emailaddress, jobtitle, gender,
+    phonenumber, passwordencrypted, passwordreset, passwordmodifieddate, gracelogincount, 
+    languageid, timezoneid, logindate, loginip, lastlogindate, lastloginip, lastfailedlogindate, 
+    failedloginattempts, lockout, lockoutdate, usertype, createdate, modifieddate, userupdate, 
+    "status"
+	</sql>
+
+	<sql id="UserDTO_Column_List">
+		u.userid, u.organizationid, u.username, u.fullname, u.emailaddress, u.jobtitle, u.gender,
+    u.phonenumber, u.lockout, u.usertype, u.status
+	</sql>
+
+	<sql id="searchCondition">
+		<if test="search != null">
+			<if test="search.userid != null"> and u.userid = #{search.userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+			<if test="search.organizationid != null"> and u.organizationid = #{search.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+
+			<if test="search.username != null">
+				<choose>
+					<when test='exact == true'>
+						and u.username = #{search.username}
+					</when>
+					<otherwise>
+						and u.username ILIKE '%${search.username}%'
+					</otherwise>
+				</choose>
+			</if>
+			<if test="search.fullname != null">
+				<choose>
+					<when test='exact == true'>
+						and u.fullname = #{search.fullname}
+					</when>
+					<otherwise>
+						and u.fullname ILIKE '%${search.fullname}%'
+					</otherwise>
+				</choose>
+			</if>
+			<if test="search.emailaddress != null">
+				<choose>
+					<when test='exact == true'>
+						and u.emailaddress = #{search.emailaddress}
+					</when>
+					<otherwise>
+						and u.emailaddress ILIKE '%${search.emailaddress}%'
+					</otherwise>
+				</choose></if>
+			<if test="search.jobtitle != null">
+				<choose>
+					<when test='exact == true'>
+						and u.jobtitle = #{search.jobtitle}
+					</when>
+					<otherwise>
+						and u.jobtitle ILIKE '%${search.jobtitle}%'
+					</otherwise>
+				</choose>
+			</if>
+			<if test="search.gender != null"> and u.gender = #{search.gender}</if>
+			<if test="search.phonenumber != null">
+				<choose>
+					<when test='exact == true'>
+						and u.phonenumber = #{search.phonenumber}
+					</when>
+					<otherwise>
+						and u.phonenumber ILIKE '%${search.phonenumber}%'
+					</otherwise>
+				</choose>
+			</if>
+			<if test="search.lockout != null"> and u.lockout = #{search.lockout}</if>
+			<if test="search.status != null"> and u.status = #{search.status}</if>
+		</if>
+	</sql>
+
+	<sql id="pageable">
+		<if test="pageable.sort.sorted">
+			<trim prefix="order by">
+				<foreach item="order" index="i" collection="pageable.sort" separator=", ">
+					<if test="order.property == 'username'">username ${order.direction}</if>
+					<if test="order.property == 'fullname'">fullname ${order.direction}</if>
+					<if test="order.property == 'emailaddress'">emailaddress ${order.direction}</if>
+					<if test="order.property == 'jobtitle'">jobtitle ${order.direction}</if>
+					<if test="order.property == 'gender'">gender ${order.direction}</if>
+					<if test="order.property == 'phonenumber'">phonenumber ${order.direction}</if>
+					<if test="order.property == 'lockout'">lockout ${order.direction}</if>
+					<if test="order.property == 'usertype'">usertype ${order.direction}</if>
+					<if test="order.property == 'status'">status ${order.direction}</if>
+				</foreach>
+			</trim>
+		</if>
+		<if test="pageable.paged">
+			limit #{pageable.pageSize} offset #{pageable.offset}
+		</if>
+	</sql>
+
+	<sql id="queryAndCountWhereStatement">
+		<where>
+			<include refid="searchCondition"></include>
+		</where>
+	</sql>
+
+	<sql id="queryAndCountWithOrganizationIdWhereStatement">
+		<where>
+			<if test="inOrOut == true">
+				u.userid in
+			</if>
+			<if test="inOrOut == false">
+				u.userid not in
+			</if>
+			(
+				select uo.userid from users_orgs uo
+				where uo.organizationid = #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+			)
+
+			<include refid="searchCondition"></include>
+		</where>
+	</sql>
+
+<!--	<sql id="queryAndCountWithGroupIdWhereStatement">-->
+<!--		<where>-->
+<!--			<if test="groupid != null">-->
+<!--				and ug.groupid = #{groupid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}-->
+<!--			</if>-->
+<!--			<include refid="searchCondition"></include>-->
+<!--		</where>-->
+<!--	</sql>-->
+
+	<select id="countPaged" resultType="long">
+		select count(1)
+		from users u
+		<include refid="queryAndCountWhereStatement"/>
+	</select>
+
+	<select id="searchPaged" resultMap="UserDTOResultMap">
+		select
+		<include refid="UserDTO_Column_List"/>
+		from users u
+		<include refid="queryAndCountWhereStatement"/>
+		<include refid="pageable"/>
+	</select>
+
+	<select id="countPagedByOrganizationId" resultType="long">
+		select count(1)
+		from users u
+		<include refid="queryAndCountWithOrganizationIdWhereStatement"/>
+	</select>
+
+	<select id="searchPagedByOrganizationId" resultMap="UserDTOResultMap">
+		select
+		<include refid="UserDTO_Column_List"/>
+		from users u
+		<include refid="queryAndCountWithOrganizationIdWhereStatement"/>
+		<include refid="pageable"/>
+	</select>
+
+
+<!--	<select id="countPagedWithGroupId" resultType="long">-->
+<!--		select count(1)-->
+<!--		from users u-->
+<!--		<if test="groupid != null">-->
+<!--			INNER JOIN user_groups ug ON u.userid = ug.userid-->
+<!--		</if>-->
+<!--		<include refid="queryAndCountWhereStatement"/>-->
+<!--	</select>-->
+
+<!--	<select id="searchPagedWithGroupId" resultMap="UserDTOResultMap">-->
+<!--		select-->
+<!--		<include refid="UserDTO_Column_List"/>-->
+<!--		from users u-->
+<!--		<if test="groupid != null">-->
+<!--			INNER JOIN user_groups ug ON u.userid = ug.userid-->
+<!--		</if>-->
+<!--		<include refid="queryAndCountWithGroupIdWhereStatement"/>-->
+<!--		<include refid="pageable"/>-->
+<!--	</select>-->
+
+	<insert id="saveAll" parameterType="java.util.List">
+		insert into users (userid, organizationid, username,
+		fullname, password, emailaddress,
+		jobtitle, gender, phonenumber,
+		passwordencrypted, passwordreset, passwordmodifieddate,
+		gracelogincount, languageid, timezoneid,
+		logindate, loginip, lastlogindate,
+		lastloginip, lastfailedlogindate, failedloginattempts,
+		lockout, lockoutdate, usertype,
+		createdate, modifieddate, userupdate,
+		status)
+		values
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.username,jdbcType=VARCHAR},
+			#{element.fullname,jdbcType=VARCHAR},
+			#{element.password,jdbcType=VARCHAR},
+			#{element.emailaddress,jdbcType=VARCHAR},
+			#{element.jobtitle,jdbcType=VARCHAR},
+			#{element.gender,jdbcType=INTEGER},
+			#{element.phonenumber,jdbcType=VARCHAR},
+			#{element.passwordencrypted,jdbcType=BOOLEAN},
+			#{element.passwordreset,jdbcType=BOOLEAN},
+			#{element.passwordmodifieddate,jdbcType=TIMESTAMP},
+			#{element.gracelogincount,jdbcType=INTEGER},
+			#{element.languageid,jdbcType=VARCHAR},
+			#{element.timezoneid,jdbcType=VARCHAR},
+			#{element.logindate,jdbcType=TIMESTAMP},
+			#{element.loginip,jdbcType=VARCHAR},
+			#{element.lastlogindate,jdbcType=TIMESTAMP},
+			#{element.lastloginip,jdbcType=VARCHAR},
+			#{element.lastfailedlogindate,jdbcType=TIMESTAMP},
+			#{element.failedloginattempts,jdbcType=INTEGER},
+			#{element.lockout,jdbcType=BOOLEAN},
+			#{element.lockoutdate,jdbcType=TIMESTAMP},
+			#{element.usertype,jdbcType=INTEGER},
+			#{element.createdate,jdbcType=TIMESTAMP},
+			#{element.modifieddate,jdbcType=TIMESTAMP},
+			#{element.userupdate,jdbcType=VARCHAR},
+			#{element.status,jdbcType=INTEGER}
+		</foreach>
+	</insert>
+
+	<select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from users
+		where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+<!--	<select id="findDTOByEmailaddress" resultMap="BaseResultMap">-->
+<!--		select-->
+<!--		<include refid="Base_Column_List"/>-->
+<!--		from users-->
+<!--		where emailaddress = #{emailaddress,jdbcType=VARCHAR}-->
+<!--	</select>-->
+
+	<select id="countByListUserId" parameterType="java.util.List" resultType="java.lang.Long">
+		SELECT
+		count(1)
+		FROM users
+		WHERE userid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</select>
+
+    <!--	<delete id="deleteById" parameterType="java.util.UUID">-->
+<!--		delete from users-->
+<!--		where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}-->
+<!--	</delete>-->
+	<insert id="insert" parameterType="com.base.admin.entity.Users">
+		insert into users
+		(userid, organizationid, username,
+		fullname, "password", emailaddress,
+		jobtitle, gender, phonenumber,
+		passwordencrypted, passwordreset, passwordmodifieddate,
+		gracelogincount, languageid, timezoneid,
+		logindate, loginip, lastlogindate,
+		lastloginip, lastfailedlogindate, failedloginattempts,
+		lockout, lockoutdate, usertype,
+		createdate, modifieddate, userupdate,
+		status)
+		values (#{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{username,jdbcType=VARCHAR},
+		#{fullname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{emailaddress,jdbcType=VARCHAR},
+		#{jobtitle,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{phonenumber,jdbcType=VARCHAR},
+		#{passwordencrypted,jdbcType=BOOLEAN}, #{passwordreset,jdbcType=BOOLEAN},
+		#{passwordmodifieddate,jdbcType=TIMESTAMP},
+		#{gracelogincount,jdbcType=INTEGER}, #{languageid,jdbcType=VARCHAR}, #{timezoneid,jdbcType=VARCHAR},
+		#{logindate,jdbcType=TIMESTAMP}, #{loginip,jdbcType=VARCHAR}, #{lastlogindate,jdbcType=TIMESTAMP},
+		#{lastloginip,jdbcType=VARCHAR}, #{lastfailedlogindate,jdbcType=TIMESTAMP},
+		#{failedloginattempts,jdbcType=INTEGER},
+		#{lockout,jdbcType=BOOLEAN}, #{lockoutdate,jdbcType=TIMESTAMP}, #{usertype,jdbcType=INTEGER},
+		#{createdate,jdbcType=TIMESTAMP}, #{modifieddate,jdbcType=TIMESTAMP}, #{userupdate,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER})
+	</insert>
+
+	<delete id="deleteListByIds" parameterType="java.util.List">
+		delete from users
+		where userid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</delete>
+
+	<update id="update" parameterType="com.base.admin.entity.Users">
+		update users
+		set
+			organizationid = #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			username = #{username,jdbcType=VARCHAR},
+			fullname = #{fullname,jdbcType=VARCHAR},
+			"password" = #{password,jdbcType=VARCHAR},
+			emailaddress = #{emailaddress,jdbcType=VARCHAR},
+			jobtitle = #{jobtitle,jdbcType=VARCHAR},
+			gender = #{gender,jdbcType=INTEGER},
+			phonenumber = #{phonenumber,jdbcType=VARCHAR},
+			passwordencrypted = #{passwordencrypted,jdbcType=BOOLEAN},
+			passwordreset = #{passwordreset,jdbcType=BOOLEAN},
+			passwordmodifieddate = #{passwordmodifieddate,jdbcType=TIMESTAMP},
+			gracelogincount = #{gracelogincount,jdbcType=INTEGER},
+			languageid = #{languageid,jdbcType=VARCHAR},
+			timezoneid = #{timezoneid,jdbcType=VARCHAR},
+			logindate = #{logindate,jdbcType=TIMESTAMP},
+			loginip = #{loginip,jdbcType=VARCHAR},
+			lastlogindate = #{lastlogindate,jdbcType=TIMESTAMP},
+			lastloginip = #{lastloginip,jdbcType=VARCHAR},
+			lastfailedlogindate = #{lastfailedlogindate,jdbcType=TIMESTAMP},
+			failedloginattempts = #{failedloginattempts,jdbcType=INTEGER},
+			lockout = #{lockout,jdbcType=BOOLEAN},
+			lockoutdate = #{lockoutdate,jdbcType=TIMESTAMP},
+			usertype = #{usertype,jdbcType=INTEGER},
+			createdate = #{createdate,jdbcType=TIMESTAMP},
+			modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+			userupdate = #{userupdate,jdbcType=VARCHAR},
+			"status" = #{status,jdbcType=INTEGER}
+		where userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

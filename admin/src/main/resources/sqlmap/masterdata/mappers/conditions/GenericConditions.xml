@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.services.GenericConditions">
+	<sql id="conditions">
+		<if test="conditions != null and conditions.size() > 0">
+			<foreach collection="conditions" item="condition">
+				<choose>
+					<when test='condition.type.equals("STRING")'>
+						<choose>
+							<when test='condition.value.contains ("%")'>
+								AND ${condition.column} ILIKE #{condition.value, jdbcType=VARCHAR}
+							</when>
+							<when test='condition.compare.equals("OR")'>
+								${condition.compare}  ${condition.column}  =  #{condition.value, jdbcType=VARCHAR}
+							</when>
+							<otherwise>
+								AND ${condition.column} = #{condition.value, jdbcType=VARCHAR}
+							</otherwise>
+						</choose>
+					</when>
+					<when test='condition.type.equals("TIMESTAMP")'>
+						AND ${condition.column} = CAST(#{condition.value} AS TIMESTAMP)
+					</when>
+						<when test='condition.type.equals("NUMERIC")'>
+						AND ${condition.column} = CAST(#{condition.value} AS NUMERIC)
+					</when>
+					<when test='condition.type.equals("BIGINT")'>
+						<choose>
+							<when test='condition.compare.equals("lt")'>
+								AND  ${condition.column} &lt; CAST(#{condition.value} AS BIGINT)
+							</when>
+							<when test='condition.compare.equals("gt") '>
+								AND ${condition.column} > CAST(#{condition.value} AS BIGINT)
+							</when>							
+							<otherwise>
+								AND ${condition.column} = CAST(#{condition.value} AS BIGINT)
+							</otherwise>
+						</choose>
+					</when>
+					
+				</choose>
+			</foreach>
+		</if>
+	</sql>
+</mapper>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.UnitLevelMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.UnitLevel">
+    <id column="unitlevelid" jdbcType="INTEGER" property="unitlevelid" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="unitlevelname" jdbcType="VARCHAR" property="unitlevelname" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BOOLEAN" property="isFavorite" />
+    <result column="is_system" jdbcType="BOOLEAN" property="isSystem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    unitlevelid, "level", unitlevelname, "position", is_favorite, is_system
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'unitlevelid'">unitlevelid ${order.direction}</if>
+          <if test="order.property == 'level'">level ${order.direction}</if>
+          <if test="order.property == 'unitlevelname'">unitlevelname ${order.direction}</if>
+          <if test="order.property == 'position'">position ${order.direction}</if>
+          <if test="order.property == 'isFavorite'">is_favorite ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from unit_level
+    where unitlevelid = #{unitlevelid,jdbcType=INTEGER}
+  </select>
+
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from unit_level
+    WHERE level = #{level,jdbcType=INTEGER}
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.entity.UnitLevel">
+    select
+    <include refid="Base_Column_List"/>
+    from unit_level
+    WHERE level = #{level,jdbcType=INTEGER}
+    <include refid="pageable"/>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from unit_level
+    where unitlevelid = #{unitlevelid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.UnitLevel">
+    insert into unit_level (unitlevelid, "level", unitlevelname, 
+      "position", is_favorite, is_system
+      )
+    values (#{unitlevelid,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, #{unitlevelname,jdbcType=VARCHAR}, 
+      #{position,jdbcType=INTEGER}, #{isFavorite,jdbcType=BOOLEAN}, #{isSystem,jdbcType=BOOLEAN}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.UnitLevel">
+    insert into unit_level
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="unitlevelid != null">
+        unitlevelid,
+      </if>
+      <if test="level != null">
+        "level",
+      </if>
+      <if test="unitlevelname != null">
+        unitlevelname,
+      </if>
+      <if test="position != null">
+        "position",
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="unitlevelid != null">
+        #{unitlevelid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="unitlevelname != null">
+        #{unitlevelname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.UnitLevel">
+    update unit_level
+    <set>
+      <if test="level != null">
+        "level" = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="unitlevelname != null">
+        unitlevelname = #{unitlevelname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        "position" = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BOOLEAN},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where unitlevelid = #{unitlevelid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.UnitLevel">
+    update unit_level
+    set "level" = #{level,jdbcType=INTEGER},
+      unitlevelname = #{unitlevelname,jdbcType=VARCHAR},
+      "position" = #{position,jdbcType=INTEGER},
+      is_favorite = #{isFavorite,jdbcType=BOOLEAN},
+      is_system = #{isSystem,jdbcType=BOOLEAN}
+    where unitlevelid = #{unitlevelid,jdbcType=INTEGER}
+  </update>
+</mapper>

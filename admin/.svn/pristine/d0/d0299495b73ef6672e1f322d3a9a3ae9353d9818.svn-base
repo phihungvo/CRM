@@ -1,0 +1,6 @@
+package com.base.admin.inventory.constant.version;
+
+public class VersionUrl {
+    public final static String VERSION_URL = "/aip/v1";
+    private VersionUrl(){}
+}

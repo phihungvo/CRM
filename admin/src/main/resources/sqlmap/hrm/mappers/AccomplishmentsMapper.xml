@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.AccomplishmentsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.Accomplishments">
+    <id column="accomplishmentid" jdbcType="OTHER" property="accomplishmentid" typeHandler="UUIDTypeHandler"/>
+    <result column="accomplishmentname" jdbcType="VARCHAR" property="accomplishmentname" />
+    <result column="accomplishmentdate" jdbcType="DATE" property="accomplishmentdate" />
+    <result column="accomplishmentnumber" jdbcType="VARCHAR" property="accomplishmentnumber" />
+    <result column="accomplishmentapproverid" jdbcType="OTHER" property="accomplishmentapproverid" typeHandler="UUIDTypeHandler"/>
+    <result column="accomplishmentformid" jdbcType="INTEGER" property="accomplishmentformid" />
+    <result column="accomplishmentobjectid" jdbcType="INTEGER" property="accomplishmentobjectid" />
+    <result column="unitlevelid" jdbcType="INTEGER" property="unitlevelid"/>
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="unitid" jdbcType="OTHER" property="unitid"  typeHandler="UUIDTypeHandler"/>
+    <result column="accomplishmenttypeid" jdbcType="INTEGER" property="accomplishmenttypeid" />
+    <result column="decisiondate" jdbcType="DATE" property="decisiondate" />
+    <result column="totalvalue" jdbcType="REAL" property="totalvalue" />
+    <result column="accomplishmentobjectdetailid" jdbcType="INTEGER" property="accomplishmentobjectdetailid" />
+    <result column="accomplishmentstatusid" jdbcType="INTEGER" property="accomplishmentstatusid" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    accomplishmentid, accomplishmentname, accomplishmentdate, accomplishmentnumber, accomplishmentapproverid, 
+    accomplishmentformid, accomplishmentobjectid, unitlevelid, reason, unitid, accomplishmenttypeid,
+decisiondate, totalvalue, accomplishmentobjectdetailid, accomplishmentstatusid
+  </sql>
+
+  <resultMap id="DTOResultMap" type="com.base.admin.hrm.entity.Accomplishments">
+    <id column="accomplishmentid" jdbcType="OTHER" property="accomplishmentid" typeHandler="UUIDTypeHandler"/>
+    <result column="accomplishmentname" jdbcType="VARCHAR" property="accomplishmentname" />
+    <result column="accomplishmentdate" jdbcType="DATE" property="accomplishmentdate" />
+    <result column="accomplishmentnumber" jdbcType="VARCHAR" property="accomplishmentnumber" />
+    <result column="accomplishmentapproverid" jdbcType="OTHER" property="accomplishmentapproverid" typeHandler="UUIDTypeHandler"/>
+    <result column="accomplishmentformid" jdbcType="INTEGER" property="accomplishmentformid" />
+    <result column="accomplishmentobjectid" jdbcType="INTEGER" property="accomplishmentobjectid" />
+    <result column="unitlevelid" jdbcType="INTEGER" property="unitlevelid"/>
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="unitid" jdbcType="OTHER" property="unitid"  typeHandler="UUIDTypeHandler"/>
+    <result column="accomplishmenttypeid" jdbcType="INTEGER" property="accomplishmenttypeid" />
+    <result column="decisiondate" jdbcType="DATE" property="decisiondate" />
+    <result column="totalvalue" jdbcType="REAL" property="totalvalue" />
+    <result column="accomplishmentobjectdetailid" jdbcType="INTEGER" property="accomplishmentobjectdetailid" />
+    <result column="accomplishmentstatusid" jdbcType="INTEGER" property="accomplishmentstatusid" />
+  </resultMap>
+
+  <sql id="DTO_Column_List">
+    accomplishmentid, accomplishmentname, accomplishmentdate, accomplishmentnumber, accomplishmentapproverid,
+    accomplishmentformid, accomplishmentobjectid, unitlevelid, reason, unitid, accomplishmenttypeid,
+decisiondate, totalvalue, accomplishmentobjectdetailid, accomplishmentstatusid
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'accomplishmentid'">accomplishmentid ${order.direction}</if>
+          <if test="order.property == 'accomplishmentname'">accomplishmentname ${order.direction}</if>
+          <if test="order.property == 'accomplishmentdate'">accomplishmentdate ${order.direction}</if>
+          <if test="order.property == 'accomplishmentnumber'">accomplishmentnumber ${order.direction}</if>
+          <if test="order.property == 'accomplishmentapproverid'">accomplishmentapproverid ${order.direction}</if>
+          <if test="order.property == 'accomplishmentstatusid'">accomplishmentstatusid ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.accomplishmentid != null"> and accomplishmentid = #{search.accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+
+      <if test="search.accomplishmentname != null">
+        <choose>
+          <when test='exact == true'>
+            and accomplishmentname = #{search.accomplishmentname}
+          </when>
+          <otherwise>
+            and accomplishmentname ILIKE '%${search.accomplishmentname}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.accomplishmentdate != null"> and accomplishmentdate = #{search.accomplishmentdate}</if>
+      <if test="search.accomplishmentnumber != null">
+        <choose>
+          <when test='exact == true'>
+            and accomplishmentnumber = #{search.accomplishmentnumber}
+          </when>
+          <otherwise>
+            and accomplishmentnumber ILIKE '%${search.accomplishmentnumber}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.accomplishmentapproverid != null"> and accomplishmentapproverid = #{search.accomplishmentapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.accomplishmentstatusid != null"> and accomplishmentstatusid = #{search.accomplishmentstatusid}</if>
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+
+  <select id="findById" resultType="com.base.admin.hrm.dto.AccomplishmentsDTO">
+    select
+    <include refid="DTO_Column_List" />
+    from accomplishments
+    where accomplishmentid = #{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+
+  <select id="countPaged" resultType="java.lang.Long">
+    select count(1)
+    from accomplishments
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.dto.AccomplishmentsDTO">
+    select
+    <include refid="DTO_Column_List"/>
+    from accomplishments
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from accomplishments
+    where accomplishmentid = #{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from accomplishments
+    where accomplishmentid = #{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.Accomplishments">
+    insert into accomplishments (accomplishmentid, accomplishmentname,
+      accomplishmentdate, accomplishmentnumber, 
+      accomplishmentapproverid, accomplishmentformid, 
+      accomplishmentobjectid, unitlevelid, reason, 
+      unitid, accomplishmenttypeid, decisiondate,
+      totalvalue, accomplishmentobjectdetailid, 
+      accomplishmentstatusid)
+    values (#{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{accomplishmentname,jdbcType=VARCHAR},
+      #{accomplishmentdate,jdbcType=DATE}, #{accomplishmentnumber,jdbcType=VARCHAR}, 
+      #{accomplishmentapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{accomplishmentformid,jdbcType=INTEGER},
+      #{accomplishmentobjectid,jdbcType=INTEGER}, #{unitlevelid,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR},
+      #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{accomplishmenttypeid,jdbcType=INTEGER}, #{decisiondate,jdbcType=DATE},
+      #{totalvalue,jdbcType=REAL}, #{accomplishmentobjectdetailid,jdbcType=INTEGER}, 
+      #{accomplishmentstatusid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.Accomplishments">
+    insert into accomplishments
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accomplishmentid != null">
+        accomplishmentid,
+      </if>
+      <if test="accomplishmentname != null">
+        accomplishmentname,
+      </if>
+      <if test="accomplishmentdate != null">
+        accomplishmentdate,
+      </if>
+      <if test="accomplishmentnumber != null">
+        accomplishmentnumber,
+      </if>
+      <if test="accomplishmentapproverid != null">
+        accomplishmentapproverid,
+      </if>
+      <if test="accomplishmentformid != null">
+        accomplishmentformid,
+      </if>
+      <if test="accomplishmentobjectid != null">
+        accomplishmentobjectid,
+      </if>
+      <if test="unitlevelid != null">
+        unitlevelid,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="unitid != null">
+        unitid,
+      </if>
+      <if test="accomplishmenttypeid != null">
+        accomplishmenttypeid,
+      </if>
+      <if test="decisiondate != null">
+        decisiondate,
+      </if>
+      <if test="totalvalue != null">
+        totalvalue,
+      </if>
+      <if test="accomplishmentobjectdetailid != null">
+        accomplishmentobjectdetailid,
+      </if>
+      <if test="accomplishmentstatusid != null">
+        accomplishmentstatusid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accomplishmentid != null">
+        #{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="accomplishmentname != null">
+        #{accomplishmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="accomplishmentdate != null">
+        #{accomplishmentdate,jdbcType=DATE},
+      </if>
+      <if test="accomplishmentnumber != null">
+        #{accomplishmentnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accomplishmentapproverid != null">
+        #{accomplishmentapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="accomplishmentformid != null">
+        #{accomplishmentformid,jdbcType=INTEGER},
+      </if>
+      <if test="accomplishmentobjectid != null">
+        #{accomplishmentobjectid,jdbcType=INTEGER},
+      </if>
+      <if test="unitlevelid != null">
+        #{unitlevelid,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="unitid != null">
+        #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="accomplishmenttypeid != null">
+        #{accomplishmenttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="decisiondate != null">
+        #{decisiondate,jdbcType=DATE},
+      </if>
+      <if test="totalvalue != null">
+        #{totalvalue,jdbcType=REAL},
+      </if>
+      <if test="accomplishmentobjectdetailid != null">
+        #{accomplishmentobjectdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="accomplishmentstatusid != null">
+        #{accomplishmentstatusid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.Accomplishments">
+    update accomplishments
+    <set>
+      <if test="accomplishmentname != null">
+        accomplishmentname = #{accomplishmentname,jdbcType=VARCHAR},
+      </if>
+      <if test="accomplishmentdate != null">
+        accomplishmentdate = #{accomplishmentdate,jdbcType=DATE},
+      </if>
+      <if test="accomplishmentnumber != null">
+        accomplishmentnumber = #{accomplishmentnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accomplishmentapproverid != null">
+        accomplishmentapproverid = #{accomplishmentapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="accomplishmentformid != null">
+        accomplishmentformid = #{accomplishmentformid,jdbcType=INTEGER},
+      </if>
+      <if test="accomplishmentobjectid != null">
+        accomplishmentobjectid = #{accomplishmentobjectid,jdbcType=INTEGER},
+      </if>
+      <if test="unitlevelid != null">
+        unitlevelid = #{unitlevelid,jdbcType=INTEGER},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="unitid != null">
+        unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="accomplishmenttypeid != null">
+        accomplishmenttypeid = #{accomplishmenttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="decisiondate != null">
+        decisiondate = #{decisiondate,jdbcType=DATE},
+      </if>
+      <if test="totalvalue != null">
+        totalvalue = #{totalvalue,jdbcType=REAL},
+      </if>
+      <if test="accomplishmentobjectdetailid != null">
+        accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="accomplishmentstatusid != null">
+        accomplishmentstatusid = #{accomplishmentstatusid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where accomplishmentid = #{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.Accomplishments">
+    update accomplishments
+    set accomplishmentname = #{accomplishmentname,jdbcType=VARCHAR},
+      accomplishmentdate = #{accomplishmentdate,jdbcType=DATE},
+      accomplishmentnumber = #{accomplishmentnumber,jdbcType=VARCHAR},
+      accomplishmentapproverid = #{accomplishmentapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      accomplishmentformid = #{accomplishmentformid,jdbcType=INTEGER},
+      accomplishmentobjectid = #{accomplishmentobjectid,jdbcType=INTEGER},
+      unitlevelid = #{unitlevelid,jdbcType=INTEGER},
+      reason = #{reason,jdbcType=VARCHAR},
+      unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      accomplishmenttypeid = #{accomplishmenttypeid,jdbcType=INTEGER},
+      decisiondate = #{decisiondate,jdbcType=DATE},
+      totalvalue = #{totalvalue,jdbcType=REAL},
+      accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER},
+      accomplishmentstatusid = #{accomplishmentstatusid,jdbcType=INTEGER}
+    where accomplishmentid = #{accomplishmentid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

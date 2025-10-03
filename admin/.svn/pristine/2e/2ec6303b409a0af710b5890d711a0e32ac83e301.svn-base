@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.OrganizationsMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Organizations">
+		<id column="organizationid" jdbcType="VARCHAR" property="organizationid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="parentorganizationid" jdbcType="VARCHAR" property="parentorganizationid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="organizationname" jdbcType="VARCHAR" property="organizationname"/>
+		<result column="createdate" jdbcType="TIMESTAMP" property="createdate"/>
+		<result column="modifieddate" jdbcType="TIMESTAMP" property="modifieddate"/>
+		<result column="userupdate" jdbcType="VARCHAR" property="userupdate"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+	</resultMap>
+
+	<resultMap id="OrganizationDTOResultMap" type="com.base.admin.dto.OrganizationsDTO">
+		<id column="organizationid" jdbcType="VARCHAR" property="organizationid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="parentorganizationid" jdbcType="VARCHAR" property="parentorganizationid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="organizationname" jdbcType="VARCHAR" property="organizationname"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		organizationid
+		, parentorganizationid, organizationname, createdate, modifieddate,
+    	userupdate, active
+	</sql>
+
+	<sql id="OrganizationDTO_Column_List">
+		organizationid
+		, parentorganizationid, organizationname,  active
+	</sql>
+	<sql id="queryAndCountWhereStatement">
+		<where>
+			<if test="search != null">
+				<if test="search.organizationid != null"> and organizationid = #{search.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+				<if test="search.parentorganizationid != null"> and parentorganizationid = #{search.parentorganizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+				<if test="search.organizationname != null">
+					<choose>
+						<when test='exact == true'>
+							and organizationname = #{search.organizationname}
+						</when>
+						<otherwise>
+							and organizationname ILIKE '%${search.organizationname}%'
+						</otherwise>
+					</choose></if>
+				<if test="search.active != null"> and active = #{search.active}</if>
+			</if>
+		</where>
+	</sql>
+
+	<select id="countPaged" resultType="long">
+		select count(1)
+		from organizations
+		<include refid="queryAndCountWhereStatement"/>
+	</select>
+
+	<select id="searchPaged" resultMap="OrganizationDTOResultMap">
+		select
+		<include refid="OrganizationDTO_Column_List"/>
+		from organizations
+		<include refid="queryAndCountWhereStatement"/>
+		<if test="pageable.sort.sorted">
+			<trim prefix="order by">
+				<foreach item="order" index="i" collection="pageable.sort" separator=", ">
+					<if test="order.property == 'organizationid'">organizationid ${order.direction}</if>
+					<if test="order.property == 'parentorganizationid'">parentorganizationid ${order.direction}</if>
+					<if test="order.property == 'organizationname'">organizationname ${order.direction}</if>
+					<if test="order.property == 'active'">active ${order.direction}</if>
+				</foreach>
+			</trim>
+		</if>
+		<if test="pageable.paged">
+			limit #{pageable.pageSize} offset #{pageable.offset}
+		</if>
+	</select>
+
+	<select id="findDTOByUserId" parameterType="java.util.UUID" resultMap="OrganizationDTOResultMap">
+		SELECT
+			organizations.organizationid,
+			organizations.parentorganizationid,
+			organizations.organizationname,
+			organizations.active
+		FROM
+			organizations
+		<if test="isSuperAdmin == false">
+			INNER JOIN users_orgs ON organizations.organizationid = users_orgs.organizationid
+		WHERE
+			users_orgs.userid = #{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+		</if>
+	</select>
+
+	<select id="findDTOById" parameterType="java.util.UUID" resultMap="OrganizationDTOResultMap">
+		select
+			<include refid="OrganizationDTO_Column_List"/>
+		from organizations
+		where organizationid = #{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from organizations
+		where organizationid =
+		#{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+	<delete id="deleteById" parameterType="java.util.UUID">
+		DELETE FROM organizations
+		WHERE organizationid =
+		#{organizationid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</delete>
+	<insert id="insert" parameterType="com.base.admin.entity.Organizations">
+		INSERT INTO organizations (organizationid, parentorganizationid,
+		organizationname, createdate, modifieddate,
+		userupdate, active)
+		VALUES (#{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{parentorganizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{organizationname,jdbcType=VARCHAR},
+		#{createdate,jdbcType=TIMESTAMP},
+		#{modifieddate,jdbcType=TIMESTAMP},
+		#{userupdate,jdbcType=VARCHAR}, #{active,jdbcType=BOOLEAN})
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Organizations">
+		UPDATE organizations
+		SET parentorganizationid =
+		#{parentorganizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		organizationname = #{organizationname,jdbcType=VARCHAR},
+		createdate = #{createdate,jdbcType=TIMESTAMP},
+		modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+		userupdate = #{userupdate,jdbcType=VARCHAR},
+		active = #{active,jdbcType=BOOLEAN}
+		WHERE organizationid =
+		#{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</update>
+</mapper>

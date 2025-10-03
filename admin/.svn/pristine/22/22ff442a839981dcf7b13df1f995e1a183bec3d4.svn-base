@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.ResUsers;
+
+public interface ResUsersMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(ResUsers record);
+
+    int insertSelective(ResUsers record);
+
+    ResUsers selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(ResUsers record);
+
+    int updateByPrimaryKey(ResUsers record);
+}

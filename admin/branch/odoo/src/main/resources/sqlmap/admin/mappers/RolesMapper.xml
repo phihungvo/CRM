@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.mapper.RolesMapper">
+	<resultMap id="BaseResultMap" type="com.base.admin.entity.Roles">
+		<id column="roleid" jdbcType="OTHER" property="roleid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="organizationid" jdbcType="OTHER" property="organizationid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="rolename" jdbcType="VARCHAR" property="rolename"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="roletype" jdbcType="INTEGER" property="roletype"/>
+		<result column="createdate" jdbcType="TIMESTAMP" property="createdate"/>
+		<result column="modifieddate" jdbcType="TIMESTAMP" property="modifieddate"/>
+		<result column="userupdate" jdbcType="VARCHAR" property="userupdate"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+	</resultMap>
+	<resultMap id="RolesDTOResultMap" type="com.base.admin.dto.RolesDTO">
+		<id column="roleid" jdbcType="OTHER" property="roleid"
+		    typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="organizationid" jdbcType="OTHER" property="organizationid"
+		        typeHandler="com.base.admin.mybatis.typehandlers.UUIDTypeHandler"/>
+		<result column="rolename" jdbcType="VARCHAR" property="rolename"/>
+		<result column="description" jdbcType="VARCHAR" property="description"/>
+		<result column="roletype" jdbcType="INTEGER" property="roletype"/>
+		<result column="active" jdbcType="BOOLEAN" property="active"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		roleid
+		, organizationid, rolename, description, roletype, createdate, modifieddate,
+    userupdate, active
+	</sql>
+
+	<sql id="RolesDTO_Column_List">
+		roles.roleid,
+		roles.organizationid,
+		roles.rolename,
+		roles.description,
+		roles.roletype,
+		roles.active
+	</sql>
+
+	<sql id="pageable">
+		<if test="pageable.sort.sorted">
+		<trim prefix="order by">
+			<foreach item="order" index="i" collection="pageable.sort" separator=", ">
+				<if test="order.property == 'roleid'">roleid ${order.direction}</if>
+				<if test="order.property == 'organizationid'">organizationid ${order.direction}</if>
+				<if test="order.property == 'rolename'">rolename ${order.direction}</if>
+				<if test="order.property == 'description'">description ${order.direction}</if>
+				<if test="order.property == 'roletype'">roletype ${order.direction}</if>
+				<if test="order.property == 'active'">active ${order.direction}</if>
+			</foreach>
+		</trim>
+	</if>
+		<if test="pageable.paged">
+			limit #{pageable.pageSize} offset #{pageable.offset}
+		</if>
+	</sql>
+
+	<sql id="searchCondition">
+		<if test="search != null">
+			<if test="search.roleid != null"> and roleid = #{search.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+			<if test="search.organizationid != null"> and organizationid = #{search.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+
+			<if test="search.rolename != null">
+				<choose>
+					<when test='exact == true'>
+						and rolename = #{search.rolename}
+					</when>
+					<otherwise>
+						and rolename ILIKE '%${search.rolename}%'
+					</otherwise>
+				</choose>
+			</if>
+			<if test="search.description != null">
+				<choose>
+					<when test='exact == true'>
+						and description = #{search.description}
+					</when>
+					<otherwise>
+						and description ILIKE '%${search.description}%'
+					</otherwise>
+				</choose>
+			</if>
+
+			<if test="search.roletype != null"> and roletype = #{search.roletype}</if>
+			<if test="search.active != null"> and active = #{search.active}</if>
+		</if>
+	</sql>
+
+	<sql id="queryAndCountWhereStatement">
+		<where>
+			<include refid="searchCondition"></include>
+		</where>
+	</sql>
+
+	<sql id="queryAndCountWithGroupIdWhereStatement">
+		<if test="groupid != null">
+			and groups_roles.groupid = #{groupid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</if>
+		<where>
+			<include refid="searchCondition"></include>
+		</where>
+	</sql>
+
+	<insert id="saveAll" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="roleid"
+	        keyProperty="roleid">
+		INSERT INTO roles (
+		roleid, organizationid,rolename,description,roletype,createdate,modifieddate,userupdate,active)
+		VALUES
+		<foreach collection="list" item="element" index="index" open="(" separator="),(" close=")">
+			#{element.roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+			#{element.rolename,jdbcType=VARCHAR},
+			#{element.description,jdbcType=VARCHAR},
+			#{element.roletype,jdbcType=INTEGER},
+			#{element.createdate,jdbcType=TIMESTAMP},
+			#{element.modifieddate,jdbcType=TIMESTAMP},
+			#{element.userupdate,jdbcType=VARCHAR},
+			#{element.active,jdbcType=BOOLEAN}
+		</foreach>
+	</insert>
+
+	<select id="getIdsByName" parameterType="java.util.List" resultType="java.util.UUID">
+		SELECT
+		roleid
+		FROM roles
+		WHERE rolename IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from roles
+	</select>
+
+	<select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from roles
+		where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="findDTOById" parameterType="java.util.UUID" resultMap="RolesDTOResultMap">
+		select
+		<include refid="RolesDTO_Column_List"/>
+		from roles
+		where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="findByOrganizationIdAndUserId" parameterType="map" resultMap="RolesDTOResultMap">
+		select
+		<include refid="RolesDTO_Column_List"/>
+		FROM roles
+			INNER JOIN users_roles ON roles.roleid = users_roles.roleid
+		WHERE
+			roles.organizationid = #{organizationid, jdbcType=OTHER, typeHandler=UUIDTypeHandler} AND
+			users_roles.userid = #{userid, jdbcType=OTHER, typeHandler=UUIDTypeHandler}
+	</select>
+
+	<select id="countPaged" resultType="long">
+		select count(1)
+		from roles
+		<include refid="queryAndCountWhereStatement"/>
+	</select>
+
+	<select id="searchPaged" resultMap="RolesDTOResultMap">
+		select
+		<include refid="RolesDTO_Column_List"/>
+		from roles
+		<include refid="queryAndCountWhereStatement"/>
+		<include refid="pageable"/>
+	</select>
+
+<!--	<select id="countPagedWithGroupId" resultType="long">-->
+<!--		select count(1)-->
+<!--		from roles-->
+<!--		INNER JOIN groups_roles ON roles.roleid = groups_roles.roleid-->
+<!--		<include refid="queryAndCountWithGroupIdWhereStatement"/>-->
+<!--	</select>-->
+
+<!--	<select id="searchPagedWithGroupId" resultMap="RolesDTOResultMap">-->
+<!--		select-->
+<!--		<include refid="RolesDTO_Column_List"/>-->
+<!--		from roles-->
+<!--		INNER JOIN groups_roles ON roles.roleid = groups_roles.roleid-->
+<!--		<include refid="queryAndCountWithGroupIdWhereStatement"/>-->
+<!--		<include refid="pageable"/>-->
+<!--	</select>-->
+
+	<select id="countByListRoleId" parameterType="java.util.List" resultType="java.lang.Long">
+		SELECT
+		count(1)
+		FROM roles
+		WHERE roleid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+		</foreach>
+	</select>
+
+	<delete id="deleteById" parameterType="java.util.UUID">
+		delete from roles
+		where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</delete>
+	<insert id="insert" parameterType="com.base.admin.entity.Roles">
+		insert into roles (roleid, organizationid, rolename,
+		description, roletype, createdate,
+		modifieddate, userupdate, active
+		)
+		values (#{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		#{rolename,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR}, #{roletype,jdbcType=INTEGER}, #{createdate,jdbcType=TIMESTAMP},
+		#{modifieddate,jdbcType=TIMESTAMP}, #{userupdate,jdbcType=VARCHAR}, #{active,jdbcType=BOOLEAN}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.base.admin.entity.Roles">
+		update roles
+		set organizationid =
+		#{organizationid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+		rolename = #{rolename,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		roletype = #{roletype,jdbcType=INTEGER},
+		createdate = #{createdate,jdbcType=TIMESTAMP},
+		modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+		userupdate = #{userupdate,jdbcType=VARCHAR},
+		active = #{active,jdbcType=BOOLEAN}
+		where roleid = #{roleid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+	</update>
+
+</mapper>

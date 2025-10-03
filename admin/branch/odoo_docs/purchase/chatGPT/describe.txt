@@ -1,0 +1,140 @@
+mô tả chi tiết các bảng dùng cho purchase app trong odoo 18 bao gồm cả kiểu dữ liệu và các bảng danh mục
+## 🗒️ Mô tả chi tiết các bảng dùng cho **Purchase App** trong Odoo 18
+
+Odoo 18 **Purchase App** (Ứng dụng mua hàng) quản lý quy trình mua sắm, từ yêu cầu mua hàng (RFQ) đến đơn đặt hàng (PO) và nhận hàng (Receipt). Dưới đây là mô tả chi tiết về các **bảng chính** và **bảng danh mục** được sử dụng trong Purchase App của Odoo 18, bao gồm tên bảng, kiểu dữ liệu của từng cột, mô tả và mối quan hệ giữa các bảng.
+
+---
+
+## **1. Bảng `purchase_order` (Đơn đặt hàng)**
+> **Mục đích**: Lưu thông tin của các đơn đặt hàng (PO) từ nhà cung cấp.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `name`             | VARCHAR(64)         | Mã tham chiếu của đơn đặt hàng (PO Number).|
+| `partner_id`       | INTEGER             | Tham chiếu đến nhà cung cấp (`res_partner`).|
+| `date_order`       | TIMESTAMP           | Ngày tạo đơn hàng.                         |
+| `date_approve`     | TIMESTAMP           | Ngày phê duyệt đơn hàng.                   |
+| `state`            | VARCHAR(20)         | Trạng thái đơn hàng (draft, sent, done, cancel).|
+| `currency_id`      | INTEGER             | Tham chiếu đến loại tiền tệ (`res_currency`).|
+| `amount_total`     | NUMERIC(12, 2)      | Tổng giá trị của đơn đặt hàng.             |
+| `create_date`      | TIMESTAMP           | Ngày tạo bản ghi.                          |
+
+> **Mối quan hệ**:
+- **Bảng `purchase_order_line`**: Liên kết 1-N (một đơn đặt hàng có nhiều dòng chi tiết).
+- **Bảng `res_partner`**: Tham chiếu đến đối tác là nhà cung cấp.
+
+---
+
+## **2. Bảng `purchase_order_line` (Dòng chi tiết đơn đặt hàng)**
+> **Mục đích**: Lưu thông tin chi tiết về các sản phẩm trong từng đơn đặt hàng.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `order_id`         | INTEGER             | Tham chiếu đến bảng `purchase_order`.      |
+| `product_id`       | INTEGER             | Tham chiếu đến sản phẩm (`product_product`).|
+| `name`             | VARCHAR(64)         | Mô tả dòng sản phẩm.                       |
+| `product_qty`      | NUMERIC(10, 2)      | Số lượng sản phẩm.                         |
+| `product_uom`      | INTEGER             | Tham chiếu đến đơn vị đo lường (`uom_uom`).|
+| `price_unit`       | NUMERIC(10, 2)      | Đơn giá của sản phẩm.                      |
+| `price_total`      | NUMERIC(12, 2)      | Tổng giá trị của dòng.                    |
+
+> **Mối quan hệ**:
+- **Bảng `purchase_order`**: Liên kết nhiều dòng với một đơn đặt hàng.
+- **Bảng `product_product`**: Liên kết sản phẩm với từng dòng chi tiết.
+
+---
+
+## **3. Bảng `product_product` (Sản phẩm)**
+> **Mục đích**: Lưu thông tin sản phẩm, bao gồm các biến thể của một mẫu sản phẩm.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `product_tmpl_id`  | INTEGER             | Tham chiếu đến bảng `product_template`.   |
+| `default_code`     | VARCHAR(64)         | Mã SKU của sản phẩm.                       |
+| `barcode`          | VARCHAR(64)         | Mã vạch của sản phẩm.                      |
+| `active`           | BOOLEAN             | Trạng thái kích hoạt của sản phẩm.         |
+
+> **Mối quan hệ**:
+- **Bảng `product_template`**: Một mẫu sản phẩm có nhiều biến thể sản phẩm.
+
+---
+
+## **4. Bảng `product_template` (Mẫu sản phẩm)**
+> **Mục đích**: Lưu thông tin mẫu sản phẩm, chẳng hạn như tên, đơn vị đo lường, loại sản phẩm, v.v.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `name`             | VARCHAR(64)         | Tên sản phẩm.                               |
+| `categ_id`         | INTEGER             | Tham chiếu đến danh mục sản phẩm (`product_category`).|
+| `uom_id`           | INTEGER             | Tham chiếu đến đơn vị đo lường (`uom_uom`).|
+| `list_price`       | NUMERIC(10, 2)      | Giá bán sản phẩm.                          |
+
+---
+
+## **5. Bảng `product_category` (Danh mục sản phẩm)**
+> **Mục đích**: Lưu thông tin danh mục sản phẩm.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `name`             | VARCHAR(64)         | Tên danh mục sản phẩm.                     |
+| `parent_id`        | INTEGER             | Tham chiếu đến danh mục cha.               |
+
+---
+
+## **6. Bảng `res_partner` (Nhà cung cấp)**
+> **Mục đích**: Lưu thông tin của nhà cung cấp.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `name`             | VARCHAR(64)         | Tên của đối tác (nhà cung cấp).             |
+| `email`            | VARCHAR(64)         | Email của nhà cung cấp.                    |
+| `phone`            | VARCHAR(20)         | Số điện thoại của nhà cung cấp.            |
+
+---
+
+## **7. Bảng `res_currency` (Tiền tệ)**
+> **Mục đích**: Lưu thông tin về tiền tệ.
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `name`             | VARCHAR(64)         | Tên tiền tệ.                                |
+| `symbol`           | VARCHAR(10)         | Ký hiệu tiền tệ (VD: $, €).                 |
+
+---
+
+## **8. Bảng `uom_uom` (Đơn vị đo lường)**
+> **Mục đích**: Lưu thông tin các đơn vị đo lường (Unit of Measure).
+
+| **Tên cột**         | **Kiểu dữ liệu**     | **Mô tả**                                   |
+|--------------------|---------------------|--------------------------------------------|
+| `id`               | SERIAL PRIMARY KEY  | Khóa chính tự động tăng.                   |
+| `name`             | VARCHAR(64)         | Tên đơn vị đo lường (VD: kg, unit, box).    |
+
+---
+
+## **Tóm tắt**
+1. **Bảng vận hành**: 
+   - `purchase_order`: Quản lý các đơn đặt hàng từ nhà cung cấp.
+   - `purchase_order_line`: Chi tiết các sản phẩm trong đơn hàng.
+
+2. **Bảng danh mục**: 
+   - `product_template`, `product_product`: Quản lý thông tin sản phẩm và biến thể.
+   - `product_category`: Quản lý danh mục sản phẩm.
+   - `res_partner`: Quản lý nhà cung cấp.
+   - `uom_uom`: Quản lý đơn vị đo lường.
+   - `res_currency`: Quản lý loại tiền tệ.
+
+3. **Mối quan hệ**:
+   - Một **Purchase Order** có nhiều **Purchase Order Line**.
+   - **Dòng sản phẩm** có liên kết đến **sản phẩm**, **đơn vị đo lường**, và **nhà cung cấp**.
+
+---
+
+Nếu bạn cần thêm chi tiết về lệnh SQL để tạo các bảng này hoặc mô tả các ràng buộc khóa ngoại, vui lòng cho tôi biết.

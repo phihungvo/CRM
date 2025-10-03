@@ -1,0 +1,2314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.EmployeesMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.Employees">
+    <id column="employeeid" jdbcType="OTHER" property="employeeid" />
+    <result column="employeecode" jdbcType="VARCHAR" property="employeecode" />
+    <result column="firstname" jdbcType="VARCHAR" property="firstname" />
+    <result column="lastname" jdbcType="VARCHAR" property="lastname" />
+    <result column="fullname" jdbcType="VARCHAR" property="fullname" />
+    <result column="genderid" jdbcType="INTEGER" property="genderid" />
+    <result column="gendername" jdbcType="VARCHAR" property="gendername" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="personaltaxcode" jdbcType="VARCHAR" property="personaltaxcode" />
+    <result column="maritalstatusid" jdbcType="INTEGER" property="maritalstatusid" />
+    <result column="maritalstatusname" jdbcType="VARCHAR" property="maritalstatusname" />
+    <result column="familyclassbackgroundid" jdbcType="INTEGER" property="familyclassbackgroundid" />
+    <result column="familyclassbackgroundname" jdbcType="VARCHAR" property="familyclassbackgroundname" />
+    <result column="ethnicid" jdbcType="INTEGER" property="ethnicid" />
+    <result column="ethnicname" jdbcType="VARCHAR" property="ethnicname" />
+    <result column="nationalityid" jdbcType="INTEGER" property="nationalityid" />
+    <result column="nationalityname" jdbcType="VARCHAR" property="nationalityname" />
+    <result column="personalclassbackgroundid" jdbcType="INTEGER" property="personalclassbackgroundid" />
+    <result column="personalclassbackgroundname" jdbcType="VARCHAR" property="personalclassbackgroundname" />
+    <result column="religionid" jdbcType="INTEGER" property="religionid" />
+    <result column="religionname" jdbcType="VARCHAR" property="religionname" />
+    <result column="birthplace" jdbcType="VARCHAR" property="birthplace" />
+    <result column="homeland" jdbcType="VARCHAR" property="homeland" />
+    <result column="identifynumber" jdbcType="VARCHAR" property="identifynumber" />
+    <result column="identifynumberissuedplaceid" jdbcType="INTEGER" property="identifynumberissuedplaceid" />
+    <result column="identifynumberissuedplace" jdbcType="VARCHAR" property="identifynumberissuedplace" />
+    <result column="identifynumberissueddate" jdbcType="DATE" property="identifynumberissueddate" />
+    <result column="identifynumberexpireddate" jdbcType="DATE" property="identifynumberexpireddate" />
+    <result column="passportnumber" jdbcType="VARCHAR" property="passportnumber" />
+    <result column="passportissueddate" jdbcType="DATE" property="passportissueddate" />
+    <result column="passportissuedplaceid" jdbcType="INTEGER" property="passportissuedplaceid" />
+    <result column="passportissuedplacename" jdbcType="VARCHAR" property="passportissuedplacename" />
+    <result column="passporteffectfromdate" jdbcType="DATE" property="passporteffectfromdate" />
+    <result column="passporteffecttodate" jdbcType="DATE" property="passporteffecttodate" />
+    <result column="educationlevel" jdbcType="VARCHAR" property="educationlevel" />
+    <result column="educationplaceid" jdbcType="INTEGER" property="educationplaceid" />
+    <result column="educationplacename" jdbcType="VARCHAR" property="educationplacename" />
+    <result column="educationmajorid" jdbcType="INTEGER" property="educationmajorid" />
+    <result column="educationmajorname" jdbcType="VARCHAR" property="educationmajorname" />
+    <result column="educationfacultyid" jdbcType="INTEGER" property="educationfacultyid" />
+    <result column="educationfacultyname" jdbcType="VARCHAR" property="educationfacultyname" />
+    <result column="levelid" jdbcType="INTEGER" property="levelid" />
+    <result column="levelname" jdbcType="VARCHAR" property="levelname" />
+    <result column="educationdegreeid" jdbcType="INTEGER" property="educationdegreeid" />
+    <result column="educationdegreename" jdbcType="VARCHAR" property="educationdegreename" />
+    <result column="awardedyear" jdbcType="INTEGER" property="awardedyear" />
+    <result column="hometel" jdbcType="VARCHAR" property="hometel" />
+    <result column="officetel" jdbcType="VARCHAR" property="officetel" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="othermobile" jdbcType="VARCHAR" property="othermobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="officeemail" jdbcType="VARCHAR" property="officeemail" />
+    <result column="otheremail" jdbcType="VARCHAR" property="otheremail" />
+    <result column="facebookid" jdbcType="VARCHAR" property="facebookid" />
+    <result column="skypeid" jdbcType="VARCHAR" property="skypeid" />
+    <result column="msnid" jdbcType="VARCHAR" property="msnid" />
+    <result column="nativecountryid" jdbcType="INTEGER" property="nativecountryid" />
+    <result column="nativecountryname" jdbcType="VARCHAR" property="nativecountryname" />
+    <result column="nativeprovinceid" jdbcType="VARCHAR" property="nativeprovinceid" />
+    <result column="nativeprovincename" jdbcType="VARCHAR" property="nativeprovincename" />
+    <result column="nativedistrictid" jdbcType="VARCHAR" property="nativedistrictid" />
+    <result column="nativedistrictname" jdbcType="VARCHAR" property="nativedistrictname" />
+    <result column="nativewardid" jdbcType="VARCHAR" property="nativewardid" />
+    <result column="nativewardname" jdbcType="VARCHAR" property="nativewardname" />
+    <result column="nativestreethousenumber" jdbcType="VARCHAR" property="nativestreethousenumber" />
+    <result column="nativeaddress" jdbcType="VARCHAR" property="nativeaddress" />
+    <result column="isheadhousehold" jdbcType="BOOLEAN" property="isheadhousehold" />
+    <result column="registrationbooknumber" jdbcType="VARCHAR" property="registrationbooknumber" />
+    <result column="registrationbookcode" jdbcType="VARCHAR" property="registrationbookcode" />
+    <result column="samenativeaddress" jdbcType="BOOLEAN" property="samenativeaddress" />
+    <result column="currentcountryid" jdbcType="INTEGER" property="currentcountryid" />
+    <result column="currentcountryname" jdbcType="VARCHAR" property="currentcountryname" />
+    <result column="currentprovinceid" jdbcType="VARCHAR" property="currentprovinceid" />
+    <result column="currentprovincename" jdbcType="VARCHAR" property="currentprovincename" />
+    <result column="currentdistrictid" jdbcType="VARCHAR" property="currentdistrictid" />
+    <result column="currentdistrictname" jdbcType="VARCHAR" property="currentdistrictname" />
+    <result column="currentwardid" jdbcType="VARCHAR" property="currentwardid" />
+    <result column="currentwardname" jdbcType="VARCHAR" property="currentwardname" />
+    <result column="currentstreethousenumber" jdbcType="VARCHAR" property="currentstreethousenumber" />
+    <result column="currentaddress" jdbcType="VARCHAR" property="currentaddress" />
+    <result column="employeecodets" jdbcType="VARCHAR" property="employeecodets" />
+    <result column="organizationunitid" jdbcType="OTHER" property="organizationunitid" />
+    <result column="organizationunitname" jdbcType="VARCHAR" property="organizationunitname" />
+    <result column="jobcode" jdbcType="VARCHAR" property="jobcode" />
+    <result column="jobpositionname" jdbcType="VARCHAR" property="jobpositionname" />
+    <result column="jobtitleid" jdbcType="INTEGER" property="jobtitleid" />
+    <result column="jobtitlename" jdbcType="VARCHAR" property="jobtitlename" />
+    <result column="jobtitleconvertid" jdbcType="INTEGER" property="jobtitleconvertid" />
+    <result column="joblevelid" jdbcType="INTEGER" property="joblevelid" />
+    <result column="joblevelname" jdbcType="VARCHAR" property="joblevelname" />
+    <result column="employeegradeid" jdbcType="INTEGER" property="employeegradeid" />
+    <result column="employeegradename" jdbcType="VARCHAR" property="employeegradename" />
+    <result column="employeestatusid" jdbcType="INTEGER" property="employeestatusid" />
+    <result column="employeestatusname" jdbcType="VARCHAR" property="employeestatusname" />
+    <result column="inactive" jdbcType="BOOLEAN" property="inactive" />
+    <result column="workingplace" jdbcType="VARCHAR" property="workingplace" />
+    <result column="laborbooknumber" jdbcType="VARCHAR" property="laborbooknumber" />
+    <result column="contracttypeid" jdbcType="INTEGER" property="contracttypeid" />
+    <result column="contracttypename" jdbcType="VARCHAR" property="contracttypename" />
+    <result column="shiftcode" jdbcType="VARCHAR" property="shiftcode" />
+    <result column="probationdate" jdbcType="DATE" property="probationdate" />
+    <result column="hiredate" jdbcType="DATE" property="hiredate" />
+    <result column="receivedate" jdbcType="DATE" property="receivedate" />
+    <result column="reporttoid" jdbcType="OTHER" property="reporttoid" />
+    <result column="reporttoname" jdbcType="VARCHAR" property="reporttoname" />
+    <result column="supervisorid" jdbcType="OTHER" property="supervisorid" />
+    <result column="supervisorname" jdbcType="VARCHAR" property="supervisorname" />
+    <result column="numberofleaveday" jdbcType="INTEGER" property="numberofleaveday" />
+    <result column="autoincrementseniority" jdbcType="VARCHAR" property="autoincrementseniority" />
+    <result column="terminationdate" jdbcType="DATE" property="terminationdate" />
+    <result column="terminationapproverid" jdbcType="OTHER" property="terminationapproverid" />
+    <result column="terminationapprover" jdbcType="VARCHAR" property="terminationapprover" />
+    <result column="terminationreasonid" jdbcType="INTEGER" property="terminationreasonid" />
+    <result column="terminationreasonname" jdbcType="VARCHAR" property="terminationreasonname" />
+    <result column="terminationreasontypeid" jdbcType="INTEGER" property="terminationreasontypeid" />
+    <result column="terminationreasontypename" jdbcType="VARCHAR" property="terminationreasontypename" />
+    <result column="terminationfeedback" jdbcType="VARCHAR" property="terminationfeedback" />
+    <result column="salarybasic" jdbcType="INTEGER" property="salarybasic" />
+    <result column="salarysocialinsurance" jdbcType="DOUBLE" property="salarysocialinsurance" />
+    <result column="bankaccountno" jdbcType="VARCHAR" property="bankaccountno" />
+    <result column="bankid" jdbcType="INTEGER" property="bankid" />
+    <result column="bankname" jdbcType="VARCHAR" property="bankname" />
+    <result column="bankbranchid" jdbcType="INTEGER" property="bankbranchid" />
+    <result column="bankbranchname" jdbcType="VARCHAR" property="bankbranchname" />
+    <result column="istradeunion" jdbcType="BOOLEAN" property="istradeunion" />
+    <result column="isinsurance" jdbcType="BOOLEAN" property="isinsurance" />
+    <result column="istemplate" jdbcType="BOOLEAN" property="istemplate" />
+    <result column="socialinsurancesupplementingdate" jdbcType="DATE" property="socialinsurancesupplementingdate" />
+    <result column="insurancerate" jdbcType="DOUBLE" property="insurancerate" />
+    <result column="socialinsurancenumber" jdbcType="VARCHAR" property="socialinsurancenumber" />
+    <result column="socialinsurancecode" jdbcType="VARCHAR" property="socialinsurancecode" />
+    <result column="identifynumberissuedprovinceid" jdbcType="VARCHAR" property="identifynumberissuedprovinceid" />
+    <result column="identifynumberissuedprovincename" jdbcType="VARCHAR" property="identifynumberissuedprovincename" />
+    <result column="identifynumberissuedprovincecode" jdbcType="VARCHAR" property="identifynumberissuedprovincecode" />
+    <result column="healthinsurancenumber" jdbcType="VARCHAR" property="healthinsurancenumber" />
+    <result column="healthinsuranceissueplace" jdbcType="VARCHAR" property="healthinsuranceissueplace" />
+    <result column="healthinsuranceexpireddate" jdbcType="DATE" property="healthinsuranceexpireddate" />
+    <result column="healthcareid" jdbcType="VARCHAR" property="healthcareid" />
+    <result column="healthcarename" jdbcType="VARCHAR" property="healthcarename" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="statusname" jdbcType="VARCHAR" property="statusname" />
+    <result column="contactname" jdbcType="VARCHAR" property="contactname" />
+    <result column="relationshipid" jdbcType="INTEGER" property="relationshipid" />
+    <result column="relationshipname" jdbcType="VARCHAR" property="relationshipname" />
+    <result column="contactmobile" jdbcType="VARCHAR" property="contactmobile" />
+    <result column="contacttel" jdbcType="VARCHAR" property="contacttel" />
+    <result column="contactemail" jdbcType="VARCHAR" property="contactemail" />
+    <result column="contactaddress" jdbcType="VARCHAR" property="contactaddress" />
+    <result column="vocativeob" jdbcType="VARCHAR" property="vocativeob" />
+    <result column="vocativeac" jdbcType="VARCHAR" property="vocativeac" />
+    <result column="employeenatureid" jdbcType="INTEGER" property="employeenatureid" />
+    <result column="employeenaturename" jdbcType="VARCHAR" property="employeenaturename" />
+    <result column="convertid" jdbcType="INTEGER" property="convertid" />
+    <result column="exportnewsfeed" jdbcType="VARCHAR" property="exportnewsfeed" />
+    <result column="kindofpaperid" jdbcType="INTEGER" property="kindofpaperid" />
+    <result column="kindofpapername" jdbcType="VARCHAR" property="kindofpapername" />
+    <result column="salarygradeid" jdbcType="INTEGER" property="salarygradeid" />
+    <result column="salarygradename" jdbcType="VARCHAR" property="salarygradename" />
+    <result column="proceduretypeid" jdbcType="INTEGER" property="proceduretypeid" />
+    <result column="proceduretypename" jdbcType="VARCHAR" property="proceduretypename" />
+    <result column="participateinsuranceid" jdbcType="INTEGER" property="participateinsuranceid" />
+    <result column="participateinsurancename" jdbcType="VARCHAR" property="participateinsurancename" />
+    <result column="totalincome" jdbcType="BIGINT" property="totalincome" />
+    <result column="expectedretirementdate" jdbcType="DATE" property="expectedretirementdate" />
+    <result column="isblacklist" jdbcType="BOOLEAN" property="isblacklist" />
+    <result column="isdeleted" jdbcType="BOOLEAN" property="isdeleted" />
+    <result column="userid" jdbcType="OTHER" property="userid" />
+    <result column="avatarid" jdbcType="OTHER" property="avatarid" />
+    <result column="statusid" jdbcType="INTEGER" property="statusid" />
+    <result column="tenantid" jdbcType="OTHER" property="tenantid" />
+    <result column="createdate" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="modifieddate" jdbcType="TIMESTAMP" property="modifieddate" />
+    <result column="userupdate" jdbcType="VARCHAR" property="userupdate" />
+    <result column="active" jdbcType="BOOLEAN" property="active" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    employeeid, employeecode, firstname, lastname, fullname, genderid, gendername, birthday,
+    personaltaxcode, maritalstatusid, maritalstatusname, familyclassbackgroundid, familyclassbackgroundname,
+    ethnicid, ethnicname, nationalityid, nationalityname, personalclassbackgroundid,
+    personalclassbackgroundname, religionid, religionname, birthplace, homeland, identifynumber,
+    identifynumberissuedplaceid, identifynumberissuedplace, identifynumberissueddate,
+    identifynumberexpireddate, passportnumber, passportissueddate, passportissuedplaceid,
+    passportissuedplacename, passporteffectfromdate, passporteffecttodate, educationlevel,
+    educationplaceid, educationplacename, educationmajorid, educationmajorname, educationfacultyid,
+    educationfacultyname, levelid, levelname, educationdegreeid, educationdegreename,
+    awardedyear, hometel, officetel, mobile, othermobile, email, officeemail, otheremail,
+    facebookid, skypeid, msnid, nativecountryid, nativecountryname, nativeprovinceid,
+    nativeprovincename, nativedistrictid, nativedistrictname, nativewardid, nativewardname,
+    nativestreethousenumber, nativeaddress, isheadhousehold, registrationbooknumber,
+    registrationbookcode, samenativeaddress, currentcountryid, currentcountryname, currentprovinceid,
+    currentprovincename, currentdistrictid, currentdistrictname, currentwardid, currentwardname,
+    currentstreethousenumber, currentaddress, employeecodets, organizationunitid, organizationunitname,
+    jobcode, jobpositionname, jobtitleid, jobtitlename, jobtitleconvertid, joblevelid,
+    joblevelname, employeegradeid, employeegradename, employeestatusid, employeestatusname,
+    inactive, workingplace, laborbooknumber, contracttypeid, contracttypename, shiftcode,
+    probationdate, hiredate, receivedate, reporttoid, reporttoname, supervisorid, supervisorname,
+    numberofleaveday, autoincrementseniority, terminationdate, terminationapproverid,
+    terminationapprover, terminationreasonid, terminationreasonname, terminationreasontypeid,
+    terminationreasontypename, terminationfeedback, salarybasic, salarysocialinsurance,
+    bankaccountno, bankid, bankname, bankbranchid, bankbranchname, istradeunion, isinsurance,
+    istemplate, socialinsurancesupplementingdate, insurancerate, socialinsurancenumber,
+    socialinsurancecode, identifynumberissuedprovinceid, identifynumberissuedprovincename,
+    identifynumberissuedprovincecode, healthinsurancenumber, healthinsuranceissueplace,
+    healthinsuranceexpireddate, healthcareid, healthcarename, username, statusname, contactname,
+    relationshipid, relationshipname, contactmobile, contacttel, contactemail, contactaddress,
+    vocativeob, vocativeac, employeenatureid, employeenaturename, convertid, exportnewsfeed,
+    kindofpaperid, kindofpapername, salarygradeid, salarygradename, proceduretypeid,
+    proceduretypename, participateinsuranceid, participateinsurancename, totalincome,
+    expectedretirementdate, isblacklist, isdeleted, userid, avatarid, statusid, tenantid,
+    createdate, modifieddate, userupdate, active
+  </sql>
+  <sql id="EmployeesDTO_Column_List">
+    employeeid, employeecode, firstname, lastname, fullname, genderid, gendername, birthday,
+    personaltaxcode, maritalstatusid, maritalstatusname, familyclassbackgroundid, familyclassbackgroundname,
+    ethnicid, ethnicname, nationalityid, nationalityname, personalclassbackgroundid,
+    personalclassbackgroundname, religionid, religionname, birthplace, homeland, identifynumber,
+    identifynumberissuedplaceid, identifynumberissuedplace, identifynumberissueddate,
+    identifynumberexpireddate, passportnumber, passportissueddate, passportissuedplaceid,
+    passportissuedplacename, passporteffectfromdate, passporteffecttodate, educationlevel,
+    educationplaceid, educationplacename, educationmajorid, educationmajorname, educationfacultyid,
+    educationfacultyname, levelid, levelname, educationdegreeid, educationdegreename,
+    awardedyear, hometel, officetel, mobile, othermobile, email, officeemail, otheremail,
+    facebookid, skypeid, msnid, nativecountryid, nativecountryname, nativeprovinceid,
+    nativeprovincename, nativedistrictid, nativedistrictname, nativewardid, nativewardname,
+    nativestreethousenumber, nativeaddress, isheadhousehold, registrationbooknumber,
+    registrationbookcode, samenativeaddress, currentcountryid, currentcountryname, currentprovinceid,
+    currentprovincename, currentdistrictid, currentdistrictname, currentwardid, currentwardname,
+    currentstreethousenumber, currentaddress, employeecodets, organizationunitid, organizationunitname,
+    jobcode, jobpositionname, jobtitleid, jobtitlename, jobtitleconvertid, joblevelid,
+    joblevelname, employeegradeid, employeegradename, employeestatusid, employeestatusname,
+    inactive, workingplace, laborbooknumber, contracttypeid, contracttypename, shiftcode,
+    probationdate, hiredate, receivedate, reporttoid, reporttoname, supervisorid, supervisorname,
+    numberofleaveday, autoincrementseniority, terminationdate, terminationapproverid,
+    terminationapprover, terminationreasonid, terminationreasonname, terminationreasontypeid,
+    terminationreasontypename, terminationfeedback, salarybasic, salarysocialinsurance,
+    bankaccountno, bankid, bankname, bankbranchid, bankbranchname, istradeunion, isinsurance,
+    istemplate, socialinsurancesupplementingdate, insurancerate, socialinsurancenumber,
+    socialinsurancecode, identifynumberissuedprovinceid, identifynumberissuedprovincename,
+    identifynumberissuedprovincecode, healthinsurancenumber, healthinsuranceissueplace,
+    healthinsuranceexpireddate, healthcareid, healthcarename, username, statusname, contactname,
+    relationshipid, relationshipname, contactmobile, contacttel, contactemail, contactaddress,
+    vocativeob, vocativeac, employeenatureid, employeenaturename, convertid, exportnewsfeed,
+    kindofpaperid, kindofpapername, salarygradeid, salarygradename, proceduretypeid,
+    proceduretypename, participateinsuranceid, participateinsurancename, totalincome,
+    expectedretirementdate, isblacklist, isdeleted, userid, avatarid, statusid, tenantid
+  </sql>
+
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.employeeid != null"> and u.employeeid = #{search.employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.employeecode != null">
+        <choose>
+          <when test='exact == true'>
+            and employeecode = #{search.employeecode}
+          </when>
+          <otherwise>
+            and employeecode ILIKE '%${search.employeecode}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.firstname != null">
+        <choose>
+          <when test='exact == true'>
+            and firstname = #{search.firstname}
+          </when>
+          <otherwise>
+            and firstname ILIKE '%${search.firstname}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.lastname != null">
+        <choose>
+          <when test='exact == true'>
+            and lastname = #{search.lastname}
+          </when>
+          <otherwise>
+            and lastname ILIKE '%${search.lastname}%'
+          </otherwise>
+        </choose></if>
+      <if test="search.fullname != null">
+        <choose>
+          <when test='exact == true'>
+            and fullname = #{search.fullname}
+          </when>
+          <otherwise>
+            and fullname ILIKE '%${search.fullname}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.genderid != null"> and genderid = #{search.genderid}</if>
+      <if test="search.gendername != null">
+        <choose>
+          <when test='exact == true'>
+            and gendername = #{search.gendername}
+          </when>
+          <otherwise>
+            and gendername ILIKE '%${search.gendername}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.birthday != null"> and birthday = #{search.birthday}</if>
+      <if test="search.personaltaxcode != null">
+        <choose>
+          <when test='exact == true'>
+            and personaltaxcode = #{search.personaltaxcode}
+          </when>
+          <otherwise>
+            and personaltaxcode ILIKE '%${search.personaltaxcode}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.passportnumber != null">
+        <choose>
+          <when test='exact == true'>
+            and passportnumber = #{search.passportnumber}
+          </when>
+          <otherwise>
+            and passportnumber ILIKE '%${search.passportnumber}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.email != null">
+        <choose>
+          <when test='exact == true'>
+            and email = #{search.email}
+          </when>
+          <otherwise>
+            and email ILIKE '%${search.email}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.officeemail != null">
+        <choose>
+          <when test='exact == true'>
+            and officeemail = #{search.officeemail}
+          </when>
+          <otherwise>
+            and officeemail ILIKE '%${search.officeemail}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.inactive != null"> and u.status = #{search.inactive}</if>
+      <if test="search.organizationunitid != null"> and organizationunitid = #{search.organizationunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.organizationunitname != null">
+        <choose>
+          <when test='exact == true'>
+            and organizationunitname = #{search.organizationunitname}
+          </when>
+          <otherwise>
+            and organizationunitname ILIKE '%${search.organizationunitname}%'
+          </otherwise>
+        </choose>
+      </if>
+    </if>
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'firstname'">firstname ${order.direction}</if>
+          <if test="order.property == 'lastname'">lastname ${order.direction}</if>
+          <if test="order.property == 'fullname'">fullname ${order.direction}</if>
+          <if test="order.property == 'birthday'">birthday ${order.direction}</if>
+          <if test="order.property == 'gendername'">gendername ${order.direction}</if>
+          <if test="order.property == 'maritalstatusname'">maritalstatusname ${order.direction}</if>
+          <if test="order.property == 'ethnicname'">ethnicname ${order.direction}</if>
+          <if test="order.property == 'organizationunitname'">organizationunitname ${order.direction}</if>
+          <if test="order.property == 'employeestatusname'">employeestatusname ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+    <!-- NOTE: PostgreSQL has a slightly different syntax to MySQL i.e.
+		MYSWL limit #{pageable.offset}, #{pageable.pageSize}
+		 limit #{pageable.pageSize} offset #{pageable.offset}
+	-->
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+
+  <select id="findById" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from employees
+    where employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+	<select id="findDTOById" resultType="com.base.admin.hrm.dto.EmployeesDTO">
+      select
+      <include refid="EmployeesDTO_Column_List" />
+      from employees
+      where employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    </select>
+  <select id="countPaged" resultType="long">
+    select count(1)
+    from employees
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.dto.EmployeesDTO">
+    select
+    <include refid="EmployeesDTO_Column_List"/>
+    from employees
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from employees
+    where employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    delete from employees
+    where employeeid in
+    <foreach item="item" collection="list" open="(" separator="," close=")">
+      #{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    </foreach>
+  </delete>
+
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.Employees">
+    insert into employees (employeeid, employeecode, firstname,
+      lastname, fullname, genderid,
+      gendername, birthday, personaltaxcode,
+      maritalstatusid, maritalstatusname, familyclassbackgroundid,
+      familyclassbackgroundname, ethnicid, ethnicname,
+      nationalityid, nationalityname, personalclassbackgroundid,
+      personalclassbackgroundname, religionid,
+      religionname, birthplace, homeland,
+      identifynumber, identifynumberissuedplaceid,
+      identifynumberissuedplace, identifynumberissueddate,
+      identifynumberexpireddate, passportnumber,
+      passportissueddate, passportissuedplaceid,
+      passportissuedplacename, passporteffectfromdate,
+      passporteffecttodate, educationlevel, educationplaceid,
+      educationplacename, educationmajorid, educationmajorname,
+      educationfacultyid, educationfacultyname,
+      levelid, levelname, educationdegreeid,
+      educationdegreename, awardedyear, hometel,
+      officetel, mobile, othermobile,
+      email, officeemail, otheremail,
+      facebookid, skypeid, msnid,
+      nativecountryid, nativecountryname, nativeprovinceid,
+      nativeprovincename, nativedistrictid, nativedistrictname,
+      nativewardid, nativewardname, nativestreethousenumber,
+      nativeaddress, isheadhousehold, registrationbooknumber,
+      registrationbookcode, samenativeaddress,
+      currentcountryid, currentcountryname, currentprovinceid,
+      currentprovincename, currentdistrictid,
+      currentdistrictname, currentwardid, currentwardname,
+      currentstreethousenumber, currentaddress,
+      employeecodets, organizationunitid, organizationunitname,
+                           jobcode, jobpositionname, jobtitleid,
+      jobtitlename, jobtitleconvertid, joblevelid,
+      joblevelname, employeegradeid, employeegradename,
+      employeestatusid, employeestatusname, inactive,
+      workingplace, laborbooknumber, contracttypeid,
+      contracttypename, shiftcode, probationdate,
+      hiredate, receivedate, reporttoid,
+      reporttoname, supervisorid, supervisorname,
+      numberofleaveday, autoincrementseniority,
+      terminationdate, terminationapproverid, terminationapprover,
+      terminationreasonid, terminationreasonname,
+      terminationreasontypeid, terminationreasontypename,
+      terminationfeedback, salarybasic, salarysocialinsurance,
+      bankaccountno, bankid, bankname,
+      bankbranchid, bankbranchname, istradeunion,
+      isinsurance, istemplate, socialinsurancesupplementingdate,
+      insurancerate, socialinsurancenumber, socialinsurancecode,
+      identifynumberissuedprovinceid, identifynumberissuedprovincename,
+      identifynumberissuedprovincecode, healthinsurancenumber,
+      healthinsuranceissueplace, healthinsuranceexpireddate,
+      healthcareid, healthcarename, username,
+      statusname, contactname, relationshipid,
+      relationshipname, contactmobile, contacttel,
+      contactemail, contactaddress, vocativeob,
+      vocativeac, employeenatureid, employeenaturename,
+      convertid, exportnewsfeed, kindofpaperid,
+      kindofpapername, salarygradeid, salarygradename,
+      proceduretypeid, proceduretypename, participateinsuranceid,
+      participateinsurancename, totalincome, expectedretirementdate,
+      isblacklist, isdeleted, userid,
+      avatarid, statusid, tenantid,
+      createdate, modifieddate, userupdate,
+      active)
+    values (#{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{employeecode,jdbcType=VARCHAR}, #{firstname,jdbcType=VARCHAR},
+      #{lastname,jdbcType=VARCHAR}, #{fullname,jdbcType=VARCHAR}, #{genderid,jdbcType=INTEGER},
+      #{gendername,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{personaltaxcode,jdbcType=VARCHAR},
+      #{maritalstatusid,jdbcType=INTEGER}, #{maritalstatusname,jdbcType=VARCHAR}, #{familyclassbackgroundid,jdbcType=INTEGER},
+      #{familyclassbackgroundname,jdbcType=VARCHAR}, #{ethnicid,jdbcType=INTEGER}, #{ethnicname,jdbcType=VARCHAR},
+      #{nationalityid,jdbcType=INTEGER}, #{nationalityname,jdbcType=VARCHAR}, #{personalclassbackgroundid,jdbcType=INTEGER},
+      #{personalclassbackgroundname,jdbcType=VARCHAR}, #{religionid,jdbcType=INTEGER},
+      #{religionname,jdbcType=VARCHAR}, #{birthplace,jdbcType=VARCHAR}, #{homeland,jdbcType=VARCHAR},
+      #{identifynumber,jdbcType=VARCHAR}, #{identifynumberissuedplaceid,jdbcType=INTEGER},
+      #{identifynumberissuedplace,jdbcType=VARCHAR}, #{identifynumberissueddate,jdbcType=DATE},
+      #{identifynumberexpireddate,jdbcType=DATE}, #{passportnumber,jdbcType=VARCHAR},
+      #{passportissueddate,jdbcType=DATE}, #{passportissuedplaceid,jdbcType=INTEGER},
+      #{passportissuedplacename,jdbcType=VARCHAR}, #{passporteffectfromdate,jdbcType=DATE},
+      #{passporteffecttodate,jdbcType=DATE}, #{educationlevel,jdbcType=VARCHAR}, #{educationplaceid,jdbcType=INTEGER},
+      #{educationplacename,jdbcType=VARCHAR}, #{educationmajorid,jdbcType=INTEGER}, #{educationmajorname,jdbcType=VARCHAR},
+      #{educationfacultyid,jdbcType=INTEGER}, #{educationfacultyname,jdbcType=VARCHAR},
+      #{levelid,jdbcType=INTEGER}, #{levelname,jdbcType=VARCHAR}, #{educationdegreeid,jdbcType=INTEGER},
+      #{educationdegreename,jdbcType=VARCHAR}, #{awardedyear,jdbcType=INTEGER}, #{hometel,jdbcType=VARCHAR},
+      #{officetel,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{othermobile,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{officeemail,jdbcType=VARCHAR}, #{otheremail,jdbcType=VARCHAR},
+      #{facebookid,jdbcType=VARCHAR}, #{skypeid,jdbcType=VARCHAR}, #{msnid,jdbcType=VARCHAR},
+      #{nativecountryid,jdbcType=INTEGER}, #{nativecountryname,jdbcType=VARCHAR}, #{nativeprovinceid,jdbcType=VARCHAR},
+      #{nativeprovincename,jdbcType=VARCHAR}, #{nativedistrictid,jdbcType=VARCHAR}, #{nativedistrictname,jdbcType=VARCHAR},
+      #{nativewardid,jdbcType=VARCHAR}, #{nativewardname,jdbcType=VARCHAR}, #{nativestreethousenumber,jdbcType=VARCHAR},
+      #{nativeaddress,jdbcType=VARCHAR}, #{isheadhousehold,jdbcType=BOOLEAN}, #{registrationbooknumber,jdbcType=VARCHAR},
+      #{registrationbookcode,jdbcType=VARCHAR}, #{samenativeaddress,jdbcType=BOOLEAN},
+      #{currentcountryid,jdbcType=INTEGER}, #{currentcountryname,jdbcType=VARCHAR}, #{currentprovinceid,jdbcType=VARCHAR},
+      #{currentprovincename,jdbcType=VARCHAR}, #{currentdistrictid,jdbcType=VARCHAR},
+      #{currentdistrictname,jdbcType=VARCHAR}, #{currentwardid,jdbcType=VARCHAR}, #{currentwardname,jdbcType=VARCHAR},
+      #{currentstreethousenumber,jdbcType=VARCHAR}, #{currentaddress,jdbcType=VARCHAR},
+      #{employeecodets,jdbcType=VARCHAR}, #{organizationunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{organizationunitname,jdbcType=VARCHAR},
+      #{jobcode,jdbcType=VARCHAR}, #{jobpositionname,jdbcType=VARCHAR}, #{jobtitleid,jdbcType=INTEGER},
+      #{jobtitlename,jdbcType=VARCHAR}, #{jobtitleconvertid,jdbcType=INTEGER}, #{joblevelid,jdbcType=INTEGER},
+      #{joblevelname,jdbcType=VARCHAR}, #{employeegradeid,jdbcType=INTEGER}, #{employeegradename,jdbcType=VARCHAR},
+      #{employeestatusid,jdbcType=INTEGER}, #{employeestatusname,jdbcType=VARCHAR}, #{inactive,jdbcType=BOOLEAN},
+      #{workingplace,jdbcType=VARCHAR}, #{laborbooknumber,jdbcType=VARCHAR}, #{contracttypeid,jdbcType=INTEGER},
+      #{contracttypename,jdbcType=VARCHAR}, #{shiftcode,jdbcType=VARCHAR}, #{probationdate,jdbcType=DATE},
+      #{hiredate,jdbcType=DATE}, #{receivedate,jdbcType=DATE}, #{reporttoid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{reporttoname,jdbcType=VARCHAR}, #{supervisorid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{supervisorname,jdbcType=VARCHAR},
+      #{numberofleaveday,jdbcType=INTEGER}, #{autoincrementseniority,jdbcType=VARCHAR},
+      #{terminationdate,jdbcType=DATE}, #{terminationapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{terminationapprover,jdbcType=VARCHAR},
+      #{terminationreasonid,jdbcType=INTEGER}, #{terminationreasonname,jdbcType=VARCHAR},
+      #{terminationreasontypeid,jdbcType=INTEGER}, #{terminationreasontypename,jdbcType=VARCHAR},
+      #{terminationfeedback,jdbcType=VARCHAR}, #{salarybasic,jdbcType=INTEGER}, #{salarysocialinsurance,jdbcType=DOUBLE},
+      #{bankaccountno,jdbcType=VARCHAR}, #{bankid,jdbcType=INTEGER}, #{bankname,jdbcType=VARCHAR},
+      #{bankbranchid,jdbcType=INTEGER}, #{bankbranchname,jdbcType=VARCHAR}, #{istradeunion,jdbcType=BOOLEAN},
+      #{isinsurance,jdbcType=BOOLEAN}, #{istemplate,jdbcType=BOOLEAN}, #{socialinsurancesupplementingdate,jdbcType=DATE},
+      #{insurancerate,jdbcType=DOUBLE}, #{socialinsurancenumber,jdbcType=VARCHAR}, #{socialinsurancecode,jdbcType=VARCHAR},
+      #{identifynumberissuedprovinceid,jdbcType=VARCHAR}, #{identifynumberissuedprovincename,jdbcType=VARCHAR},
+      #{identifynumberissuedprovincecode,jdbcType=VARCHAR}, #{healthinsurancenumber,jdbcType=VARCHAR},
+      #{healthinsuranceissueplace,jdbcType=VARCHAR}, #{healthinsuranceexpireddate,jdbcType=DATE},
+      #{healthcareid,jdbcType=VARCHAR}, #{healthcarename,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+      #{statusname,jdbcType=VARCHAR}, #{contactname,jdbcType=VARCHAR}, #{relationshipid,jdbcType=INTEGER},
+      #{relationshipname,jdbcType=VARCHAR}, #{contactmobile,jdbcType=VARCHAR}, #{contacttel,jdbcType=VARCHAR},
+      #{contactemail,jdbcType=VARCHAR}, #{contactaddress,jdbcType=VARCHAR}, #{vocativeob,jdbcType=VARCHAR},
+      #{vocativeac,jdbcType=VARCHAR}, #{employeenatureid,jdbcType=INTEGER}, #{employeenaturename,jdbcType=VARCHAR},
+      #{convertid,jdbcType=INTEGER}, #{exportnewsfeed,jdbcType=VARCHAR}, #{kindofpaperid,jdbcType=INTEGER},
+      #{kindofpapername,jdbcType=VARCHAR}, #{salarygradeid,jdbcType=INTEGER}, #{salarygradename,jdbcType=VARCHAR},
+      #{proceduretypeid,jdbcType=INTEGER}, #{proceduretypename,jdbcType=VARCHAR}, #{participateinsuranceid,jdbcType=INTEGER},
+      #{participateinsurancename,jdbcType=VARCHAR}, #{totalincome,jdbcType=BIGINT}, #{expectedretirementdate,jdbcType=DATE},
+      #{isblacklist,jdbcType=BOOLEAN}, #{isdeleted,jdbcType=BOOLEAN}, #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{avatarid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{statusid,jdbcType=INTEGER}, #{tenantid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{createdate,jdbcType=TIMESTAMP}, #{modifieddate,jdbcType=TIMESTAMP}, #{userupdate,jdbcType=VARCHAR},
+      #{active,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.Employees">
+    insert into employees
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="employeeid != null">
+        employeeid,
+      </if>
+      <if test="employeecode != null">
+        employeecode,
+      </if>
+      <if test="firstname != null">
+        firstname,
+      </if>
+      <if test="lastname != null">
+        lastname,
+      </if>
+      <if test="fullname != null">
+        fullname,
+      </if>
+      <if test="genderid != null">
+        genderid,
+      </if>
+      <if test="gendername != null">
+        gendername,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="personaltaxcode != null">
+        personaltaxcode,
+      </if>
+      <if test="maritalstatusid != null">
+        maritalstatusid,
+      </if>
+      <if test="maritalstatusname != null">
+        maritalstatusname,
+      </if>
+      <if test="familyclassbackgroundid != null">
+        familyclassbackgroundid,
+      </if>
+      <if test="familyclassbackgroundname != null">
+        familyclassbackgroundname,
+      </if>
+      <if test="ethnicid != null">
+        ethnicid,
+      </if>
+      <if test="ethnicname != null">
+        ethnicname,
+      </if>
+      <if test="nationalityid != null">
+        nationalityid,
+      </if>
+      <if test="nationalityname != null">
+        nationalityname,
+      </if>
+      <if test="personalclassbackgroundid != null">
+        personalclassbackgroundid,
+      </if>
+      <if test="personalclassbackgroundname != null">
+        personalclassbackgroundname,
+      </if>
+      <if test="religionid != null">
+        religionid,
+      </if>
+      <if test="religionname != null">
+        religionname,
+      </if>
+      <if test="birthplace != null">
+        birthplace,
+      </if>
+      <if test="homeland != null">
+        homeland,
+      </if>
+      <if test="identifynumber != null">
+        identifynumber,
+      </if>
+      <if test="identifynumberissuedplaceid != null">
+        identifynumberissuedplaceid,
+      </if>
+      <if test="identifynumberissuedplace != null">
+        identifynumberissuedplace,
+      </if>
+      <if test="identifynumberissueddate != null">
+        identifynumberissueddate,
+      </if>
+      <if test="identifynumberexpireddate != null">
+        identifynumberexpireddate,
+      </if>
+      <if test="passportnumber != null">
+        passportnumber,
+      </if>
+      <if test="passportissueddate != null">
+        passportissueddate,
+      </if>
+      <if test="passportissuedplaceid != null">
+        passportissuedplaceid,
+      </if>
+      <if test="passportissuedplacename != null">
+        passportissuedplacename,
+      </if>
+      <if test="passporteffectfromdate != null">
+        passporteffectfromdate,
+      </if>
+      <if test="passporteffecttodate != null">
+        passporteffecttodate,
+      </if>
+      <if test="educationlevel != null">
+        educationlevel,
+      </if>
+      <if test="educationplaceid != null">
+        educationplaceid,
+      </if>
+      <if test="educationplacename != null">
+        educationplacename,
+      </if>
+      <if test="educationmajorid != null">
+        educationmajorid,
+      </if>
+      <if test="educationmajorname != null">
+        educationmajorname,
+      </if>
+      <if test="educationfacultyid != null">
+        educationfacultyid,
+      </if>
+      <if test="educationfacultyname != null">
+        educationfacultyname,
+      </if>
+      <if test="levelid != null">
+        levelid,
+      </if>
+      <if test="levelname != null">
+        levelname,
+      </if>
+      <if test="educationdegreeid != null">
+        educationdegreeid,
+      </if>
+      <if test="educationdegreename != null">
+        educationdegreename,
+      </if>
+      <if test="awardedyear != null">
+        awardedyear,
+      </if>
+      <if test="hometel != null">
+        hometel,
+      </if>
+      <if test="officetel != null">
+        officetel,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="othermobile != null">
+        othermobile,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="officeemail != null">
+        officeemail,
+      </if>
+      <if test="otheremail != null">
+        otheremail,
+      </if>
+      <if test="facebookid != null">
+        facebookid,
+      </if>
+      <if test="skypeid != null">
+        skypeid,
+      </if>
+      <if test="msnid != null">
+        msnid,
+      </if>
+      <if test="nativecountryid != null">
+        nativecountryid,
+      </if>
+      <if test="nativecountryname != null">
+        nativecountryname,
+      </if>
+      <if test="nativeprovinceid != null">
+        nativeprovinceid,
+      </if>
+      <if test="nativeprovincename != null">
+        nativeprovincename,
+      </if>
+      <if test="nativedistrictid != null">
+        nativedistrictid,
+      </if>
+      <if test="nativedistrictname != null">
+        nativedistrictname,
+      </if>
+      <if test="nativewardid != null">
+        nativewardid,
+      </if>
+      <if test="nativewardname != null">
+        nativewardname,
+      </if>
+      <if test="nativestreethousenumber != null">
+        nativestreethousenumber,
+      </if>
+      <if test="nativeaddress != null">
+        nativeaddress,
+      </if>
+      <if test="isheadhousehold != null">
+        isheadhousehold,
+      </if>
+      <if test="registrationbooknumber != null">
+        registrationbooknumber,
+      </if>
+      <if test="registrationbookcode != null">
+        registrationbookcode,
+      </if>
+      <if test="samenativeaddress != null">
+        samenativeaddress,
+      </if>
+      <if test="currentcountryid != null">
+        currentcountryid,
+      </if>
+      <if test="currentcountryname != null">
+        currentcountryname,
+      </if>
+      <if test="currentprovinceid != null">
+        currentprovinceid,
+      </if>
+      <if test="currentprovincename != null">
+        currentprovincename,
+      </if>
+      <if test="currentdistrictid != null">
+        currentdistrictid,
+      </if>
+      <if test="currentdistrictname != null">
+        currentdistrictname,
+      </if>
+      <if test="currentwardid != null">
+        currentwardid,
+      </if>
+      <if test="currentwardname != null">
+        currentwardname,
+      </if>
+      <if test="currentstreethousenumber != null">
+        currentstreethousenumber,
+      </if>
+      <if test="currentaddress != null">
+        currentaddress,
+      </if>
+      <if test="employeecodets != null">
+        employeecodets,
+      </if>
+      <if test="organizationunitid != null">
+        organizationunitid,
+      </if>
+      <if test="organizationunitname != null">
+        organizationunitname,
+      </if>
+      <if test="jobcode != null">
+        jobcode,
+      </if>
+      <if test="jobpositionname != null">
+        jobpositionname,
+      </if>
+      <if test="jobtitleid != null">
+        jobtitleid,
+      </if>
+      <if test="jobtitlename != null">
+        jobtitlename,
+      </if>
+      <if test="jobtitleconvertid != null">
+        jobtitleconvertid,
+      </if>
+      <if test="joblevelid != null">
+        joblevelid,
+      </if>
+      <if test="joblevelname != null">
+        joblevelname,
+      </if>
+      <if test="employeegradeid != null">
+        employeegradeid,
+      </if>
+      <if test="employeegradename != null">
+        employeegradename,
+      </if>
+      <if test="employeestatusid != null">
+        employeestatusid,
+      </if>
+      <if test="employeestatusname != null">
+        employeestatusname,
+      </if>
+      <if test="inactive != null">
+        inactive,
+      </if>
+      <if test="workingplace != null">
+        workingplace,
+      </if>
+      <if test="laborbooknumber != null">
+        laborbooknumber,
+      </if>
+      <if test="contracttypeid != null">
+        contracttypeid,
+      </if>
+      <if test="contracttypename != null">
+        contracttypename,
+      </if>
+      <if test="shiftcode != null">
+        shiftcode,
+      </if>
+      <if test="probationdate != null">
+        probationdate,
+      </if>
+      <if test="hiredate != null">
+        hiredate,
+      </if>
+      <if test="receivedate != null">
+        receivedate,
+      </if>
+      <if test="reporttoid != null">
+        reporttoid,
+      </if>
+      <if test="reporttoname != null">
+        reporttoname,
+      </if>
+      <if test="supervisorid != null">
+        supervisorid,
+      </if>
+      <if test="supervisorname != null">
+        supervisorname,
+      </if>
+      <if test="numberofleaveday != null">
+        numberofleaveday,
+      </if>
+      <if test="autoincrementseniority != null">
+        autoincrementseniority,
+      </if>
+      <if test="terminationdate != null">
+        terminationdate,
+      </if>
+      <if test="terminationapproverid != null">
+        terminationapproverid,
+      </if>
+      <if test="terminationapprover != null">
+        terminationapprover,
+      </if>
+      <if test="terminationreasonid != null">
+        terminationreasonid,
+      </if>
+      <if test="terminationreasonname != null">
+        terminationreasonname,
+      </if>
+      <if test="terminationreasontypeid != null">
+        terminationreasontypeid,
+      </if>
+      <if test="terminationreasontypename != null">
+        terminationreasontypename,
+      </if>
+      <if test="terminationfeedback != null">
+        terminationfeedback,
+      </if>
+      <if test="salarybasic != null">
+        salarybasic,
+      </if>
+      <if test="salarysocialinsurance != null">
+        salarysocialinsurance,
+      </if>
+      <if test="bankaccountno != null">
+        bankaccountno,
+      </if>
+      <if test="bankid != null">
+        bankid,
+      </if>
+      <if test="bankname != null">
+        bankname,
+      </if>
+      <if test="bankbranchid != null">
+        bankbranchid,
+      </if>
+      <if test="bankbranchname != null">
+        bankbranchname,
+      </if>
+      <if test="istradeunion != null">
+        istradeunion,
+      </if>
+      <if test="isinsurance != null">
+        isinsurance,
+      </if>
+      <if test="istemplate != null">
+        istemplate,
+      </if>
+      <if test="socialinsurancesupplementingdate != null">
+        socialinsurancesupplementingdate,
+      </if>
+      <if test="insurancerate != null">
+        insurancerate,
+      </if>
+      <if test="socialinsurancenumber != null">
+        socialinsurancenumber,
+      </if>
+      <if test="socialinsurancecode != null">
+        socialinsurancecode,
+      </if>
+      <if test="identifynumberissuedprovinceid != null">
+        identifynumberissuedprovinceid,
+      </if>
+      <if test="identifynumberissuedprovincename != null">
+        identifynumberissuedprovincename,
+      </if>
+      <if test="identifynumberissuedprovincecode != null">
+        identifynumberissuedprovincecode,
+      </if>
+      <if test="healthinsurancenumber != null">
+        healthinsurancenumber,
+      </if>
+      <if test="healthinsuranceissueplace != null">
+        healthinsuranceissueplace,
+      </if>
+      <if test="healthinsuranceexpireddate != null">
+        healthinsuranceexpireddate,
+      </if>
+      <if test="healthcareid != null">
+        healthcareid,
+      </if>
+      <if test="healthcarename != null">
+        healthcarename,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="statusname != null">
+        statusname,
+      </if>
+      <if test="contactname != null">
+        contactname,
+      </if>
+      <if test="relationshipid != null">
+        relationshipid,
+      </if>
+      <if test="relationshipname != null">
+        relationshipname,
+      </if>
+      <if test="contactmobile != null">
+        contactmobile,
+      </if>
+      <if test="contacttel != null">
+        contacttel,
+      </if>
+      <if test="contactemail != null">
+        contactemail,
+      </if>
+      <if test="contactaddress != null">
+        contactaddress,
+      </if>
+      <if test="vocativeob != null">
+        vocativeob,
+      </if>
+      <if test="vocativeac != null">
+        vocativeac,
+      </if>
+      <if test="employeenatureid != null">
+        employeenatureid,
+      </if>
+      <if test="employeenaturename != null">
+        employeenaturename,
+      </if>
+      <if test="convertid != null">
+        convertid,
+      </if>
+      <if test="exportnewsfeed != null">
+        exportnewsfeed,
+      </if>
+      <if test="kindofpaperid != null">
+        kindofpaperid,
+      </if>
+      <if test="kindofpapername != null">
+        kindofpapername,
+      </if>
+      <if test="salarygradeid != null">
+        salarygradeid,
+      </if>
+      <if test="salarygradename != null">
+        salarygradename,
+      </if>
+      <if test="proceduretypeid != null">
+        proceduretypeid,
+      </if>
+      <if test="proceduretypename != null">
+        proceduretypename,
+      </if>
+      <if test="participateinsuranceid != null">
+        participateinsuranceid,
+      </if>
+      <if test="participateinsurancename != null">
+        participateinsurancename,
+      </if>
+      <if test="totalincome != null">
+        totalincome,
+      </if>
+      <if test="expectedretirementdate != null">
+        expectedretirementdate,
+      </if>
+      <if test="isblacklist != null">
+        isblacklist,
+      </if>
+      <if test="isdeleted != null">
+        isdeleted,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="avatarid != null">
+        avatarid,
+      </if>
+      <if test="statusid != null">
+        statusid,
+      </if>
+      <if test="tenantid != null">
+        tenantid,
+      </if>
+      <if test="createdate != null">
+        createdate,
+      </if>
+      <if test="modifieddate != null">
+        modifieddate,
+      </if>
+      <if test="userupdate != null">
+        userupdate,
+      </if>
+      <if test="active != null">
+        active,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="employeeid != null">
+        #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="employeecode != null">
+        #{employeecode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstname != null">
+        #{firstname,jdbcType=VARCHAR},
+      </if>
+      <if test="lastname != null">
+        #{lastname,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null">
+        #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="genderid != null">
+        #{genderid,jdbcType=INTEGER},
+      </if>
+      <if test="gendername != null">
+        #{gendername,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="personaltaxcode != null">
+        #{personaltaxcode,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalstatusid != null">
+        #{maritalstatusid,jdbcType=INTEGER},
+      </if>
+      <if test="maritalstatusname != null">
+        #{maritalstatusname,jdbcType=VARCHAR},
+      </if>
+      <if test="familyclassbackgroundid != null">
+        #{familyclassbackgroundid,jdbcType=INTEGER},
+      </if>
+      <if test="familyclassbackgroundname != null">
+        #{familyclassbackgroundname,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicid != null">
+        #{ethnicid,jdbcType=INTEGER},
+      </if>
+      <if test="ethnicname != null">
+        #{ethnicname,jdbcType=VARCHAR},
+      </if>
+      <if test="nationalityid != null">
+        #{nationalityid,jdbcType=INTEGER},
+      </if>
+      <if test="nationalityname != null">
+        #{nationalityname,jdbcType=VARCHAR},
+      </if>
+      <if test="personalclassbackgroundid != null">
+        #{personalclassbackgroundid,jdbcType=INTEGER},
+      </if>
+      <if test="personalclassbackgroundname != null">
+        #{personalclassbackgroundname,jdbcType=VARCHAR},
+      </if>
+      <if test="religionid != null">
+        #{religionid,jdbcType=INTEGER},
+      </if>
+      <if test="religionname != null">
+        #{religionname,jdbcType=VARCHAR},
+      </if>
+      <if test="birthplace != null">
+        #{birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="homeland != null">
+        #{homeland,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumber != null">
+        #{identifynumber,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedplaceid != null">
+        #{identifynumberissuedplaceid,jdbcType=INTEGER},
+      </if>
+      <if test="identifynumberissuedplace != null">
+        #{identifynumberissuedplace,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissueddate != null">
+        #{identifynumberissueddate,jdbcType=DATE},
+      </if>
+      <if test="identifynumberexpireddate != null">
+        #{identifynumberexpireddate,jdbcType=DATE},
+      </if>
+      <if test="passportnumber != null">
+        #{passportnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="passportissueddate != null">
+        #{passportissueddate,jdbcType=DATE},
+      </if>
+      <if test="passportissuedplaceid != null">
+        #{passportissuedplaceid,jdbcType=INTEGER},
+      </if>
+      <if test="passportissuedplacename != null">
+        #{passportissuedplacename,jdbcType=VARCHAR},
+      </if>
+      <if test="passporteffectfromdate != null">
+        #{passporteffectfromdate,jdbcType=DATE},
+      </if>
+      <if test="passporteffecttodate != null">
+        #{passporteffecttodate,jdbcType=DATE},
+      </if>
+      <if test="educationlevel != null">
+        #{educationlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="educationplaceid != null">
+        #{educationplaceid,jdbcType=INTEGER},
+      </if>
+      <if test="educationplacename != null">
+        #{educationplacename,jdbcType=VARCHAR},
+      </if>
+      <if test="educationmajorid != null">
+        #{educationmajorid,jdbcType=INTEGER},
+      </if>
+      <if test="educationmajorname != null">
+        #{educationmajorname,jdbcType=VARCHAR},
+      </if>
+      <if test="educationfacultyid != null">
+        #{educationfacultyid,jdbcType=INTEGER},
+      </if>
+      <if test="educationfacultyname != null">
+        #{educationfacultyname,jdbcType=VARCHAR},
+      </if>
+      <if test="levelid != null">
+        #{levelid,jdbcType=INTEGER},
+      </if>
+      <if test="levelname != null">
+        #{levelname,jdbcType=VARCHAR},
+      </if>
+      <if test="educationdegreeid != null">
+        #{educationdegreeid,jdbcType=INTEGER},
+      </if>
+      <if test="educationdegreename != null">
+        #{educationdegreename,jdbcType=VARCHAR},
+      </if>
+      <if test="awardedyear != null">
+        #{awardedyear,jdbcType=INTEGER},
+      </if>
+      <if test="hometel != null">
+        #{hometel,jdbcType=VARCHAR},
+      </if>
+      <if test="officetel != null">
+        #{officetel,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="othermobile != null">
+        #{othermobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="officeemail != null">
+        #{officeemail,jdbcType=VARCHAR},
+      </if>
+      <if test="otheremail != null">
+        #{otheremail,jdbcType=VARCHAR},
+      </if>
+      <if test="facebookid != null">
+        #{facebookid,jdbcType=VARCHAR},
+      </if>
+      <if test="skypeid != null">
+        #{skypeid,jdbcType=VARCHAR},
+      </if>
+      <if test="msnid != null">
+        #{msnid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativecountryid != null">
+        #{nativecountryid,jdbcType=INTEGER},
+      </if>
+      <if test="nativecountryname != null">
+        #{nativecountryname,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeprovinceid != null">
+        #{nativeprovinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeprovincename != null">
+        #{nativeprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="nativedistrictid != null">
+        #{nativedistrictid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativedistrictname != null">
+        #{nativedistrictname,jdbcType=VARCHAR},
+      </if>
+      <if test="nativewardid != null">
+        #{nativewardid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativewardname != null">
+        #{nativewardname,jdbcType=VARCHAR},
+      </if>
+      <if test="nativestreethousenumber != null">
+        #{nativestreethousenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeaddress != null">
+        #{nativeaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isheadhousehold != null">
+        #{isheadhousehold,jdbcType=BOOLEAN},
+      </if>
+      <if test="registrationbooknumber != null">
+        #{registrationbooknumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationbookcode != null">
+        #{registrationbookcode,jdbcType=VARCHAR},
+      </if>
+      <if test="samenativeaddress != null">
+        #{samenativeaddress,jdbcType=BOOLEAN},
+      </if>
+      <if test="currentcountryid != null">
+        #{currentcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="currentcountryname != null">
+        #{currentcountryname,jdbcType=VARCHAR},
+      </if>
+      <if test="currentprovinceid != null">
+        #{currentprovinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentprovincename != null">
+        #{currentprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="currentdistrictid != null">
+        #{currentdistrictid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentdistrictname != null">
+        #{currentdistrictname,jdbcType=VARCHAR},
+      </if>
+      <if test="currentwardid != null">
+        #{currentwardid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentwardname != null">
+        #{currentwardname,jdbcType=VARCHAR},
+      </if>
+      <if test="currentstreethousenumber != null">
+        #{currentstreethousenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="currentaddress != null">
+        #{currentaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="employeecodets != null">
+        #{employeecodets,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationunitid != null">
+        #{organizationunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="organizationunitname != null">
+        #{organizationunitname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobcode != null">
+        #{jobcode,jdbcType=VARCHAR},
+      </if>
+      <if test="jobpositionname != null">
+        #{jobpositionname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleid != null">
+        #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="jobtitlename != null">
+        #{jobtitlename,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleconvertid != null">
+        #{jobtitleconvertid,jdbcType=INTEGER},
+      </if>
+      <if test="joblevelid != null">
+        #{joblevelid,jdbcType=INTEGER},
+      </if>
+      <if test="joblevelname != null">
+        #{joblevelname,jdbcType=VARCHAR},
+      </if>
+      <if test="employeegradeid != null">
+        #{employeegradeid,jdbcType=INTEGER},
+      </if>
+      <if test="employeegradename != null">
+        #{employeegradename,jdbcType=VARCHAR},
+      </if>
+      <if test="employeestatusid != null">
+        #{employeestatusid,jdbcType=INTEGER},
+      </if>
+      <if test="employeestatusname != null">
+        #{employeestatusname,jdbcType=VARCHAR},
+      </if>
+      <if test="inactive != null">
+        #{inactive,jdbcType=BOOLEAN},
+      </if>
+      <if test="workingplace != null">
+        #{workingplace,jdbcType=VARCHAR},
+      </if>
+      <if test="laborbooknumber != null">
+        #{laborbooknumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contracttypeid != null">
+        #{contracttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="contracttypename != null">
+        #{contracttypename,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftcode != null">
+        #{shiftcode,jdbcType=VARCHAR},
+      </if>
+      <if test="probationdate != null">
+        #{probationdate,jdbcType=DATE},
+      </if>
+      <if test="hiredate != null">
+        #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="receivedate != null">
+        #{receivedate,jdbcType=DATE},
+      </if>
+      <if test="reporttoid != null">
+        #{reporttoid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="reporttoname != null">
+        #{reporttoname,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorid != null">
+        #{supervisorid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="supervisorname != null">
+        #{supervisorname,jdbcType=VARCHAR},
+      </if>
+      <if test="numberofleaveday != null">
+        #{numberofleaveday,jdbcType=INTEGER},
+      </if>
+      <if test="autoincrementseniority != null">
+        #{autoincrementseniority,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationdate != null">
+        #{terminationdate,jdbcType=DATE},
+      </if>
+      <if test="terminationapproverid != null">
+        #{terminationapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="terminationapprover != null">
+        #{terminationapprover,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationreasonid != null">
+        #{terminationreasonid,jdbcType=INTEGER},
+      </if>
+      <if test="terminationreasonname != null">
+        #{terminationreasonname,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationreasontypeid != null">
+        #{terminationreasontypeid,jdbcType=INTEGER},
+      </if>
+      <if test="terminationreasontypename != null">
+        #{terminationreasontypename,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationfeedback != null">
+        #{terminationfeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="salarybasic != null">
+        #{salarybasic,jdbcType=INTEGER},
+      </if>
+      <if test="salarysocialinsurance != null">
+        #{salarysocialinsurance,jdbcType=DOUBLE},
+      </if>
+      <if test="bankaccountno != null">
+        #{bankaccountno,jdbcType=VARCHAR},
+      </if>
+      <if test="bankid != null">
+        #{bankid,jdbcType=INTEGER},
+      </if>
+      <if test="bankname != null">
+        #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankbranchid != null">
+        #{bankbranchid,jdbcType=INTEGER},
+      </if>
+      <if test="bankbranchname != null">
+        #{bankbranchname,jdbcType=VARCHAR},
+      </if>
+      <if test="istradeunion != null">
+        #{istradeunion,jdbcType=BOOLEAN},
+      </if>
+      <if test="isinsurance != null">
+        #{isinsurance,jdbcType=BOOLEAN},
+      </if>
+      <if test="istemplate != null">
+        #{istemplate,jdbcType=BOOLEAN},
+      </if>
+      <if test="socialinsurancesupplementingdate != null">
+        #{socialinsurancesupplementingdate,jdbcType=DATE},
+      </if>
+      <if test="insurancerate != null">
+        #{insurancerate,jdbcType=DOUBLE},
+      </if>
+      <if test="socialinsurancenumber != null">
+        #{socialinsurancenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="socialinsurancecode != null">
+        #{socialinsurancecode,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedprovinceid != null">
+        #{identifynumberissuedprovinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedprovincename != null">
+        #{identifynumberissuedprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedprovincecode != null">
+        #{identifynumberissuedprovincecode,jdbcType=VARCHAR},
+      </if>
+      <if test="healthinsurancenumber != null">
+        #{healthinsurancenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="healthinsuranceissueplace != null">
+        #{healthinsuranceissueplace,jdbcType=VARCHAR},
+      </if>
+      <if test="healthinsuranceexpireddate != null">
+        #{healthinsuranceexpireddate,jdbcType=DATE},
+      </if>
+      <if test="healthcareid != null">
+        #{healthcareid,jdbcType=VARCHAR},
+      </if>
+      <if test="healthcarename != null">
+        #{healthcarename,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="statusname != null">
+        #{statusname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactname != null">
+        #{contactname,jdbcType=VARCHAR},
+      </if>
+      <if test="relationshipid != null">
+        #{relationshipid,jdbcType=INTEGER},
+      </if>
+      <if test="relationshipname != null">
+        #{relationshipname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactmobile != null">
+        #{contactmobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contacttel != null">
+        #{contacttel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactemail != null">
+        #{contactemail,jdbcType=VARCHAR},
+      </if>
+      <if test="contactaddress != null">
+        #{contactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="vocativeob != null">
+        #{vocativeob,jdbcType=VARCHAR},
+      </if>
+      <if test="vocativeac != null">
+        #{vocativeac,jdbcType=VARCHAR},
+      </if>
+      <if test="employeenatureid != null">
+        #{employeenatureid,jdbcType=INTEGER},
+      </if>
+      <if test="employeenaturename != null">
+        #{employeenaturename,jdbcType=VARCHAR},
+      </if>
+      <if test="convertid != null">
+        #{convertid,jdbcType=INTEGER},
+      </if>
+      <if test="exportnewsfeed != null">
+        #{exportnewsfeed,jdbcType=VARCHAR},
+      </if>
+      <if test="kindofpaperid != null">
+        #{kindofpaperid,jdbcType=INTEGER},
+      </if>
+      <if test="kindofpapername != null">
+        #{kindofpapername,jdbcType=VARCHAR},
+      </if>
+      <if test="salarygradeid != null">
+        #{salarygradeid,jdbcType=INTEGER},
+      </if>
+      <if test="salarygradename != null">
+        #{salarygradename,jdbcType=VARCHAR},
+      </if>
+      <if test="proceduretypeid != null">
+        #{proceduretypeid,jdbcType=INTEGER},
+      </if>
+      <if test="proceduretypename != null">
+        #{proceduretypename,jdbcType=VARCHAR},
+      </if>
+      <if test="participateinsuranceid != null">
+        #{participateinsuranceid,jdbcType=INTEGER},
+      </if>
+      <if test="participateinsurancename != null">
+        #{participateinsurancename,jdbcType=VARCHAR},
+      </if>
+      <if test="totalincome != null">
+        #{totalincome,jdbcType=BIGINT},
+      </if>
+      <if test="expectedretirementdate != null">
+        #{expectedretirementdate,jdbcType=DATE},
+      </if>
+      <if test="isblacklist != null">
+        #{isblacklist,jdbcType=BOOLEAN},
+      </if>
+      <if test="isdeleted != null">
+        #{isdeleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="avatarid != null">
+        #{avatarid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="statusid != null">
+        #{statusid,jdbcType=INTEGER},
+      </if>
+      <if test="tenantid != null">
+        #{tenantid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="createdate != null">
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifieddate != null">
+        #{modifieddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userupdate != null">
+        #{userupdate,jdbcType=VARCHAR},
+      </if>
+      <if test="active != null">
+        #{active,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.Employees">
+    update employees
+    <set>
+      <if test="employeecode != null">
+        employeecode = #{employeecode,jdbcType=VARCHAR},
+      </if>
+      <if test="firstname != null">
+        firstname = #{firstname,jdbcType=VARCHAR},
+      </if>
+      <if test="lastname != null">
+        lastname = #{lastname,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null">
+        fullname = #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="genderid != null">
+        genderid = #{genderid,jdbcType=INTEGER},
+      </if>
+      <if test="gendername != null">
+        gendername = #{gendername,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="personaltaxcode != null">
+        personaltaxcode = #{personaltaxcode,jdbcType=VARCHAR},
+      </if>
+      <if test="maritalstatusid != null">
+        maritalstatusid = #{maritalstatusid,jdbcType=INTEGER},
+      </if>
+      <if test="maritalstatusname != null">
+        maritalstatusname = #{maritalstatusname,jdbcType=VARCHAR},
+      </if>
+      <if test="familyclassbackgroundid != null">
+        familyclassbackgroundid = #{familyclassbackgroundid,jdbcType=INTEGER},
+      </if>
+      <if test="familyclassbackgroundname != null">
+        familyclassbackgroundname = #{familyclassbackgroundname,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicid != null">
+        ethnicid = #{ethnicid,jdbcType=INTEGER},
+      </if>
+      <if test="ethnicname != null">
+        ethnicname = #{ethnicname,jdbcType=VARCHAR},
+      </if>
+      <if test="nationalityid != null">
+        nationalityid = #{nationalityid,jdbcType=INTEGER},
+      </if>
+      <if test="nationalityname != null">
+        nationalityname = #{nationalityname,jdbcType=VARCHAR},
+      </if>
+      <if test="personalclassbackgroundid != null">
+        personalclassbackgroundid = #{personalclassbackgroundid,jdbcType=INTEGER},
+      </if>
+      <if test="personalclassbackgroundname != null">
+        personalclassbackgroundname = #{personalclassbackgroundname,jdbcType=VARCHAR},
+      </if>
+      <if test="religionid != null">
+        religionid = #{religionid,jdbcType=INTEGER},
+      </if>
+      <if test="religionname != null">
+        religionname = #{religionname,jdbcType=VARCHAR},
+      </if>
+      <if test="birthplace != null">
+        birthplace = #{birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="homeland != null">
+        homeland = #{homeland,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumber != null">
+        identifynumber = #{identifynumber,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedplaceid != null">
+        identifynumberissuedplaceid = #{identifynumberissuedplaceid,jdbcType=INTEGER},
+      </if>
+      <if test="identifynumberissuedplace != null">
+        identifynumberissuedplace = #{identifynumberissuedplace,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissueddate != null">
+        identifynumberissueddate = #{identifynumberissueddate,jdbcType=DATE},
+      </if>
+      <if test="identifynumberexpireddate != null">
+        identifynumberexpireddate = #{identifynumberexpireddate,jdbcType=DATE},
+      </if>
+      <if test="passportnumber != null">
+        passportnumber = #{passportnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="passportissueddate != null">
+        passportissueddate = #{passportissueddate,jdbcType=DATE},
+      </if>
+      <if test="passportissuedplaceid != null">
+        passportissuedplaceid = #{passportissuedplaceid,jdbcType=INTEGER},
+      </if>
+      <if test="passportissuedplacename != null">
+        passportissuedplacename = #{passportissuedplacename,jdbcType=VARCHAR},
+      </if>
+      <if test="passporteffectfromdate != null">
+        passporteffectfromdate = #{passporteffectfromdate,jdbcType=DATE},
+      </if>
+      <if test="passporteffecttodate != null">
+        passporteffecttodate = #{passporteffecttodate,jdbcType=DATE},
+      </if>
+      <if test="educationlevel != null">
+        educationlevel = #{educationlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="educationplaceid != null">
+        educationplaceid = #{educationplaceid,jdbcType=INTEGER},
+      </if>
+      <if test="educationplacename != null">
+        educationplacename = #{educationplacename,jdbcType=VARCHAR},
+      </if>
+      <if test="educationmajorid != null">
+        educationmajorid = #{educationmajorid,jdbcType=INTEGER},
+      </if>
+      <if test="educationmajorname != null">
+        educationmajorname = #{educationmajorname,jdbcType=VARCHAR},
+      </if>
+      <if test="educationfacultyid != null">
+        educationfacultyid = #{educationfacultyid,jdbcType=INTEGER},
+      </if>
+      <if test="educationfacultyname != null">
+        educationfacultyname = #{educationfacultyname,jdbcType=VARCHAR},
+      </if>
+      <if test="levelid != null">
+        levelid = #{levelid,jdbcType=INTEGER},
+      </if>
+      <if test="levelname != null">
+        levelname = #{levelname,jdbcType=VARCHAR},
+      </if>
+      <if test="educationdegreeid != null">
+        educationdegreeid = #{educationdegreeid,jdbcType=INTEGER},
+      </if>
+      <if test="educationdegreename != null">
+        educationdegreename = #{educationdegreename,jdbcType=VARCHAR},
+      </if>
+      <if test="awardedyear != null">
+        awardedyear = #{awardedyear,jdbcType=INTEGER},
+      </if>
+      <if test="hometel != null">
+        hometel = #{hometel,jdbcType=VARCHAR},
+      </if>
+      <if test="officetel != null">
+        officetel = #{officetel,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="othermobile != null">
+        othermobile = #{othermobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="officeemail != null">
+        officeemail = #{officeemail,jdbcType=VARCHAR},
+      </if>
+      <if test="otheremail != null">
+        otheremail = #{otheremail,jdbcType=VARCHAR},
+      </if>
+      <if test="facebookid != null">
+        facebookid = #{facebookid,jdbcType=VARCHAR},
+      </if>
+      <if test="skypeid != null">
+        skypeid = #{skypeid,jdbcType=VARCHAR},
+      </if>
+      <if test="msnid != null">
+        msnid = #{msnid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativecountryid != null">
+        nativecountryid = #{nativecountryid,jdbcType=INTEGER},
+      </if>
+      <if test="nativecountryname != null">
+        nativecountryname = #{nativecountryname,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeprovinceid != null">
+        nativeprovinceid = #{nativeprovinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeprovincename != null">
+        nativeprovincename = #{nativeprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="nativedistrictid != null">
+        nativedistrictid = #{nativedistrictid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativedistrictname != null">
+        nativedistrictname = #{nativedistrictname,jdbcType=VARCHAR},
+      </if>
+      <if test="nativewardid != null">
+        nativewardid = #{nativewardid,jdbcType=VARCHAR},
+      </if>
+      <if test="nativewardname != null">
+        nativewardname = #{nativewardname,jdbcType=VARCHAR},
+      </if>
+      <if test="nativestreethousenumber != null">
+        nativestreethousenumber = #{nativestreethousenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeaddress != null">
+        nativeaddress = #{nativeaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isheadhousehold != null">
+        isheadhousehold = #{isheadhousehold,jdbcType=BOOLEAN},
+      </if>
+      <if test="registrationbooknumber != null">
+        registrationbooknumber = #{registrationbooknumber,jdbcType=VARCHAR},
+      </if>
+      <if test="registrationbookcode != null">
+        registrationbookcode = #{registrationbookcode,jdbcType=VARCHAR},
+      </if>
+      <if test="samenativeaddress != null">
+        samenativeaddress = #{samenativeaddress,jdbcType=BOOLEAN},
+      </if>
+      <if test="currentcountryid != null">
+        currentcountryid = #{currentcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="currentcountryname != null">
+        currentcountryname = #{currentcountryname,jdbcType=VARCHAR},
+      </if>
+      <if test="currentprovinceid != null">
+        currentprovinceid = #{currentprovinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentprovincename != null">
+        currentprovincename = #{currentprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="currentdistrictid != null">
+        currentdistrictid = #{currentdistrictid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentdistrictname != null">
+        currentdistrictname = #{currentdistrictname,jdbcType=VARCHAR},
+      </if>
+      <if test="currentwardid != null">
+        currentwardid = #{currentwardid,jdbcType=VARCHAR},
+      </if>
+      <if test="currentwardname != null">
+        currentwardname = #{currentwardname,jdbcType=VARCHAR},
+      </if>
+      <if test="currentstreethousenumber != null">
+        currentstreethousenumber = #{currentstreethousenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="currentaddress != null">
+        currentaddress = #{currentaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="employeecodets != null">
+        employeecodets = #{employeecodets,jdbcType=VARCHAR},
+      </if>
+      <if test="organizationunitid != null">
+        organizationunitid = #{organizationunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="organizationunitname != null">
+        organizationunitname = #{organizationunitname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobcode != null">
+        jobcode = #{jobcode,jdbcType=VARCHAR},
+      </if>
+      <if test="jobpositionname != null">
+        jobpositionname = #{jobpositionname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleid != null">
+        jobtitleid = #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="jobtitlename != null">
+        jobtitlename = #{jobtitlename,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleconvertid != null">
+        jobtitleconvertid = #{jobtitleconvertid,jdbcType=INTEGER},
+      </if>
+      <if test="joblevelid != null">
+        joblevelid = #{joblevelid,jdbcType=INTEGER},
+      </if>
+      <if test="joblevelname != null">
+        joblevelname = #{joblevelname,jdbcType=VARCHAR},
+      </if>
+      <if test="employeegradeid != null">
+        employeegradeid = #{employeegradeid,jdbcType=INTEGER},
+      </if>
+      <if test="employeegradename != null">
+        employeegradename = #{employeegradename,jdbcType=VARCHAR},
+      </if>
+      <if test="employeestatusid != null">
+        employeestatusid = #{employeestatusid,jdbcType=INTEGER},
+      </if>
+      <if test="employeestatusname != null">
+        employeestatusname = #{employeestatusname,jdbcType=VARCHAR},
+      </if>
+      <if test="inactive != null">
+        inactive = #{inactive,jdbcType=BOOLEAN},
+      </if>
+      <if test="workingplace != null">
+        workingplace = #{workingplace,jdbcType=VARCHAR},
+      </if>
+      <if test="laborbooknumber != null">
+        laborbooknumber = #{laborbooknumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contracttypeid != null">
+        contracttypeid = #{contracttypeid,jdbcType=INTEGER},
+      </if>
+      <if test="contracttypename != null">
+        contracttypename = #{contracttypename,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftcode != null">
+        shiftcode = #{shiftcode,jdbcType=VARCHAR},
+      </if>
+      <if test="probationdate != null">
+        probationdate = #{probationdate,jdbcType=DATE},
+      </if>
+      <if test="hiredate != null">
+        hiredate = #{hiredate,jdbcType=DATE},
+      </if>
+      <if test="receivedate != null">
+        receivedate = #{receivedate,jdbcType=DATE},
+      </if>
+      <if test="reporttoid != null">
+        reporttoid = #{reporttoid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="reporttoname != null">
+        reporttoname = #{reporttoname,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisorid != null">
+        supervisorid = #{supervisorid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="supervisorname != null">
+        supervisorname = #{supervisorname,jdbcType=VARCHAR},
+      </if>
+      <if test="numberofleaveday != null">
+        numberofleaveday = #{numberofleaveday,jdbcType=INTEGER},
+      </if>
+      <if test="autoincrementseniority != null">
+        autoincrementseniority = #{autoincrementseniority,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationdate != null">
+        terminationdate = #{terminationdate,jdbcType=DATE},
+      </if>
+      <if test="terminationapproverid != null">
+        terminationapproverid = #{terminationapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="terminationapprover != null">
+        terminationapprover = #{terminationapprover,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationreasonid != null">
+        terminationreasonid = #{terminationreasonid,jdbcType=INTEGER},
+      </if>
+      <if test="terminationreasonname != null">
+        terminationreasonname = #{terminationreasonname,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationreasontypeid != null">
+        terminationreasontypeid = #{terminationreasontypeid,jdbcType=INTEGER},
+      </if>
+      <if test="terminationreasontypename != null">
+        terminationreasontypename = #{terminationreasontypename,jdbcType=VARCHAR},
+      </if>
+      <if test="terminationfeedback != null">
+        terminationfeedback = #{terminationfeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="salarybasic != null">
+        salarybasic = #{salarybasic,jdbcType=INTEGER},
+      </if>
+      <if test="salarysocialinsurance != null">
+        salarysocialinsurance = #{salarysocialinsurance,jdbcType=DOUBLE},
+      </if>
+      <if test="bankaccountno != null">
+        bankaccountno = #{bankaccountno,jdbcType=VARCHAR},
+      </if>
+      <if test="bankid != null">
+        bankid = #{bankid,jdbcType=INTEGER},
+      </if>
+      <if test="bankname != null">
+        bankname = #{bankname,jdbcType=VARCHAR},
+      </if>
+      <if test="bankbranchid != null">
+        bankbranchid = #{bankbranchid,jdbcType=INTEGER},
+      </if>
+      <if test="bankbranchname != null">
+        bankbranchname = #{bankbranchname,jdbcType=VARCHAR},
+      </if>
+      <if test="istradeunion != null">
+        istradeunion = #{istradeunion,jdbcType=BOOLEAN},
+      </if>
+      <if test="isinsurance != null">
+        isinsurance = #{isinsurance,jdbcType=BOOLEAN},
+      </if>
+      <if test="istemplate != null">
+        istemplate = #{istemplate,jdbcType=BOOLEAN},
+      </if>
+      <if test="socialinsurancesupplementingdate != null">
+        socialinsurancesupplementingdate = #{socialinsurancesupplementingdate,jdbcType=DATE},
+      </if>
+      <if test="insurancerate != null">
+        insurancerate = #{insurancerate,jdbcType=DOUBLE},
+      </if>
+      <if test="socialinsurancenumber != null">
+        socialinsurancenumber = #{socialinsurancenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="socialinsurancecode != null">
+        socialinsurancecode = #{socialinsurancecode,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedprovinceid != null">
+        identifynumberissuedprovinceid = #{identifynumberissuedprovinceid,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedprovincename != null">
+        identifynumberissuedprovincename = #{identifynumberissuedprovincename,jdbcType=VARCHAR},
+      </if>
+      <if test="identifynumberissuedprovincecode != null">
+        identifynumberissuedprovincecode = #{identifynumberissuedprovincecode,jdbcType=VARCHAR},
+      </if>
+      <if test="healthinsurancenumber != null">
+        healthinsurancenumber = #{healthinsurancenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="healthinsuranceissueplace != null">
+        healthinsuranceissueplace = #{healthinsuranceissueplace,jdbcType=VARCHAR},
+      </if>
+      <if test="healthinsuranceexpireddate != null">
+        healthinsuranceexpireddate = #{healthinsuranceexpireddate,jdbcType=DATE},
+      </if>
+      <if test="healthcareid != null">
+        healthcareid = #{healthcareid,jdbcType=VARCHAR},
+      </if>
+      <if test="healthcarename != null">
+        healthcarename = #{healthcarename,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="statusname != null">
+        statusname = #{statusname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactname != null">
+        contactname = #{contactname,jdbcType=VARCHAR},
+      </if>
+      <if test="relationshipid != null">
+        relationshipid = #{relationshipid,jdbcType=INTEGER},
+      </if>
+      <if test="relationshipname != null">
+        relationshipname = #{relationshipname,jdbcType=VARCHAR},
+      </if>
+      <if test="contactmobile != null">
+        contactmobile = #{contactmobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contacttel != null">
+        contacttel = #{contacttel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactemail != null">
+        contactemail = #{contactemail,jdbcType=VARCHAR},
+      </if>
+      <if test="contactaddress != null">
+        contactaddress = #{contactaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="vocativeob != null">
+        vocativeob = #{vocativeob,jdbcType=VARCHAR},
+      </if>
+      <if test="vocativeac != null">
+        vocativeac = #{vocativeac,jdbcType=VARCHAR},
+      </if>
+      <if test="employeenatureid != null">
+        employeenatureid = #{employeenatureid,jdbcType=INTEGER},
+      </if>
+      <if test="employeenaturename != null">
+        employeenaturename = #{employeenaturename,jdbcType=VARCHAR},
+      </if>
+      <if test="convertid != null">
+        convertid = #{convertid,jdbcType=INTEGER},
+      </if>
+      <if test="exportnewsfeed != null">
+        exportnewsfeed = #{exportnewsfeed,jdbcType=VARCHAR},
+      </if>
+      <if test="kindofpaperid != null">
+        kindofpaperid = #{kindofpaperid,jdbcType=INTEGER},
+      </if>
+      <if test="kindofpapername != null">
+        kindofpapername = #{kindofpapername,jdbcType=VARCHAR},
+      </if>
+      <if test="salarygradeid != null">
+        salarygradeid = #{salarygradeid,jdbcType=INTEGER},
+      </if>
+      <if test="salarygradename != null">
+        salarygradename = #{salarygradename,jdbcType=VARCHAR},
+      </if>
+      <if test="proceduretypeid != null">
+        proceduretypeid = #{proceduretypeid,jdbcType=INTEGER},
+      </if>
+      <if test="proceduretypename != null">
+        proceduretypename = #{proceduretypename,jdbcType=VARCHAR},
+      </if>
+      <if test="participateinsuranceid != null">
+        participateinsuranceid = #{participateinsuranceid,jdbcType=INTEGER},
+      </if>
+      <if test="participateinsurancename != null">
+        participateinsurancename = #{participateinsurancename,jdbcType=VARCHAR},
+      </if>
+      <if test="totalincome != null">
+        totalincome = #{totalincome,jdbcType=BIGINT},
+      </if>
+      <if test="expectedretirementdate != null">
+        expectedretirementdate = #{expectedretirementdate,jdbcType=DATE},
+      </if>
+      <if test="isblacklist != null">
+        isblacklist = #{isblacklist,jdbcType=BOOLEAN},
+      </if>
+      <if test="isdeleted != null">
+        isdeleted = #{isdeleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="avatarid != null">
+        avatarid = #{avatarid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="statusid != null">
+        statusid = #{statusid,jdbcType=INTEGER},
+      </if>
+      <if test="tenantid != null">
+        tenantid = #{tenantid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="createdate != null">
+        createdate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifieddate != null">
+        modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userupdate != null">
+        userupdate = #{userupdate,jdbcType=VARCHAR},
+      </if>
+      <if test="active != null">
+        active = #{active,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.Employees">
+    update employees
+    set employeecode = #{employeecode,jdbcType=VARCHAR},
+      firstname = #{firstname,jdbcType=VARCHAR},
+      lastname = #{lastname,jdbcType=VARCHAR},
+      fullname = #{fullname,jdbcType=VARCHAR},
+      genderid = #{genderid,jdbcType=INTEGER},
+      gendername = #{gendername,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      personaltaxcode = #{personaltaxcode,jdbcType=VARCHAR},
+      maritalstatusid = #{maritalstatusid,jdbcType=INTEGER},
+      maritalstatusname = #{maritalstatusname,jdbcType=VARCHAR},
+      familyclassbackgroundid = #{familyclassbackgroundid,jdbcType=INTEGER},
+      familyclassbackgroundname = #{familyclassbackgroundname,jdbcType=VARCHAR},
+      ethnicid = #{ethnicid,jdbcType=INTEGER},
+      ethnicname = #{ethnicname,jdbcType=VARCHAR},
+      nationalityid = #{nationalityid,jdbcType=INTEGER},
+      nationalityname = #{nationalityname,jdbcType=VARCHAR},
+      personalclassbackgroundid = #{personalclassbackgroundid,jdbcType=INTEGER},
+      personalclassbackgroundname = #{personalclassbackgroundname,jdbcType=VARCHAR},
+      religionid = #{religionid,jdbcType=INTEGER},
+      religionname = #{religionname,jdbcType=VARCHAR},
+      birthplace = #{birthplace,jdbcType=VARCHAR},
+      homeland = #{homeland,jdbcType=VARCHAR},
+      identifynumber = #{identifynumber,jdbcType=VARCHAR},
+      identifynumberissuedplaceid = #{identifynumberissuedplaceid,jdbcType=INTEGER},
+      identifynumberissuedplace = #{identifynumberissuedplace,jdbcType=VARCHAR},
+      identifynumberissueddate = #{identifynumberissueddate,jdbcType=DATE},
+      identifynumberexpireddate = #{identifynumberexpireddate,jdbcType=DATE},
+      passportnumber = #{passportnumber,jdbcType=VARCHAR},
+      passportissueddate = #{passportissueddate,jdbcType=DATE},
+      passportissuedplaceid = #{passportissuedplaceid,jdbcType=INTEGER},
+      passportissuedplacename = #{passportissuedplacename,jdbcType=VARCHAR},
+      passporteffectfromdate = #{passporteffectfromdate,jdbcType=DATE},
+      passporteffecttodate = #{passporteffecttodate,jdbcType=DATE},
+      educationlevel = #{educationlevel,jdbcType=VARCHAR},
+      educationplaceid = #{educationplaceid,jdbcType=INTEGER},
+      educationplacename = #{educationplacename,jdbcType=VARCHAR},
+      educationmajorid = #{educationmajorid,jdbcType=INTEGER},
+      educationmajorname = #{educationmajorname,jdbcType=VARCHAR},
+      educationfacultyid = #{educationfacultyid,jdbcType=INTEGER},
+      educationfacultyname = #{educationfacultyname,jdbcType=VARCHAR},
+      levelid = #{levelid,jdbcType=INTEGER},
+      levelname = #{levelname,jdbcType=VARCHAR},
+      educationdegreeid = #{educationdegreeid,jdbcType=INTEGER},
+      educationdegreename = #{educationdegreename,jdbcType=VARCHAR},
+      awardedyear = #{awardedyear,jdbcType=INTEGER},
+      hometel = #{hometel,jdbcType=VARCHAR},
+      officetel = #{officetel,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      othermobile = #{othermobile,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      officeemail = #{officeemail,jdbcType=VARCHAR},
+      otheremail = #{otheremail,jdbcType=VARCHAR},
+      facebookid = #{facebookid,jdbcType=VARCHAR},
+      skypeid = #{skypeid,jdbcType=VARCHAR},
+      msnid = #{msnid,jdbcType=VARCHAR},
+      nativecountryid = #{nativecountryid,jdbcType=INTEGER},
+      nativecountryname = #{nativecountryname,jdbcType=VARCHAR},
+      nativeprovinceid = #{nativeprovinceid,jdbcType=VARCHAR},
+      nativeprovincename = #{nativeprovincename,jdbcType=VARCHAR},
+      nativedistrictid = #{nativedistrictid,jdbcType=VARCHAR},
+      nativedistrictname = #{nativedistrictname,jdbcType=VARCHAR},
+      nativewardid = #{nativewardid,jdbcType=VARCHAR},
+      nativewardname = #{nativewardname,jdbcType=VARCHAR},
+      nativestreethousenumber = #{nativestreethousenumber,jdbcType=VARCHAR},
+      nativeaddress = #{nativeaddress,jdbcType=VARCHAR},
+      isheadhousehold = #{isheadhousehold,jdbcType=BOOLEAN},
+      registrationbooknumber = #{registrationbooknumber,jdbcType=VARCHAR},
+      registrationbookcode = #{registrationbookcode,jdbcType=VARCHAR},
+      samenativeaddress = #{samenativeaddress,jdbcType=BOOLEAN},
+      currentcountryid = #{currentcountryid,jdbcType=INTEGER},
+      currentcountryname = #{currentcountryname,jdbcType=VARCHAR},
+      currentprovinceid = #{currentprovinceid,jdbcType=VARCHAR},
+      currentprovincename = #{currentprovincename,jdbcType=VARCHAR},
+      currentdistrictid = #{currentdistrictid,jdbcType=VARCHAR},
+      currentdistrictname = #{currentdistrictname,jdbcType=VARCHAR},
+      currentwardid = #{currentwardid,jdbcType=VARCHAR},
+      currentwardname = #{currentwardname,jdbcType=VARCHAR},
+      currentstreethousenumber = #{currentstreethousenumber,jdbcType=VARCHAR},
+      currentaddress = #{currentaddress,jdbcType=VARCHAR},
+      employeecodets = #{employeecodets,jdbcType=VARCHAR},
+      organizationunitid = #{organizationunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      organizationunitname = #{organizationunitname,jdbcType=VARCHAR},
+        jobcode = #{jobcode,jdbcType=INTEGER},
+      jobpositionname = #{jobpositionname,jdbcType=VARCHAR},
+      jobtitleid = #{jobtitleid,jdbcType=INTEGER},
+      jobtitlename = #{jobtitlename,jdbcType=VARCHAR},
+      jobtitleconvertid = #{jobtitleconvertid,jdbcType=INTEGER},
+      joblevelid = #{joblevelid,jdbcType=INTEGER},
+      joblevelname = #{joblevelname,jdbcType=VARCHAR},
+      employeegradeid = #{employeegradeid,jdbcType=INTEGER},
+      employeegradename = #{employeegradename,jdbcType=VARCHAR},
+      employeestatusid = #{employeestatusid,jdbcType=INTEGER},
+      employeestatusname = #{employeestatusname,jdbcType=VARCHAR},
+      inactive = #{inactive,jdbcType=BOOLEAN},
+      workingplace = #{workingplace,jdbcType=VARCHAR},
+      laborbooknumber = #{laborbooknumber,jdbcType=VARCHAR},
+      contracttypeid = #{contracttypeid,jdbcType=INTEGER},
+      contracttypename = #{contracttypename,jdbcType=VARCHAR},
+      shiftcode = #{shiftcode,jdbcType=VARCHAR},
+      probationdate = #{probationdate,jdbcType=DATE},
+      hiredate = #{hiredate,jdbcType=DATE},
+      receivedate = #{receivedate,jdbcType=DATE},
+      reporttoid = #{reporttoid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      reporttoname = #{reporttoname,jdbcType=VARCHAR},
+      supervisorid = #{supervisorid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      supervisorname = #{supervisorname,jdbcType=VARCHAR},
+      numberofleaveday = #{numberofleaveday,jdbcType=INTEGER},
+      autoincrementseniority = #{autoincrementseniority,jdbcType=VARCHAR},
+      terminationdate = #{terminationdate,jdbcType=DATE},
+      terminationapproverid = #{terminationapproverid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      terminationapprover = #{terminationapprover,jdbcType=VARCHAR},
+      terminationreasonid = #{terminationreasonid,jdbcType=INTEGER},
+      terminationreasonname = #{terminationreasonname,jdbcType=VARCHAR},
+      terminationreasontypeid = #{terminationreasontypeid,jdbcType=INTEGER},
+      terminationreasontypename = #{terminationreasontypename,jdbcType=VARCHAR},
+      terminationfeedback = #{terminationfeedback,jdbcType=VARCHAR},
+      salarybasic = #{salarybasic,jdbcType=INTEGER},
+      salarysocialinsurance = #{salarysocialinsurance,jdbcType=DOUBLE},
+      bankaccountno = #{bankaccountno,jdbcType=VARCHAR},
+      bankid = #{bankid,jdbcType=INTEGER},
+      bankname = #{bankname,jdbcType=VARCHAR},
+      bankbranchid = #{bankbranchid,jdbcType=INTEGER},
+      bankbranchname = #{bankbranchname,jdbcType=VARCHAR},
+      istradeunion = #{istradeunion,jdbcType=BOOLEAN},
+      isinsurance = #{isinsurance,jdbcType=BOOLEAN},
+      istemplate = #{istemplate,jdbcType=BOOLEAN},
+      socialinsurancesupplementingdate = #{socialinsurancesupplementingdate,jdbcType=DATE},
+      insurancerate = #{insurancerate,jdbcType=DOUBLE},
+      socialinsurancenumber = #{socialinsurancenumber,jdbcType=VARCHAR},
+      socialinsurancecode = #{socialinsurancecode,jdbcType=VARCHAR},
+      identifynumberissuedprovinceid = #{identifynumberissuedprovinceid,jdbcType=VARCHAR},
+      identifynumberissuedprovincename = #{identifynumberissuedprovincename,jdbcType=VARCHAR},
+      identifynumberissuedprovincecode = #{identifynumberissuedprovincecode,jdbcType=VARCHAR},
+      healthinsurancenumber = #{healthinsurancenumber,jdbcType=VARCHAR},
+      healthinsuranceissueplace = #{healthinsuranceissueplace,jdbcType=VARCHAR},
+      healthinsuranceexpireddate = #{healthinsuranceexpireddate,jdbcType=DATE},
+      healthcareid = #{healthcareid,jdbcType=VARCHAR},
+      healthcarename = #{healthcarename,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      statusname = #{statusname,jdbcType=VARCHAR},
+      contactname = #{contactname,jdbcType=VARCHAR},
+      relationshipid = #{relationshipid,jdbcType=INTEGER},
+      relationshipname = #{relationshipname,jdbcType=VARCHAR},
+      contactmobile = #{contactmobile,jdbcType=VARCHAR},
+      contacttel = #{contacttel,jdbcType=VARCHAR},
+      contactemail = #{contactemail,jdbcType=VARCHAR},
+      contactaddress = #{contactaddress,jdbcType=VARCHAR},
+      vocativeob = #{vocativeob,jdbcType=VARCHAR},
+      vocativeac = #{vocativeac,jdbcType=VARCHAR},
+      employeenatureid = #{employeenatureid,jdbcType=INTEGER},
+      employeenaturename = #{employeenaturename,jdbcType=VARCHAR},
+      convertid = #{convertid,jdbcType=INTEGER},
+      exportnewsfeed = #{exportnewsfeed,jdbcType=VARCHAR},
+      kindofpaperid = #{kindofpaperid,jdbcType=INTEGER},
+      kindofpapername = #{kindofpapername,jdbcType=VARCHAR},
+      salarygradeid = #{salarygradeid,jdbcType=INTEGER},
+      salarygradename = #{salarygradename,jdbcType=VARCHAR},
+      proceduretypeid = #{proceduretypeid,jdbcType=INTEGER},
+      proceduretypename = #{proceduretypename,jdbcType=VARCHAR},
+      participateinsuranceid = #{participateinsuranceid,jdbcType=INTEGER},
+      participateinsurancename = #{participateinsurancename,jdbcType=VARCHAR},
+      totalincome = #{totalincome,jdbcType=BIGINT},
+      expectedretirementdate = #{expectedretirementdate,jdbcType=DATE},
+      isblacklist = #{isblacklist,jdbcType=BOOLEAN},
+      isdeleted = #{isdeleted,jdbcType=BOOLEAN},
+      userid = #{userid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      avatarid = #{avatarid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      statusid = #{statusid,jdbcType=INTEGER},
+      tenantid = #{tenantid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      createdate = #{createdate,jdbcType=TIMESTAMP},
+      modifieddate = #{modifieddate,jdbcType=TIMESTAMP},
+      userupdate = #{userupdate,jdbcType=VARCHAR},
+      active = #{active,jdbcType=BOOLEAN}
+    where employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

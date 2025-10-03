@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.inventory.mapper.UomUomMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.inventory.entity.UomUom">
+    <id column="id" jdbcType="OTHER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="category_id" jdbcType="OTHER" property="categoryId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, "name", category_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Object" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "uom_uom"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Object">
+    delete from "uom_uom"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.UomUom" useGeneratedKeys="false">
+    insert into "uom_uom" ("id","name", category_id)
+    values (#{id,jdbcType=OTHER},#{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=OTHER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.inventory.entity.UomUom" useGeneratedKeys="true">
+    insert into "uom_uom"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        "name",
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=OTHER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.inventory.entity.UomUom">
+    update "uom_uom"
+    <set>
+      <if test="name != null">
+        "name" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=OTHER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.inventory.entity.UomUom">
+    update "uom_uom"
+    set "name" = #{name,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=OTHER}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

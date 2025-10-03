@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.DismissionsMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.Dismissions">
+    <id column="dismissionid" jdbcType="OTHER" property="dismissionid" typeHandler="UUIDTypeHandler"/>
+    <result column="employeeid" jdbcType="OTHER" property="employeeid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="dismissionunitid" jdbcType="OTHER" property="dismissionunitid" typeHandler="UUIDTypeHandler"/>
+    <result column="effectivedate" jdbcType="DATE" property="effectivedate" />
+    <result column="dismissionnumber" jdbcType="VARCHAR" property="dismissionnumber" />
+    <result column="jobtitleid" jdbcType="INTEGER" property="jobtitleid" />
+    <result column="dismissionstatusid" jdbcType="INTEGER" property="dismissionstatusid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dismissionid, employeeid, unitid, dismissionunitid, effectivedate, dismissionnumber,
+    jobtitleid, dismissionstatusid
+  </sql>
+
+  <resultMap id="DTOResultMap" type="com.base.admin.hrm.dto.DismissionsDTO">
+    <id column="dismissionid" jdbcType="OTHER" property="dismissionid" typeHandler="UUIDTypeHandler"/>
+    <result column="employeeid" jdbcType="OTHER" property="employeeid" typeHandler="UUIDTypeHandler"/>
+    <result column="unitid" jdbcType="OTHER" property="unitid" typeHandler="UUIDTypeHandler"/>
+    <result column="dismissionunitid" jdbcType="OTHER" property="dismissionunitid" typeHandler="UUIDTypeHandler"/>
+    <result column="effectivedate" jdbcType="DATE" property="effectivedate" />
+    <result column="dismissionnumber" jdbcType="VARCHAR" property="dismissionnumber" />
+    <result column="jobtitleid" jdbcType="INTEGER" property="jobtitleid" />
+    <result column="dismissionstatusid" jdbcType="INTEGER" property="dismissionstatusid" />
+    <result column="employeecode" jdbcType="VARCHAR" property="employeecode" />
+    <result column="fullname" jdbcType="VARCHAR" property="fullname" />
+    <result column="unitname" jdbcType="VARCHAR" property="unitname" />
+    <result column="dismissionunitname" jdbcType="VARCHAR" property="dismissionunitname" />
+      <result column="jobtitlename" jdbcType="VARCHAR" property="jobtitlename"/>
+  </resultMap>
+  <sql id="DTO_Column_List">
+    dismissionid, employeeid, unitid, dismissionunitid, effectivedate, dismissionnumber,
+    jobtitleid, dismissionstatusid, employeecode, fullname, unitname, dismissionunitname, jobtitlename
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'dismissionid'">dismissionid ${order.direction}</if>
+          <if test="order.property == 'employeeid'">employeeid ${order.direction}</if>
+          <if test="order.property == 'unitid'">unitid ${order.direction}</if>
+          <if test="order.property == 'dismissionunitid'">dismissionunitid ${order.direction}</if>
+          <if test="order.property == 'effectivedate'">effectivedate ${order.direction}</if>
+          <if test="order.property == 'dismissionnumber'">dismissionnumber ${order.direction}</if>
+          <if test="order.property == 'dismissionstatusid'">dismissionstatusid ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+  <sql id="searchCondition">
+    <if test="search != null">
+      <if test="search.dismissionid != null"> and dismissionid = #{search.dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.employeeid != null"> and employeeid = #{search.employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.unitid != null"> and unitid = #{search.unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.dismissionunitid != null"> and dismissionunitid = #{search.dismissionunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}</if>
+      <if test="search.effectivedate != null"> and effectivedate = #{search.effectivedate}</if>
+      <if test="search.dismissionnumber != null">
+        <choose>
+          <when test='exact == true'>
+            and dismissionnumber = #{search.dismissionnumber}
+          </when>
+          <otherwise>
+            and dismissionnumber ILIKE '%${search.dismissionnumber}%'
+          </otherwise>
+        </choose>
+      </if>
+      <if test="search.jobtitleid != null"> and jobtitleid = #{search.jobtitleid,jdbcType=INTEGER}</if>
+      <if test="search.dismissionstatusid != null"> and dismissionstatusid = #{search.dismissionstatusid}</if>
+    </if>
+  </sql>
+
+  <sql id="queryAndCountWhereStatement">
+    <where>
+      <include refid="searchCondition"></include>
+    </where>
+  </sql>
+
+  <select id="findById" resultType="com.base.admin.hrm.dto.DismissionsDTO">
+    WITH dismissions_CTE AS (
+      SELECT
+        dm.dismissionid,
+        dm.employeeid,
+        dm.unitid,
+        dm.dismissionunitid,
+        dm.effectivedate,
+        dm.dismissionnumber,
+        dm.jobtitleid,
+        dm.dismissionstatusid
+      FROM
+        dismissions dm
+      where dm.dismissionid = #{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    )
+    SELECT
+      dm.dismissionid,
+      dm.employeeid,
+      dm.unitid,
+      dm.dismissionunitid,
+      dm.effectivedate,
+      dm.dismissionnumber,
+      dm.jobtitleid,
+      dm.dismissionstatusid,
+      e.employeecode,
+      e.fullname,
+      u.unitname,
+      ud.unitname as dismissionunitname,
+      jt.jobtitlename
+    FROM
+      dismissions_CTE dm
+        LEFT JOIN employees e on e.employeeid = dm.employeeid
+        LEFT JOIN units u on u.unitid =  dm.unitid
+        LEFT JOIN units ud on ud.unitid = dm.dismissionunitid
+        LEFT JOIN job_title jt on jt.jobtitleid = dm.jobtitleid
+  </select>
+
+  <select id="countPaged" resultType="java.lang.Long">
+    select count(1)
+    from dismissions
+    <include refid="queryAndCountWhereStatement"/>
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.dto.DismissionsDTO">
+<!--    WITH dismissions_CTE AS (-->
+<!--      SELECT-->
+<!--        dm.dismissionid,-->
+<!--        dm.employeeid,-->
+<!--        dm.unitid,-->
+<!--        dm.dismissionunitid,-->
+<!--        dm.effectivedate,-->
+<!--        dm.dismissionnumber,-->
+<!--        dm.jobtitleid,-->
+<!--        dm.dismissionstatusid-->
+<!--      FROM-->
+<!--        dismissions dm-->
+<!--        <include refid="queryAndCountWhereStatement"/>-->
+<!--        <include refid="pageable"/>-->
+<!--    )-->
+<!--    SELECT-->
+<!--      dm.dismissionid,-->
+<!--      dm.employeeid,-->
+<!--      dm.unitid,-->
+<!--      dm.dismissionunitid,-->
+<!--      dm.effectivedate,-->
+<!--      dm.dismissionnumber,-->
+<!--      dm.jobtitleid,-->
+<!--      dm.dismissionstatusid,-->
+<!--      e.employeecode,-->
+<!--      e.fullname,-->
+<!--      u.unitname,-->
+<!--      ud.unitname as dismissionunitname,-->
+<!--      jt.jobtitlename-->
+<!--    FROM-->
+<!--        dismissions_CTE dm-->
+<!--        LEFT JOIN employees e on e.employeeid = dm.employeeid-->
+<!--        LEFT JOIN units u on u.unitid =  dm.unitid-->
+<!--        LEFT JOIN units ud on ud.unitid = dm.dismissionunitid-->
+<!--        LEFT JOIN job_title jt on jt.jobtitleid = dm.jobtitleid-->
+<!--    select-->
+<!--    <include refid="DTO_Column_List"/>-->
+<!--    from dismissions-->
+    SELECT
+      dm.dismissionid,
+      dm.employeeid,
+      dm.unitid,
+      dm.dismissionunitid,
+      dm.effectivedate,
+      dm.dismissionnumber,
+      dm.jobtitleid,
+      dm.dismissionstatusid,
+      e.employeecode,
+      e.fullname,
+      u.unitname,
+      ud.unitname as dismissionunitname,
+      jt.jobtitlename
+    FROM
+        dismissions dm
+      LEFT JOIN employees e on e.employeeid = dm.employeeid
+      LEFT JOIN units u on u.unitid =  dm.unitid
+      LEFT JOIN units ud on ud.unitid = dm.dismissionunitid
+      LEFT JOIN job_title jt on jt.jobtitleid = dm.jobtitleid
+    <include refid="queryAndCountWhereStatement"/>
+    <include refid="pageable"/>
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.util.UUID" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dismissions
+    where dismissionid = #{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.util.UUID">
+    delete from dismissions
+    where dismissionid = #{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </delete>
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    delete from dismissions
+    where dismissionid in
+    <foreach item="item" collection="list" open="(" separator="," close=")">
+      #{item,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.Dismissions">
+    insert into dismissions (dismissionid, employeeid, unitid,
+      dismissionunitid, effectivedate, dismissionnumber,
+      jobtitleid, dismissionstatusid)
+    values (#{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      #{dismissionunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}, #{effectivedate,jdbcType=DATE}, #{dismissionnumber,jdbcType=VARCHAR},
+      #{jobtitleid,jdbcType=INTEGER}, #{dismissionstatusid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.Dismissions">
+    insert into dismissions
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dismissionid != null">
+        dismissionid,
+      </if>
+      <if test="employeeid != null">
+        employeeid,
+      </if>
+      <if test="unitid != null">
+        unitid,
+      </if>
+      <if test="dismissionunitid != null">
+        dismissionunitid,
+      </if>
+      <if test="effectivedate != null">
+        effectivedate,
+      </if>
+      <if test="dismissionnumber != null">
+        dismissionnumber,
+      </if>
+      <if test="jobtitleid != null">
+        jobtitleid,
+      </if>
+      <if test="dismissionstatusid != null">
+        dismissionstatusid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dismissionid != null">
+        #{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="employeeid != null">
+        #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitid != null">
+        #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="dismissionunitid != null">
+        #{dismissionunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="effectivedate != null">
+        #{effectivedate,jdbcType=DATE},
+      </if>
+      <if test="dismissionnumber != null">
+        #{dismissionnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleid != null">
+        #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="dismissionstatusid != null">
+        #{dismissionstatusid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.Dismissions">
+    update dismissions
+    <set>
+      <if test="employeeid != null">
+        employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="unitid != null">
+        unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="dismissionunitid != null">
+        dismissionunitid = #{dismissionunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      </if>
+      <if test="effectivedate != null">
+        effectivedate = #{effectivedate,jdbcType=DATE},
+      </if>
+      <if test="dismissionnumber != null">
+        dismissionnumber = #{dismissionnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="jobtitleid != null">
+        jobtitleid = #{jobtitleid,jdbcType=INTEGER},
+      </if>
+      <if test="dismissionstatusid != null">
+        dismissionstatusid = #{dismissionstatusid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where dismissionid = #{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.Dismissions">
+    update dismissions
+    set employeeid = #{employeeid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      unitid = #{unitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      dismissionunitid = #{dismissionunitid,jdbcType=OTHER,typeHandler=UUIDTypeHandler},
+      effectivedate = #{effectivedate,jdbcType=DATE},
+      dismissionnumber = #{dismissionnumber,jdbcType=VARCHAR},
+      jobtitleid = #{jobtitleid,jdbcType=INTEGER},
+      dismissionstatusid = #{dismissionstatusid,jdbcType=INTEGER}
+    where dismissionid = #{dismissionid,jdbcType=OTHER,typeHandler=UUIDTypeHandler}
+  </update>
+</mapper>

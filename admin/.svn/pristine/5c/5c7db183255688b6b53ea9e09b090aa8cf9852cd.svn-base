@@ -1,0 +1,17 @@
+package com.base.admin.inventory.mapper;
+
+import com.base.admin.inventory.entity.StockLocation;
+
+public interface StockLocationMapper {
+    int deleteByPrimaryKey(Object id);
+
+    int insert(StockLocation record);
+
+    int insertSelective(StockLocation record);
+
+    StockLocation selectByPrimaryKey(Object id);
+
+    int updateByPrimaryKeySelective(StockLocation record);
+
+    int updateByPrimaryKey(StockLocation record);
+}

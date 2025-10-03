@@ -1,0 +1,22 @@
+package com.base.admin.inventory.service.impl;
+
+import com.base.admin.inventory.entity.Brand;
+import com.base.admin.inventory.mapper.BrandMapper;
+import com.base.admin.inventory.service.BrandService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class BrandServiceImpl implements BrandService {
+
+    private final BrandMapper brandMapper;
+
+    @Override
+    public Optional<Brand> findById(UUID id) {
+        return brandMapper.findById(id);
+    }
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.hrm.mapper.AccomplishmentObjectdetailMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.hrm.entity.AccomplishmentObjectdetail">
+    <id column="accomplishmentobjectdetailid" jdbcType="INTEGER" property="accomplishmentobjectdetailid" />
+    <result column="accomplishmentobjectdetailname" jdbcType="VARCHAR" property="accomplishmentobjectdetailname" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BIT" property="isFavorite" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    accomplishmentobjectdetailid, accomplishmentobjectdetailname, position, is_favorite,
+    is_system
+  </sql>
+
+  <resultMap id="DTOResultMap" type="com.base.admin.hrm.dto.AccomplishmentObjectdetailDTO">
+    <id column="accomplishmentobjectdetailid" jdbcType="INTEGER" property="accomplishmentobjectdetailid" />
+    <result column="accomplishmentobjectdetailname" jdbcType="VARCHAR" property="accomplishmentobjectdetailname" />
+    <result column="position" jdbcType="INTEGER" property="position" />
+    <result column="is_favorite" jdbcType="BIT" property="isFavorite" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+  </resultMap>
+  <sql id="DTO_Column_List">
+    accomplishmentobjectdetailid, accomplishmentobjectdetailname, position, is_favorite,
+    is_system
+  </sql>
+
+  <sql id="pageable">
+    <if test="pageable.sort.sorted">
+      <trim prefix="order by">
+        <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+          <if test="order.property == 'accomplishmentobjectdetailid'">accomplishmentobjectdetailid ${order.direction}</if>
+          <if test="order.property == 'accomplishmentobjectdetailname'">accomplishmentobjectdetailname ${order.direction}</if>
+          <if test="order.property == 'position'">position ${order.direction}</if>
+          <if test="order.property == 'isFavorite'">is_favorite ${order.direction}</if>
+          <if test="order.property == 'isSystem'">is_system ${order.direction}</if>
+        </foreach>
+      </trim>
+    </if>
+    <if test="pageable.paged">
+      limit #{pageable.pageSize} offset #{pageable.offset}
+    </if>
+  </sql>
+
+
+  <select id="findById" resultType="com.base.admin.hrm.dto.AccomplishmentObjectdetailDTO">
+    select
+    <include refid="DTO_Column_List" />
+    from accomplishment_objectdetail
+    where accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER}
+  </select>
+
+  <select id="countPaged" resultType="java.lang.Long">
+    select count(1)
+    from accomplishment_objectdetail
+  </select>
+
+  <select id="searchPaged" resultType="com.base.admin.hrm.dto.AccomplishmentObjectdetailDTO">
+    select
+    <include refid="DTO_Column_List"/>
+    from accomplishment_objectdetail
+    <include refid="pageable"/>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from accomplishment_objectdetail
+    where accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from accomplishment_objectdetail
+    where accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER}
+    AND is_system = false
+  </delete>
+
+  <select id="generateKeyAndPosition" resultType="com.base.admin.hrm.entity.KeyAndPosition">
+    SELECT
+      max(accomplishmentobjectdetailid) as id,
+      max("position") as position
+    FROM
+      accomplishment_objectdetail
+  </select>
+
+  <insert id="insert" parameterType="com.base.admin.hrm.entity.AccomplishmentObjectdetail">
+    insert into accomplishment_objectdetail (accomplishmentobjectdetailid, accomplishmentobjectdetailname,
+      position, is_favorite, is_system
+      )
+    values (#{accomplishmentobjectdetailid,jdbcType=INTEGER}, #{accomplishmentobjectdetailname,jdbcType=VARCHAR}, 
+      #{position,jdbcType=INTEGER}, #{isFavorite,jdbcType=BIT}, #{isSystem,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.base.admin.hrm.entity.AccomplishmentObjectdetail">
+    insert into accomplishment_objectdetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accomplishmentobjectdetailid != null">
+        accomplishmentobjectdetailid,
+      </if>
+      <if test="accomplishmentobjectdetailname != null">
+        accomplishmentobjectdetailname,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="isFavorite != null">
+        is_favorite,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accomplishmentobjectdetailid != null">
+        #{accomplishmentobjectdetailid,jdbcType=INTEGER},
+      </if>
+      <if test="accomplishmentobjectdetailname != null">
+        #{accomplishmentobjectdetailname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        #{isFavorite,jdbcType=BIT},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.hrm.entity.AccomplishmentObjectdetail">
+    update accomplishment_objectdetail
+    <set>
+      <if test="accomplishmentobjectdetailname != null">
+        accomplishmentobjectdetailname = #{accomplishmentobjectdetailname,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=INTEGER},
+      </if>
+      <if test="isFavorite != null">
+        is_favorite = #{isFavorite,jdbcType=BIT},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BIT},
+      </if>
+    </set>
+    where accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.hrm.entity.AccomplishmentObjectdetail">
+    update accomplishment_objectdetail
+    set accomplishmentobjectdetailname = #{accomplishmentobjectdetailname,jdbcType=VARCHAR},
+      position = #{position,jdbcType=INTEGER},
+      is_favorite = #{isFavorite,jdbcType=BIT},
+      is_system = #{isSystem,jdbcType=BIT}
+    where accomplishmentobjectdetailid = #{accomplishmentobjectdetailid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.admin.purchase.mapper.AccountAccountMapper">
+  <resultMap id="BaseResultMap" type="com.base.admin.purchase.entity.AccountAccount">
+    <id column="id" jdbcType="OTHER" property="id" />
+    <result column="currency_id" jdbcType="OTHER" property="currencyId" />
+    <result column="create_uid" jdbcType="OTHER" property="createUid" />
+    <result column="write_uid" jdbcType="OTHER" property="writeUid" />
+    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
+    <result column="name" jdbcType="OTHER" property="name" />
+    <result column="code_store" jdbcType="OTHER" property="codeStore" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="deprecated" jdbcType="BOOLEAN" property="deprecated" />
+    <result column="reconcile" jdbcType="BOOLEAN" property="reconcile" />
+    <result column="non_trade" jdbcType="BOOLEAN" property="nonTrade" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="write_date" jdbcType="TIMESTAMP" property="writeDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, currency_id, create_uid, write_uid, account_type, "name", code_store, note, deprecated, 
+    reconcile, non_trade, create_date, write_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Object" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from "account_account"
+    where id = #{id,jdbcType=OTHER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Object">
+    delete from "account_account"
+    where id = #{id,jdbcType=OTHER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.base.admin.purchase.entity.AccountAccount" useGeneratedKeys="true">
+    insert into "account_account" (currency_id, create_uid, write_uid, 
+      account_type, "name", code_store, 
+      note, deprecated, reconcile, 
+      non_trade, create_date, write_date
+      )
+    values (#{currencyId,jdbcType=OTHER}, #{createUid,jdbcType=OTHER}, #{writeUid,jdbcType=OTHER}, 
+      #{accountType,jdbcType=VARCHAR}, #{name,jdbcType=OTHER}, #{codeStore,jdbcType=OTHER}, 
+      #{note,jdbcType=VARCHAR}, #{deprecated,jdbcType=BOOLEAN}, #{reconcile,jdbcType=BOOLEAN}, 
+      #{nonTrade,jdbcType=BOOLEAN}, #{createDate,jdbcType=TIMESTAMP}, #{writeDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.base.admin.purchase.entity.AccountAccount" useGeneratedKeys="true">
+    insert into "account_account"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="currencyId != null">
+        currency_id,
+      </if>
+      <if test="createUid != null">
+        create_uid,
+      </if>
+      <if test="writeUid != null">
+        write_uid,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="name != null">
+        "name",
+      </if>
+      <if test="codeStore != null">
+        code_store,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="deprecated != null">
+        deprecated,
+      </if>
+      <if test="reconcile != null">
+        reconcile,
+      </if>
+      <if test="nonTrade != null">
+        non_trade,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="writeDate != null">
+        write_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="currencyId != null">
+        #{currencyId,jdbcType=OTHER},
+      </if>
+      <if test="createUid != null">
+        #{createUid,jdbcType=OTHER},
+      </if>
+      <if test="writeUid != null">
+        #{writeUid,jdbcType=OTHER},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=OTHER},
+      </if>
+      <if test="codeStore != null">
+        #{codeStore,jdbcType=OTHER},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="deprecated != null">
+        #{deprecated,jdbcType=BOOLEAN},
+      </if>
+      <if test="reconcile != null">
+        #{reconcile,jdbcType=BOOLEAN},
+      </if>
+      <if test="nonTrade != null">
+        #{nonTrade,jdbcType=BOOLEAN},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writeDate != null">
+        #{writeDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.base.admin.purchase.entity.AccountAccount">
+    update "account_account"
+    <set>
+      <if test="currencyId != null">
+        currency_id = #{currencyId,jdbcType=OTHER},
+      </if>
+      <if test="createUid != null">
+        create_uid = #{createUid,jdbcType=OTHER},
+      </if>
+      <if test="writeUid != null">
+        write_uid = #{writeUid,jdbcType=OTHER},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        "name" = #{name,jdbcType=OTHER},
+      </if>
+      <if test="codeStore != null">
+        code_store = #{codeStore,jdbcType=OTHER},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="deprecated != null">
+        deprecated = #{deprecated,jdbcType=BOOLEAN},
+      </if>
+      <if test="reconcile != null">
+        reconcile = #{reconcile,jdbcType=BOOLEAN},
+      </if>
+      <if test="nonTrade != null">
+        non_trade = #{nonTrade,jdbcType=BOOLEAN},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="writeDate != null">
+        write_date = #{writeDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=OTHER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.base.admin.purchase.entity.AccountAccount">
+    update "account_account"
+    set currency_id = #{currencyId,jdbcType=OTHER},
+      create_uid = #{createUid,jdbcType=OTHER},
+      write_uid = #{writeUid,jdbcType=OTHER},
+      account_type = #{accountType,jdbcType=VARCHAR},
+      "name" = #{name,jdbcType=OTHER},
+      code_store = #{codeStore,jdbcType=OTHER},
+      note = #{note,jdbcType=VARCHAR},
+      deprecated = #{deprecated,jdbcType=BOOLEAN},
+      reconcile = #{reconcile,jdbcType=BOOLEAN},
+      non_trade = #{nonTrade,jdbcType=BOOLEAN},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      write_date = #{writeDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=OTHER}
+  </update>
+</mapper>

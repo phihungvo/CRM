@@ -1,0 +1,12 @@
+package com.base.admin.inventory.dto.request;
+
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class DeliveryRequest {
+    DeliveryReq delivery;
+    List<DeliveryDetailReq> deliveryDetails;
+}
